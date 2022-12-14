@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
 import { Outlet } from 'react-router-dom';
+import Header from '../components/Header';
 
 const Container = styled.div`
   width: 1024px;
@@ -10,9 +11,12 @@ const Container = styled.div`
 
 function PageLayout() {
   return (
-    <Container>
-      <Outlet />
-    </Container>
+    <>
+      <Header />
+      <Container>
+        <Outlet />
+      </Container>
+    </>
   );
 }
 

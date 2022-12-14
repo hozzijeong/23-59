@@ -6,12 +6,14 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    font-family: "Helvetica", "Arial", sans-serif;
+    font-family:'Pretendard-Regular';
     line-height: 1.5;
     margin:0;
     width: 100%;
-    font-size: 1em; // 1rem = 10px;
+    height:100vh;
+    background-color: #efebeb;
   }
+  
 `;
 
 export default GlobalStyle;
