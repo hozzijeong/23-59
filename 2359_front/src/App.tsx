@@ -1,7 +1,10 @@
-import React from "react";
+import { Routes } from "./pages/Routes";
+import { RecoilRoot } from "recoil";
 
-function App() {
-  return <div className="App">HELLO WORLD</div>;
+export default function App() {
+  return (
+    <RecoilRoot>
+      <Routes />
+    </RecoilRoot>
+  );
 }
-
-export default App;
