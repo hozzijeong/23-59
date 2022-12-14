@@ -1,10 +1,5 @@
-import { Routes } from "./pages/Routes";
-import { RecoilRoot } from "recoil";
+import { Routes } from './pages/Routes';
 
 export default function App() {
-  return (
-    <RecoilRoot>
-      <Routes />
-    </RecoilRoot>
-  );
+  return <Routes />;
 }
