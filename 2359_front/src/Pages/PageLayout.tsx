@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import styled from 'styled-components';
+import { Outlet } from 'react-router-dom';
 
 const Container = styled.div`
   width: 1024px;
@@ -7,8 +8,12 @@ const Container = styled.div`
   margin: 0 auto;
 `;
 
-function PageLayout({ children }: { children: ReactNode }) {
-  return <Container>{children}</Container>;
+function PageLayout() {
+  return (
+    <Container>
+      <Outlet />
+    </Container>
+  );
 }
 
 export default PageLayout;
