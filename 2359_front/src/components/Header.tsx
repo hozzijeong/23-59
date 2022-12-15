@@ -7,10 +7,11 @@ const HeaderContainer = tw.div`
   justify-center
   flex-col
   w-full
-  bg-indigo-600
+  bg-primary
 `;
 
 const HeaderContent = tw.div`
+
 `;
 
 function Header() {
