@@ -1,15 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
+import tw from 'tailwind-styled-components';
 
-const HeaderContainer = styled.div`
-  width: 100%;
-  height: 115px;
-  background-color: #bdb9b9;
+const HeaderContainer = tw.div`
+ml-3
 `;
 
-const HeaderContent = styled.div`
-  width: 1024px;
-  margin: 0 auto;
+const HeaderContent = tw.div`
+  bg-lg
 `;
 
 function Header() {
