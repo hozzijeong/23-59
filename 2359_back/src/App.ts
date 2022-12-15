@@ -1,15 +1,23 @@
-import express, { Request, Response, NextFunction } from 'express';
+import express from 'express';
+// eslint-disable-next-line import/extensions
+//import mongoose from 'mongoose';
+import connectDB from './DB/index';
+
+connectDB();
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.get('/welcome', (req: Request, res: Response, next: NextFunction) => {
+// Content-Type: application/json 형태의 데이터를 인식하고 핸들링할 수 있게 함.
+app.use(express.json());
+
+// Content-Type: application/x-www-form-urlencoded 형태의 데이터를 인식하고 핸들링할 수 있게 함.
+app.use(express.urlencoded({ extended: false }));
+
+app.get('/welcome', (req, res) => {
   res.send('welcome!');
 });
 
-app.listen('1234', () => {
-  console.log(`
-  ################################################
-  🛡️  Server listening on port: 1234🛡️
-  ################################################
-`);
+app.listen(PORT, () => {
+  console.log('server connected...');
 });
