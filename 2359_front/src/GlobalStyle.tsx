@@ -4,7 +4,10 @@ const GlobalStyle = createGlobalStyle`
   *, *::before, *::after {
     box-sizing: border-box;
   }
-
+  html{
+    font-size: 10px;
+  }
+  
   body {
     font-family:'Pretendard-Regular';
     line-height: 1.5;

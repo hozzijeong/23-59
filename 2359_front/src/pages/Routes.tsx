@@ -1,9 +1,9 @@
 import React from 'react';
 import { Route, Routes as ReactRouterRoutes, Navigate } from 'react-router-dom';
 
-import Diary from './Diary';
-import Landing from './Landing';
-import PageLayout from './PageLayout';
+import Diary from 'pages/Diary';
+import Landing from 'pages/Landing';
+import PageLayout from 'pages/PageLayout';
 
 export default function Routes() {
   return (
