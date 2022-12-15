@@ -12,7 +12,7 @@ export default function Routes() {
         <Route path="diary" element={<Diary />} />
       </Route>
       <Route path="/" element={<Landing />} />
-      <Route path="*" element={<Navigate replace to="/" />} />
+      <Route path="*" element={<Navigate replace to="/"/>} />
     </ReactRouterRoutes>
   );
 }

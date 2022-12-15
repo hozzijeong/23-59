@@ -8,7 +8,11 @@ module.exports = {
       'primary-light': '#ffffff',
       'primary-dark': '#bdb9b9',
     },
-    extend: {},
+    extend: {
+      margin: {
+        'zero-auto': '0 auto',
+      }
+    },
   },
   plugins: [],
 };
