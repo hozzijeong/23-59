@@ -75,6 +75,15 @@ function Diary() {
     [contentOptions]
   );
 
+  const contentCheckBox = useMemo(() => {
+    return contentOptions.map(({ id, content }) => (
+      <li key={id}>
+        <input className="text-2rem" id={id} type="checkbox" value={content} onChange={optionHandler} />
+        <label htmlFor={id}>{content}</label>
+      </li>
+    ));
+  }, [contentOptions]);
+
   const tableContents = useMemo(() => {
     const filterdContents = contentOptions.filter(({ isChecked }) => isChecked);
     return filterdContents.map(({ content }) => (
@@ -90,21 +99,16 @@ function Diary() {
         <Title>title</Title>
         <RelativeDiv>
           <AbsoluteDiv isLeft>
-            <FixedUl>
-              {contentOptions.map(({ id, content }) => (
-                <li key={id}>
-                  <input className="text-2rem" id={id} type="checkbox" value={content} onChange={optionHandler} />
-                  <label htmlFor={id}>{content}</label>
-                </li>
-              ))}
-            </FixedUl>
+            <FixedUl>{contentCheckBox}</FixedUl>
           </AbsoluteDiv>
           <AbsoluteDiv isLeft={false}>
             <FixedUl>{tableContents}</FixedUl>
           </AbsoluteDiv>
         </RelativeDiv>
       </HeadContent>
-      <Content>Diary 다이어리</Content>
+      <Content>
+        {contentOptions.every((options) => options.isChecked === false) ? '좌측 옵션을 선택해주세요' : 'MyDiary'}
+      </Content>
     </DiarySection>
   );
 }
