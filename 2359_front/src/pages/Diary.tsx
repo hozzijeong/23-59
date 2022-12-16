@@ -1,3 +1,7 @@
+import AccountBook from 'components/Diary/AccountBook';
+import EmotionDiary from 'components/Diary/EmotionDiary';
+import TodayQuestion from 'components/Diary/TodayQuestion';
+import TodoList from 'components/Diary/ToDoList';
 import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
@@ -88,9 +92,25 @@ function Diary() {
     const filterdContents = contentOptions.filter(({ isChecked }) => isChecked);
     return filterdContents.map(({ content }) => (
       <li>
-        <a href={`#${content}`}>{content}</a>
+        <a href={`#${content.replaceAll(' ', '-')}`}>{content}</a>
       </li>
     ));
+  }, [contentOptions]);
+
+  const todoComponents = useMemo(() => {
+    return <TodoList />;
+  }, [contentOptions]);
+
+  const emotionDiaryComponents = useMemo(() => {
+    return <EmotionDiary />;
+  }, [contentOptions]);
+
+  const questionComponents = useMemo(() => {
+    return <TodayQuestion />;
+  }, [contentOptions]);
+
+  const accountBookComponents = useMemo(() => {
+    return <AccountBook />;
   }, [contentOptions]);
 
   return (
@@ -107,7 +127,23 @@ function Diary() {
         </RelativeDiv>
       </HeadContent>
       <Content>
-        {contentOptions.every((options) => options.isChecked === false) ? '좌측 옵션을 선택해주세요' : 'MyDiary'}
+        {contentOptions.every((options) => options.isChecked === false)
+          ? '좌측 옵션을 선택해주세요'
+          : contentOptions.map(({ content, isChecked }) => {
+              if (!isChecked) return null;
+              switch (content) {
+                case 'To-Do-List':
+                  return todoComponents;
+                case '오늘의 질문':
+                  return questionComponents;
+                case '감정 일기':
+                  return emotionDiaryComponents;
+                case '가계부':
+                  return accountBookComponents;
+                default:
+                  return null;
+              }
+            })}
       </Content>
     </DiarySection>
   );
