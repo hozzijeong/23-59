@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useState, ReactNode } from 'react';
-import AccountBook from 'components/Diary/AccountBook';
-import DiaryComponentsLayout from 'components/Diary/DiaryComponentsLayout';
-import EmotionDiary from 'components/Diary/EmotionDiary';
-import TodayQuestion from 'components/Diary/TodayQuestion';
-import TodoList from 'components/Diary/ToDoList';
+import AccountBook from 'components/diary/AccountBook';
+import DiaryComponentsLayout from 'components/diary/DiaryComponentsLayout';
+import EmotionDiary from 'components/diary/EmotionDiary';
+import TodayQuestion from 'components/diary/TodayQuestion';
+import TodoList from 'components/diary/ToDoList';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
