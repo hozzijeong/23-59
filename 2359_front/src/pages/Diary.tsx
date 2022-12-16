@@ -1,4 +1,11 @@
 import React from 'react';
+import tw from 'tailwind-styled-components';
+
+const Content = tw.div`
+    w-[768px]
+    m-0
+    m-auto 
+`;
 
 function Diary() {
   return (
@@ -8,7 +15,7 @@ function Diary() {
           <li>{data}</li>
         ))}
       </ul>
-      <div>Diary 다이어리</div>
+      <Content>Diary 다이어리</Content>
     </div>
   );
 }

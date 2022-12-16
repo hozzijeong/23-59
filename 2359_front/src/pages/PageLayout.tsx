@@ -6,22 +6,23 @@ import Header from '../components/Header';
 
 const Container = tw.div`
   max-w-screen-lg
-  mt-0
-  mb-0
-  ml-auto
-  mr-auto
+  my-0
+  mx-auto
+  relative
+`;
 
-  
+const Main = tw.main`
+  w-full
 `;
 
 function PageLayout() {
   return (
-    <>
+    <Main>
       <Header />
       <Container>
         <Outlet />
       </Container>
-    </>
+    </Main>
   );
 }
 
