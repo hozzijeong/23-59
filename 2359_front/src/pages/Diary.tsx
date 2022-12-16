@@ -1,22 +1,63 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 
-const Content = tw.div`
-    w-[768px]
-    m-0
-    m-auto 
+const DiarySection = tw.section`
+  w-full
 `;
+
+const HeadContent = tw.div`
+  max-w-screen-md
+  my-0
+  mx-auto
+  mt-[8rem]
+`;
+const Content = tw.div`
+  max-w-screen-md
+  my-0
+  mx-auto 
+`;
+
+const Title = tw.p`
+  text-[4.8rem]
+  font-extrabold
+  break-keep	
+`;
+
+const RelativeDiv = tw.div`
+  relative
+`;
+
+const AbsoluteDiv = tw.div`
+  absolute  
+`;
+
+const TEMP_DATA = [
+  { id: '1', content: 'To-Do-List' },
+  { id: '2', content: '오늘의 질문' },
+  { id: '3', content: '감정 일기' },
+  { id: '4', content: '가계부' },
+];
 
 function Diary() {
   return (
-    <div>
-      <ul>
-        {Array.from({ length: 6 }, (_, idx) => idx + 1).map((data) => (
-          <li>{data}</li>
-        ))}
-      </ul>
+    <DiarySection>
+      <HeadContent>
+        <Title>title</Title>
+        <RelativeDiv>
+          <AbsoluteDiv>
+            <ul>
+              {TEMP_DATA.map(({ id, content }) => (
+                <li key={id}>
+                  <input id={id} type="checkbox" value={content} />
+                  <label htmlFor={id}>{content}</label>
+                </li>
+              ))}
+            </ul>
+          </AbsoluteDiv>
+        </RelativeDiv>
+      </HeadContent>
       <Content>Diary 다이어리</Content>
-    </div>
+    </DiarySection>
   );
 }
 
