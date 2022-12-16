@@ -1,6 +1,7 @@
 import { atom } from 'recoil';
 
 interface TodoListProps {
+  id: string;
   isChecked: boolean;
   todoContent: string;
 }
