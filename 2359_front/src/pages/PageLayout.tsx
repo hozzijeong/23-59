@@ -13,6 +13,7 @@ const Container = tw.div`
 
 const Main = tw.main`
   w-full
+  bg-primary
 `;
 
 function PageLayout() {
