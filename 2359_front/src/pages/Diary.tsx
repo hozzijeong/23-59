@@ -9,7 +9,7 @@ const HeadContent = tw.div`
   max-w-screen-md
   my-0
   mx-auto
-  mt-[8rem]
+  pt-[8rem]
 `;
 const Content = tw.div`
   max-w-screen-md

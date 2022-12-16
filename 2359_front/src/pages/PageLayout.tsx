@@ -16,10 +16,13 @@ const Main = tw.main`
 
 function PageLayout({ children }: { children: ReactNode }) {
   return (
-    <Main>
+    <>
       <Header />
-      <Container>{children}</Container>
-    </Main>
+      <Main>
+        <Container>{children}</Container>
+      </Main>
+      <footer>푸터입니다.</footer>
+    </>
   );
 }
 
