@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
@@ -35,7 +35,7 @@ interface AbsoluteProps {
 
 const AbsoluteDiv = tw.div<AbsoluteProps>`
   absolute
-  ${(props) => (props.isLeft ? 'left-[-12rem]' : 'right-[12rem]')}
+  ${(props) => (props.isLeft ? 'left-[-12rem]' : 'right-0')}
 `;
 
 const Ullists = styled.ul`
@@ -65,16 +65,24 @@ const TEMP_DATA: ContentOption[] = [
 
 function Diary() {
   const [contentOptions, setContentOptions] = useState<ContentOption[]>(TEMP_DATA);
-  const [tableContents, setTableContents] = useState<string[]>(['To-Do-List', '오늘의 질문', '감정 일기', '가계부']);
   const optionHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { id } = event.target;
       setContentOptions((currentOptions) =>
-        currentOptions.map((options) => (options.id === id ? { ...options, isChecked: true } : options))
+        currentOptions.map((options) => (options.id === id ? { ...options, isChecked: !options.isChecked } : options))
       );
     },
     [contentOptions]
   );
+
+  const tableContents = useMemo(() => {
+    const filterdContents = contentOptions.filter(({ isChecked }) => isChecked);
+    return filterdContents.map(({ content }) => (
+      <li>
+        <a href={`#${content}`}>{content}</a>
+      </li>
+    ));
+  }, [contentOptions]);
 
   return (
     <DiarySection>
@@ -91,16 +99,8 @@ function Diary() {
               ))}
             </FixedUl>
           </AbsoluteDiv>
-        </RelativeDiv>
-        <RelativeDiv>
           <AbsoluteDiv isLeft={false}>
-            <FixedUl>
-              {tableContents.map((data) => (
-                <li>
-                  <a href={`#${data}`}>{data}</a>
-                </li>
-              ))}
-            </FixedUl>
+            <FixedUl>{tableContents}</FixedUl>
           </AbsoluteDiv>
         </RelativeDiv>
       </HeadContent>
