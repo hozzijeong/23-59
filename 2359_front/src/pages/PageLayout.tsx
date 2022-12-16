@@ -1,6 +1,4 @@
 import React, { ReactNode } from 'react';
-import styled from 'styled-components';
-import { Outlet } from 'react-router-dom';
 import tw from 'tailwind-styled-components';
 import Header from '../components/Header';
 
@@ -16,13 +14,11 @@ const Main = tw.main`
   bg-primary
 `;
 
-function PageLayout() {
+function PageLayout({ children }: { children: ReactNode }) {
   return (
     <Main>
       <Header />
-      <Container>
-        <Outlet />
-      </Container>
+      <Container>{children}</Container>
     </Main>
   );
 }
