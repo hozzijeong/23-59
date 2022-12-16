@@ -73,15 +73,12 @@ const TEMP_DATA: ContentOptionProps[] = [
 
 function Diary() {
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>(TEMP_DATA);
-  const optionHandler = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const { id } = event.target;
-      setContentOptions((currentOptions) =>
-        currentOptions.map((options) => (options.id === id ? { ...options, isChecked: !options.isChecked } : options))
-      );
-    },
-    [contentOptions]
-  );
+  const optionHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id } = event.target;
+    setContentOptions((currentOptions) =>
+      currentOptions.map((options) => (options.id === id ? { ...options, isChecked: !options.isChecked } : options))
+    );
+  }, []);
 
   const contentCheckBox = useMemo(() => {
     return contentOptions.map(({ id, content }) => (
@@ -90,12 +87,12 @@ function Diary() {
         <label htmlFor={id}>{content}</label>
       </li>
     ));
-  }, [contentOptions]);
+  }, [contentOptions, optionHandler]);
 
   const tableContents = useMemo(() => {
     const filterdContents = contentOptions.filter(({ isChecked }) => isChecked);
     return filterdContents.map(({ content }) => (
-      <li>
+      <li key={content}>
         <a href={`#${content.replaceAll(' ', '-')}`}>{content}</a>
       </li>
     ));
