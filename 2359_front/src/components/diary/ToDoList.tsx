@@ -25,13 +25,6 @@ function TodoList() {
     setTodoInput(value);
   };
 
-  // typescript에서 li에 onClick event를 설정하고 싶은데 그게 되지 않음. 그 이유는 eslint의
-  // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/4abc751d87a8491219a9a3d2dacd80ea8adcb79b/docs/rules/click-events-have-key-events.md
-  // 때문에 안된다고함
-  const todoClickHandler = (event: React.MouseEvent<HTMLInputElement | HTMLButtonElement | HTMLLIElement>) => {
-    console.log(event.target, event.currentTarget);
-  };
-
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
     const { todos } = curTodo;
@@ -40,8 +33,8 @@ function TodoList() {
     setCurTodo((cur) => ({ ...cur, todos: updateTodos }));
   };
 
-  const todoDeleteHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-    return null;
+  const todoDeleteHandler = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    setCurTodo((cur) => ({ ...cur, todos: cur.todos.filter((todo) => todo.id !== id) }));
   };
 
   return (
@@ -59,7 +52,7 @@ function TodoList() {
               <li key={id}>
                 <input id={id} type="checkbox" defaultChecked={isChecked} onChange={changeTodoCheckHandler} />
                 <label htmlFor={id}>{todoContent}</label>
-                <button onClick={todoDeleteHandler} type="button">
+                <button onClick={(event) => todoDeleteHandler(event, id)} type="button">
                   삭제하기
                 </button>
               </li>
