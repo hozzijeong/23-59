@@ -8,6 +8,7 @@ import SetDiaryOption from '../components/mypage/SetDiaryOption';
 import EmotionStatistics from '../components/mypage/EmotionStatistics';
 import AccountStatistics from '../components/mypage/AccountStatistics';
 import CollectQuestion from '../components/mypage/CollectQuestion';
+import SignUp from './SignUp';
 
 export default function Routes() {
   return (
@@ -20,6 +21,7 @@ export default function Routes() {
         <Route path="collect-question" element={<CollectQuestion />} />
       </Route>
       <Route path="/diary" element={<Diary />} />
+      <Route path="/signup" element={<SignUp />} />
       <Route path="/" element={<Landing />} />
       <Route path="*" element={<Navigate replace to="/" />} />
     </ReactRouterRoutes>
