@@ -1,6 +1,6 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const HeaderContainer = tw.div`
   w-full
@@ -40,7 +40,7 @@ function Header() {
       <HeaderContent>
         <Logo onClick={logoClickHandler}>Logo</Logo>
         <HeaderRightContainer>
-          <button type="button">myPage</button>
+          <Link to="/mypage/user">myPage</Link>
           <button type="button">logout</button>
         </HeaderRightContainer>
       </HeaderContent>
