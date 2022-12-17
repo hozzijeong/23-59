@@ -6,9 +6,17 @@ interface TodoListProps {
   todoContent: string;
 }
 
+export type emotionTypes = 'Very Bad' | 'Bad' | 'SoSo' | 'Good' | 'Very Good' | null;
+
+interface EmotionRecordProps {
+  emotionState: emotionTypes;
+  emotionDiary: string;
+}
+
 interface DiaryStateProps {
   todos: TodoListProps[];
   questionAnswer: string;
+  emotionRecord: EmotionRecordProps;
 }
 
 export const diaryAtom = atom<DiaryStateProps>({
@@ -16,5 +24,9 @@ export const diaryAtom = atom<DiaryStateProps>({
   default: {
     todos: [],
     questionAnswer: '',
+    emotionRecord: {
+      emotionState: 'Bad',
+      emotionDiary: '',
+    },
   },
 });
