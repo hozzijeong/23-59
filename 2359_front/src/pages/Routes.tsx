@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Routes as ReactRouterRoutes, Navigate } from 'react-router-dom';
 import Diary from 'pages/Diary';
-import Landing from 'pages/Landing';
+import Home from './Home';
 import MyPage from './MyPage';
 import UserInfo from '../components/mypage/UserInfo';
 import SetDiaryOption from '../components/mypage/SetDiaryOption';
@@ -22,7 +22,7 @@ export default function Routes() {
       </Route>
       <Route path="/diary" element={<Diary />} />
       <Route path="/signup" element={<SignUp />} />
-      <Route path="/" element={<Landing />} />
+      <Route path="/" element={<Home />} />
       <Route path="*" element={<Navigate replace to="/" />} />
     </ReactRouterRoutes>
   );
