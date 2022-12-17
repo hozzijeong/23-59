@@ -1,6 +1,8 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
 
 const SideNavbar = tw.div`
   flex
@@ -24,12 +26,25 @@ function AverageDetailMenu() {
 }
 
 function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const openHandler = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <SideNavbar>
       <Link to="user">회원 정보 수정</Link>
       <Link to="select-option">작성페이지 옵션 설정</Link>
-      <p>통계 보기</p>
-      <AverageDetailMenu />
+      <button
+        type="button"
+        onClick={() => {
+          openHandler();
+        }}
+      >
+        통계 보기
+      </button>
+      {isOpen ? <AverageDetailMenu /> : null}
       <Link to="collect-question">오늘의 질문 모아보기</Link>
     </SideNavbar>
   );
