@@ -12,6 +12,8 @@ module.exports = {
   rules: {
     'linebreak-style': 0,
     'import/prefer-default-export': 0,
+    'jsx-a11y/click-events-have-key-events': 0, // click이벤트를 다른 element에서도 쓸 수 있게 허용
+    'jsx-a11y/no-static-element-interactions': 0, // 각 element에 대한 규율 검사 정지
     'prettier/prettier': 0,
     'import/extensions': 0,
     'no-use-before-define': 0,
