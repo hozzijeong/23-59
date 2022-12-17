@@ -48,24 +48,25 @@ const userSchema = new Schema<IUser>(
     },
   },
   {
+    collection: 'users',
     timestamps: true,
   }
 );
 
-const User = model<IUser>('User', userSchema);
+// const User = model<IUser>('User', userSchema);
 
-run().catch((err) => console.log(err));
+// run().catch((err) => console.log(err));
 
-async function run() {
-  // 4. Connect to MongoDB
-  await connect('mongodb://localhost:27017/test');
+// async function run() {
+//   // 4. Connect to MongoDB
+//   await connect('mongodb://localhost:27017/test');
 
-  const user = new User({
-    email: 'abc@cc.com',
-    password: 'abc123',
-    nickname: 'st',
-  });
-  await user.save();
+//   const user = new User({
+//     email: 'abc@cc.com',
+//     password: 'abc123',
+//     nickname: 'st',
+//   });
+//   await user.save();
 
-  console.log(user);
-}
+//   console.log(user);
+// }

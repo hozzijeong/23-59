@@ -5,13 +5,11 @@
     "node": true
   },
   "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "import"],
+  "plugins": ["@typescript-eslint", "import", "prettier"],
   "extends": [
     "airbnb",
-    "airbnb/hooks",
-    "prettier/react",
+    "prettier",
     "plugin:@typescript-eslint/recommended",
-    "prettier/@typescript-eslint",
     "plugin:prettier/recommended"
   ],
   "globals": {
@@ -26,6 +24,7 @@
     }
   },
   "rules": {
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
     "linebreak-style": 0,
     "import/no-dynamic-require": 0,
     "import/no-unresolved": 0,
