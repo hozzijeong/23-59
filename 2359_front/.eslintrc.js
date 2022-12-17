@@ -1,6 +1,6 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['@typescript-eslint', 'prettier', 'react-hooks'],
   extends: [
     'airbnb',
     'plugin:import/errors',
@@ -20,6 +20,16 @@ module.exports = {
     'no-shadow': 0,
     'react/prop-types': 0,
     'react/jsx-filename-extension': [2, { extensions: ['.js', '.jsx', '.ts', '.tsx'] }],
+    'react/function-component-definition': [2, { namedcomponents: 'arrow-function' }],
     'jsx-a11y/no-noninteractive-element-interactions': 0,
+
+    // eslint-plugin-react-hooks 사용 중 recoil 사용시 useRecoilCallback 에서 경고를 띄워줌
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': [
+      'warn',
+      {
+        additionalHooks: 'useRecoilCallback',
+      },
+    ],
   },
 };
