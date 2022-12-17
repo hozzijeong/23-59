@@ -89,8 +89,10 @@ border-b
 border-r 
 px-2 
 pt-2
+
 hover:bg-primaryDark
 active:bg-primary
+transition-colors ease-in-out duration-300
 `;
 const CalendarDay = tw.div`
 flex 
