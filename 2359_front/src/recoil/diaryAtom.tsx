@@ -8,11 +8,13 @@ interface TodoListProps {
 
 interface DiaryStateProps {
   todos: TodoListProps[];
+  questionAnswer: string;
 }
 
 export const diaryAtom = atom<DiaryStateProps>({
   key: 'diaryState',
   default: {
     todos: [],
+    questionAnswer: '',
   },
 });
