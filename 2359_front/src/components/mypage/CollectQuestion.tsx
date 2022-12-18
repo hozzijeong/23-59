@@ -3,20 +3,6 @@ import tw from 'tailwind-styled-components';
 
 const tagData: string[] = ['#슬픔', '#기쁨', '#행복', '#죽음', '#공부', '#연애', '#사랑', '#고민', '#걱정'];
 
-const TagButtons = tw.button`
-  mr-3
-`;
-
-const selectBtnClass = `
-  inline-block px-2.5 py-1 bg-blue-600 text-white font-medium text-xs leading-tight rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg
-  mr-3
-`;
-
-const nonSelectBtnClass = `
-  inline-block px-2.5 py-1 text-blue font-medium text-xs leading-tight rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg  active:bg-blue-800 active:shadow-lg
-  mr-3
-`;
-
 interface IData {
   [key: string]: boolean;
 }
@@ -43,12 +29,12 @@ function CollectQuestion() {
     console.log('newSelect', newSelect);
   };
 
-  function selectedTag(ele: string): string {
+  const selectedTag = (ele: string): string => {
     if (isSelect[ele]) {
       return selectBtnClass;
     }
     return nonSelectBtnClass;
-  }
+  };
 
   return (
     <div>
@@ -68,3 +54,20 @@ function CollectQuestion() {
 }
 
 export default CollectQuestion;
+
+const TagButtons = tw.button`
+  mr-3
+`;
+
+const selectBtnClass = `
+  inline-block px-2.5 py-1 bg-blue-600 text-white font-medium text-xs leading-tight rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg 
+  mr-3
+`;
+
+const nonSelectBtnClass = `
+  inline-block px-2.5 py-1 text-blue font-medium text-xs leading-tight rounded-xl shadow-md hover:shadow-lg hover:bg-neutral-300
+  mr-3
+`;
+// 참고 사항
+// focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg
+// active:bg-blue-800 active:shadow-lg

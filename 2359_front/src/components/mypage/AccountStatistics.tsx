@@ -62,7 +62,13 @@ function AccountStatistics() {
 
 export default AccountStatistics;
 
-const data = [
+interface Idata {
+  id: string;
+  label: string;
+  value: number;
+}
+
+const data: Idata[] = [
   {
     id: '식비',
     label: '식비',
