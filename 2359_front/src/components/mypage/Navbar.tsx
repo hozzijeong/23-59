@@ -1,8 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import tw from 'tailwind-styled-components';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
-/* eslint-disable react/jsx-props-no-spreading */
 
 const SideNavbar = tw.div`
   flex
@@ -12,16 +10,22 @@ const SideNavbar = tw.div`
   items-start
   p-4
   pt-10
-  space-y-4
+  space-y-5
 `;
 
-function AverageDetailMenu() {
+const StatisticsDiv = tw.div`
+  space-y-3
+  flex
+  flex-col
+  ml-4
+`;
+
+function StatisticsMenu() {
   return (
-    <div>
+    <StatisticsDiv>
       <Link to="emotion">한달 감정 통계</Link>
-      <br />
       <Link to="account">가계부 통계</Link>
-    </div>
+    </StatisticsDiv>
   );
 }
 
@@ -40,10 +44,11 @@ function Navbar() {
         onClick={() => {
           openHandler();
         }}
+        style={{ cursor: 'pointer' }}
       >
         통계 보기
       </div>
-      {isOpen ? <AverageDetailMenu /> : null}
+      {isOpen ? <StatisticsMenu /> : null}
       <Link to="collect-question">오늘의 질문 모아보기</Link>
     </SideNavbar>
   );
