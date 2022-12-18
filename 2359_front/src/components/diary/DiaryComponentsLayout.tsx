@@ -16,11 +16,11 @@ const Title = tw.h1`
 `;
 
 function DiaryComponentsLayout({ contents, children }: DiaryComponentLayoutProps) {
-  const id = contents.content.replaceAll(' ', '-');
+  const id = contents.title.replaceAll(' ', '-');
 
   return (
     <ContentContainer id={id}>
-      <Title>{contents.content}</Title>
+      <Title>{contents.title}</Title>
       {children}
     </ContentContainer>
   );

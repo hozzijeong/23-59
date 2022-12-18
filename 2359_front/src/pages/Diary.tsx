@@ -58,21 +58,28 @@ const FixedUl = tw(Ullists)`
   fixed
 `;
 
+type ContentOptionTypes = 'To Do List' | '오늘의 질문' | '감정 일기' | '가계부';
+
+type DiaryContentsPrpos = {
+  [key in ContentOptionTypes]: ReactNode;
+};
+
 export interface ContentOptionProps {
   id: string;
-  content: string;
+  title: ContentOptionTypes;
   isChecked: boolean;
 }
 
 const TEMP_DATA: ContentOptionProps[] = [
-  { id: '1', content: 'To Do List', isChecked: false },
-  { id: '2', content: '오늘의 질문', isChecked: false },
-  { id: '3', content: '감정 일기', isChecked: false },
-  { id: '4', content: '가계부', isChecked: false },
+  { id: '1', title: 'To Do List', isChecked: false },
+  { id: '2', title: '오늘의 질문', isChecked: false },
+  { id: '3', title: '감정 일기', isChecked: false },
+  { id: '4', title: '가계부', isChecked: false },
 ];
 
 function Diary() {
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>(TEMP_DATA);
+
   const optionHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
     setContentOptions((currentOptions) =>
@@ -81,49 +88,42 @@ function Diary() {
   }, []);
 
   const contentCheckBox = useMemo(() => {
-    return contentOptions.map(({ id, content }) => (
+    return contentOptions.map(({ id, title }) => (
       <li key={id}>
-        <input className="text-2rem" id={id} type="checkbox" value={content} onChange={optionHandler} />
-        <label htmlFor={id}>{content}</label>
+        <input className="text-2rem" id={id} type="checkbox" value={title} onChange={optionHandler} />
+        <label htmlFor={id}>{title}</label>
       </li>
     ));
   }, [contentOptions, optionHandler]);
 
   const tableContents = useMemo(() => {
     const filterdContents = contentOptions.filter(({ isChecked }) => isChecked);
-    return filterdContents.map(({ content }) => (
-      <li key={content}>
-        <a href={`#${content.replaceAll(' ', '-')}`}>{content}</a>
+    return filterdContents.map(({ title }) => (
+      <li key={title}>
+        <a href={`#${title.replaceAll(' ', '-')}`}>{title}</a>
       </li>
     ));
   }, [contentOptions]);
 
-  const diaryContents = useMemo(() => {
-    return contentOptions.every((options) => options.isChecked === false)
-      ? '좌측 옵션을 선택해주세요'
-      : contentOptions.map((options) => {
-          const { content, isChecked } = options;
-          if (!isChecked) return null;
-          let currentComponents: ReactNode;
-          switch (content) {
-            case 'To Do List':
-              currentComponents = <TodoList />;
-              break;
-            case '오늘의 질문':
-              currentComponents = <TodayQuestion />;
-              break;
-            case '감정 일기':
-              currentComponents = <EmotionDiary />;
-              break;
-            case '가계부':
-              currentComponents = <AccountBook />;
-              break;
-            default:
-              return null;
-          }
-          return <DiaryComponentsLayout contents={options}>{currentComponents}</DiaryComponentsLayout>;
-        });
-  }, [contentOptions]);
+  const diaryContents = useMemo(
+    () =>
+      contentOptions.every((options) => options.isChecked === false)
+        ? '좌측 옵션을 선택해주세요'
+        : contentOptions.map((options) => {
+            const { title, isChecked } = options;
+            if (!isChecked) return null;
+
+            const diaryContentMap: DiaryContentsPrpos = {
+              'To Do List': <TodoList />,
+              '오늘의 질문': <TodayQuestion />,
+              '감정 일기': <EmotionDiary />,
+              가계부: <AccountBook />,
+            };
+
+            return <DiaryComponentsLayout contents={options}>{diaryContentMap[title]}</DiaryComponentsLayout>;
+          }),
+    [contentOptions]
+  );
 
   return (
     <DiarySection>
