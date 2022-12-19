@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 
 type accountCategory =
   | '식비'
@@ -19,6 +19,12 @@ type accountCategory =
   | '자녀/육아'
   | '반려동물'
   | '경조/선물';
+
+enum moneyFlowCategory {
+  expense = '지출',
+  income = '수입',
+  transfer = '이체',
+}
 
 const ACCOUNT_CATEGORY: accountCategory[] = [
   '식비',
@@ -41,11 +47,44 @@ const ACCOUNT_CATEGORY: accountCategory[] = [
   '경조/선물',
 ];
 
+export interface AccountTableRow {
+  id: string;
+  moneyFlow: moneyFlowCategory;
+  category: accountCategory;
+  amount: number;
+  memo: string;
+}
+
 function AccountBook() {
+  const [accountTable, setAccountTable] = useState<AccountTableRow[]>([]);
   const categoryOptions = useMemo(() => ACCOUNT_CATEGORY.map((category) => <option>{category}</option>), []);
+
   const appendAccountInfoHandler = () => {
     return null;
   };
+
+  const deleteTableInfoHandler = () => {
+    return null;
+  };
+
+  const tableInfo = useMemo(
+    () =>
+      accountTable.map(({ moneyFlow, category, amount, memo }) => (
+        <tr>
+          <th>{moneyFlow}</th>
+          <th>{category}</th>
+          <th>{amount}</th>
+          <th>{memo}</th>
+          <th>
+            <button type="button" onClick={deleteTableInfoHandler}>
+              삭제하기
+            </button>
+          </th>
+        </tr>
+      )),
+    [accountTable]
+  );
+
   return (
     <div>
       <div>
@@ -74,7 +113,7 @@ function AccountBook() {
             <th> </th>
           </tr>
         </thead>
-        <tbody>a</tbody>
+        <tbody>{tableInfo}</tbody>
       </table>
     </div>
   );

@@ -7,7 +7,7 @@ import TodoList from 'components/diary/ToDoList';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
-interface AbsoluteProps {
+interface AbsoluteDivProps {
   isLeft: boolean;
 }
 
@@ -39,7 +39,7 @@ const RelativeDiv = tw.div`
   relative
 `;
 
-const AbsoluteDiv = tw.div<AbsoluteProps>`
+const AbsoluteDiv = tw.div<AbsoluteDivProps>`
   absolute
   ${(props) => (props.isLeft ? 'left-[-12rem]' : 'right-0')}
   mt-[5rem]
