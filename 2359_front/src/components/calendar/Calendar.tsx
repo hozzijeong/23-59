@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { format, subMonths, addMonths } from 'date-fns';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
+import Button from 'components/Button';
 import { CalendarWeeks, dayColor, takeMonth, todayColor } from './Utils';
 
 function Calendar() {
@@ -20,16 +21,16 @@ function Calendar() {
   return (
     <CalendarContainer>
       <HeaderContainer>
-        <CalendarBtn type="button" onClick={prevMonth}>
+        <Button btntype="basic" onClick={prevMonth}>
           이전
-        </CalendarBtn>
+        </Button>
         <div>
           <CalendarYear>{format(currentDate, 'yyyy')}년</CalendarYear>
           <CalendarMonth>{format(currentDate, 'M')}월</CalendarMonth>
         </div>
-        <CalendarBtn type="button" onClick={nextMonth}>
+        <Button btntype="basic" onClick={nextMonth}>
           다음
-        </CalendarBtn>
+        </Button>
       </HeaderContainer>
       <CalendarWeeks />
       {data.map((week) => (
@@ -45,14 +46,6 @@ function Calendar() {
   );
 }
 export default Calendar;
-
-const CalendarBtn = tw.button`
-text-lg
-border 
-rounded-lg 
-px-2
-bg-primary
-`;
 
 const CalendarContainer = tw.div`
 bg-white
