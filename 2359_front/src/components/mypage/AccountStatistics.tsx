@@ -1,6 +1,7 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsivePie } from '@nivo/pie';
+import { useParams } from 'react-router-dom';
 
 function AccountStatistics() {
   return (

@@ -15,12 +15,10 @@ const setData = (): void => {
 };
 setData();
 console.log('newData', newData);
-// 생각해볼 키워드!
-// 그냥 Object면... 내가 누른거의 key값을 받아오면 그걸로 파악할수있지 않나?
-// 객체가 아니라 배열로 관리 하면 괜찮?
 
 function CollectQuestion() {
   const [isSelect, setIsSelect] = useState(newData);
+  const [showModal, setShowModal] = React.useState(false);
 
   const handleTagName = (item: string): void => {
     const newSelect = { ...isSelect };
@@ -37,7 +35,7 @@ function CollectQuestion() {
   };
 
   return (
-    <div>
+    <Container>
       <div>오늘의 질문 모아보기</div>
       <div>
         {tagData.map((item) => {
@@ -48,8 +46,62 @@ function CollectQuestion() {
           );
         })}
       </div>
-      <div>질문 보여주는 영역</div>
-    </div>
+      <div>
+        <AnswerUl>
+          <AnswerList onClick={() => setShowModal(true)}>해당하는 질문 1이 보여질거에여</AnswerList>
+          <AnswerList onClick={() => setShowModal(true)}>이건 질문 2임</AnswerList>
+          <AnswerList onClick={() => setShowModal(true)}>요거슨 3번째 알맞는 질문임</AnswerList>
+        </AnswerUl>
+      </div>
+      {showModal ? (
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
+                  <h3 className="text-3xl font-semibold">Modal Title</h3>
+                  <button
+                    type="button"
+                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
+                    onClick={() => setShowModal(false)}
+                  >
+                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
+                      ×
+                    </span>
+                  </button>
+                </div>
+
+                <div className="relative p-6 flex-auto">
+                  <p className="my-4 text-slate-500 text-lg leading-relaxed">
+                    I always felt like I could do anything. That’s the main thing people are controlled by! Thoughts-
+                    their perception of themselves! Theyre slowed down by their perception of themselves. If youre
+                    taught you can’t do anything, you won’t do anything. I was taught I could do everything.
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                  <button
+                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Close
+                  </button>
+                  <button
+                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black">.</div>
+        </>
+      ) : null}
+    </Container>
   );
 }
 
@@ -68,6 +120,33 @@ const nonSelectBtnClass = `
   inline-block px-2.5 py-1 text-blue font-medium text-xs leading-tight rounded-xl shadow-md hover:shadow-lg hover:bg-neutral-300
   mr-3
 `;
-// 참고 사항
+
+const Container = tw.div`
+  w-full  
+  flex
+  align-center
+  flex-col
+  space-y-4
+`;
+
+const AnswerUl = tw.ul`
+  w-full
+  p-4
+`;
+
+const AnswerList = tw.li`
+border-solid
+border-2
+rounded-md
+w-full
+shadow-md
+p-3
+m-3
+hover:bg-gray-200
+active:bg-stone-300
+cursor-pointer
+`;
+
+// BtnClass 참고 사항
 // focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg
 // active:bg-blue-800 active:shadow-lg

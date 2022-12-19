@@ -4,7 +4,7 @@ import { ResponsiveBar } from '@nivo/bar';
 
 const data = [
   {
-    name: '😁',
+    name: '개수',
     행복: 50,
     기쁨: 60,
     좌절: 12,
@@ -21,7 +21,6 @@ function EmotionStatistics() {
         <ResponsiveBar
           data={data}
           keys={['행복', '기쁨', '좌절', '슬픔', '분노']}
-          indexBy="name"
           margin={{ top: 100, right: 130, bottom: 60, left: 60 }}
           padding={0.1}
           groupMode="grouped"

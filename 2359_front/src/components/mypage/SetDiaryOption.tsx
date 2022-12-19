@@ -1,35 +1,13 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
-
-const SetOptionContainer = tw.div`
-  flex
-  flex-col
-  justify-between
-  space-y-4
-  w-full
-`;
-
-const CheckboxArea = tw.div`
-  flex
-  flex-col
-  justify-center
-  items-start
-  space-y-4
-  m-auto
-  h-96
-`;
-
-const ScriptDiv = tw.div`
-  flex
-  justify-center
-  items-center
-  w-10/12
-  m-auto
-`;
+import { useLocation } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 
 function SetDiaryOption() {
+  const { pathname } = useLocation();
+  console.log(pathname);
   return (
-    <SetOptionContainer>
+    <Container>
       <div className="justify-self-start">작성페이지 옵션 설정</div>
       <ScriptDiv>
         1. 일일 결산을할 때 고정적으로 적용할 옵션을 설정하는 페이지 입니다.
@@ -53,8 +31,35 @@ function SetDiaryOption() {
           <p>일기를 쓰고 오늘의 감정을 선택할 수 있어요!</p>
         </div>
       </CheckboxArea>
-    </SetOptionContainer>
+    </Container>
   );
 }
 
 export default SetDiaryOption;
+
+const Container = tw.div`
+  flex
+  flex-col
+  justify-start
+  space-y-4
+  w-full
+`;
+
+const CheckboxArea = tw.div`
+  flex
+  flex-col
+  justify-center
+  items-start
+  space-y-4
+  m-auto
+  h-96
+`;
+
+const ScriptDiv = tw.div`
+  flex
+  justify-center
+  items-center
+  w-10/12
+  mx-auto
+  my-4
+`;
