@@ -1,36 +1,24 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
 import { useRecoilState } from 'recoil';
-import { accountCategory, accountTableAtom, AccountTableRow, moneyFlowCategory } from 'recoil/diaryAtom';
+import {
+  accountEnums,
+  accountTableAtom,
+  AccountTableRow,
+  moneyFlowEnums,
+  ACCOUNT_CATEGORY,
+  MONEY_FLOW,
+} from 'recoil/diaryAtom';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 
-const ACCOUNT_CATEGORY: accountCategory[] = [
-  '식비',
-  '카페/간식',
-  '술/유흥',
-  '생활',
-  '온라인 쇼핑',
-  '패션/쇼핑',
-  '뷰티/미용',
-  '교통',
-  '자동차',
-  '주거/통신',
-  '의료/건강',
-  '금융',
-  '문화/여가',
-  '여행/숙박',
-  '교육/학습',
-  '자녀/육아',
-  '반려동물',
-  '경조/선물',
-];
+const ACCOUNT_STATE = Object.values(accountEnums);
 
-const MONEY_FLOW: moneyFlowCategory[] = ['지출', '수입', '이체'];
+const MONEY_STATE = Object.values(moneyFlowEnums);
 
 const initialAccountInfo: AccountTableRow = {
   id: getCurrentDate(),
-  moneyFlow: '지출',
-  category: '식비',
+  moneyFlow: moneyFlowEnums.EXPENSE,
+  category: accountEnums.FOOD,
   amount: 0,
   memo: '',
 };
@@ -58,17 +46,21 @@ function AccountBook() {
 
   const moneyFlowOptions = useMemo(
     () =>
-      MONEY_FLOW.map((type) => {
-        return <option key={uuid()}>{type}</option>;
-      }),
+      MONEY_STATE.map((type) => (
+        <option key={uuid()} value={type}>
+          {MONEY_FLOW[type]}
+        </option>
+      )),
     []
   );
 
   const categoryOptions = useMemo(
     () =>
-      ACCOUNT_CATEGORY.map((category) => {
-        return <option key={uuid()}>{category}</option>;
-      }),
+      ACCOUNT_STATE.map((category) => (
+        <option key={uuid()} value={category}>
+          {ACCOUNT_CATEGORY[category]}
+        </option>
+      )),
     []
   );
 
