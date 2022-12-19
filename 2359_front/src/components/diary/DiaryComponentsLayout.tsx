@@ -7,14 +7,6 @@ interface DiaryComponentLayoutProps {
   children: ReactNode;
 }
 
-const ContentContainer = tw.div`
-  mt-[2rem] 
-`;
-
-const Title = tw.h1`
-  text-3xl
-`;
-
 function DiaryComponentsLayout({ contents, children }: DiaryComponentLayoutProps) {
   const id = contents.title.replaceAll(' ', '-');
 
@@ -27,3 +19,11 @@ function DiaryComponentsLayout({ contents, children }: DiaryComponentLayoutProps
 }
 
 export default DiaryComponentsLayout;
+
+const ContentContainer = tw.div`
+  mt-[2rem] 
+`;
+
+const Title = tw.h1`
+  text-3xl
+`;

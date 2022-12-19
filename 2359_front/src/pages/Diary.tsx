@@ -11,54 +11,6 @@ interface AbsoluteDivProps {
   isLeft: boolean;
 }
 
-const DiarySection = tw.section`
-  w-full
-`;
-
-const HeadContent = tw.div`
-  max-w-screen-md
-  my-0
-  mx-auto
-  pt-[5rem]
-`;
-
-const Content = tw.div`
-  max-w-screen-md
-  mt-[5rem]
-  md-0
-  mx-auto
-  text-lg	
-`;
-
-const Title = tw.p`
-  text-5xl
-  font-extrabold
-  break-keep	
-`;
-
-const RelativeDiv = tw.div`
-  relative
-`;
-
-const AbsoluteDiv = tw.div<AbsoluteDivProps>`
-  absolute
-  ${(props) => (props.isLeft ? 'left-[-7.5rem]' : 'right-0')}
-  mt-12
-
-`;
-
-const Ullists = styled.ul`
-  li {
-    display: flex;
-    align-content: center;
-    font-size: 14px;
-  }
-`;
-
-const FixedUl = tw(Ullists)`
-  fixed
-`;
-
 type ContentOptionTypes = 'To Do List' | '오늘의 질문' | '감정 일기' | '가계부';
 
 type DiaryContentsPrpos = {
@@ -145,3 +97,51 @@ function Diary() {
 }
 
 export default Diary;
+
+const DiarySection = tw.section`
+  w-full
+`;
+
+const HeadContent = tw.div`
+  max-w-screen-md
+  my-0
+  mx-auto
+  pt-[5rem]
+`;
+
+const Content = tw.div`
+  max-w-screen-md
+  mt-[5rem]
+  md-0
+  mx-auto
+  text-lg	
+`;
+
+const Title = tw.p`
+  text-5xl
+  font-extrabold
+  break-keep	
+`;
+
+const RelativeDiv = tw.div`
+  relative
+`;
+
+const AbsoluteDiv = tw.div<AbsoluteDivProps>`
+  absolute
+  ${(props) => (props.isLeft ? 'left-[-7.5rem]' : 'right-0')}
+  mt-12
+
+`;
+
+const Ullists = styled.ul`
+  li {
+    display: flex;
+    align-content: center;
+    font-size: 14px;
+  }
+`;
+
+const FixedUl = tw(Ullists)`
+  fixed
+`;
