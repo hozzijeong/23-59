@@ -1,5 +1,5 @@
 import React from 'react';
-import Calendar from 'components/Calendar';
+import Calendar from 'components/calendar/Calendar';
 
 function Home() {
   return (
