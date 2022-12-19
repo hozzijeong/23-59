@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { diaryAtom } from 'recoil/diaryAtom';
+import { getCurrentDate } from 'utilities/getCurrentDate';
 import tw from 'tailwind-styled-components';
 
 function TodoList() {
@@ -12,10 +13,9 @@ function TodoList() {
       alert('한 글자 이상 입력해주세요!');
       return;
     }
-    const date = Date.now();
     setCurTodo((cur) => ({
       ...cur,
-      todos: [...cur.todos, { id: date.toString(10), isChecked: false, todoContent: todoInput }],
+      todos: [...cur.todos, { id: getCurrentDate(), isChecked: false, todoContent: todoInput }],
     }));
     setTodoInput('');
   };
