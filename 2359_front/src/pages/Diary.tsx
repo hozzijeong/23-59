@@ -19,18 +19,19 @@ const HeadContent = tw.div`
   max-w-screen-md
   my-0
   mx-auto
-  pt-[8rem]
+  pt-[5rem]
 `;
+
 const Content = tw.div`
   max-w-screen-md
   mt-[5rem]
   md-0
   mx-auto
-  text-[1.8rem]
+  text-lg	
 `;
 
 const Title = tw.p`
-  text-[4.8rem]
+  text-5xl
   font-extrabold
   break-keep	
 `;
@@ -41,8 +42,8 @@ const RelativeDiv = tw.div`
 
 const AbsoluteDiv = tw.div<AbsoluteDivProps>`
   absolute
-  ${(props) => (props.isLeft ? 'left-[-12rem]' : 'right-0')}
-  mt-[5rem]
+  ${(props) => (props.isLeft ? 'left-[-7.5rem]' : 'right-0')}
+  mt-12
 
 `;
 
@@ -50,7 +51,7 @@ const Ullists = styled.ul`
   li {
     display: flex;
     align-content: center;
-    font-size: 1.4rem;
+    font-size: 14px;
   }
 `;
 
@@ -90,7 +91,7 @@ function Diary() {
   const contentCheckBox = useMemo(() => {
     return contentOptions.map(({ id, title }) => (
       <li key={id}>
-        <input className="text-2rem" id={id} type="checkbox" value={title} onChange={optionHandler} />
+        <input className="text-lg" id={id} type="checkbox" value={title} onChange={optionHandler} />
         <label htmlFor={id}>{title}</label>
       </li>
     ));

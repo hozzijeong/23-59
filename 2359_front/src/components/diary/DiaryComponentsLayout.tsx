@@ -12,7 +12,7 @@ const ContentContainer = tw.div`
 `;
 
 const Title = tw.h1`
-  text-5xl
+  text-3xl
 `;
 
 function DiaryComponentsLayout({ contents, children }: DiaryComponentLayoutProps) {
