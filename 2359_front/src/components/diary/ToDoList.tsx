@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { diaryAtom } from 'recoil/diaryAtom';
+import { todayTodo } from 'recoil/diaryAtom';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 import tw from 'tailwind-styled-components';
 
 function TodoList() {
   const [todoInput, setTodoInput] = useState<string>('');
-  const [curTodo, setCurTodo] = useRecoilState(diaryAtom);
+  const [curTodo, setCurTodo] = useRecoilState(todayTodo);
 
   const addTodoHandler = () => {
     if (!todoInput.length) {
       alert('한 글자 이상 입력해주세요!');
       return;
     }
-    setCurTodo((cur) => ({
-      ...cur,
-      todos: [...cur.todos, { id: getCurrentDate(), isChecked: false, todoContent: todoInput }],
-    }));
+    setCurTodo((cur) => [...cur, { id: getCurrentDate(), isChecked: false, todoContent: todoInput }]);
     setTodoInput('');
   };
 
@@ -27,14 +24,13 @@ function TodoList() {
 
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
-    const { todos } = curTodo;
-    const updateTodos = todos.map((todo) => (todo.id === id ? { ...todo, isChecked: !todo.isChecked } : { ...todo }));
+    const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, isChecked: !todo.isChecked } : { ...todo }));
 
-    setCurTodo((cur) => ({ ...cur, todos: updateTodos }));
+    setCurTodo(updateTodos);
   };
 
   const todoDeleteHandler = (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
-    setCurTodo((cur) => ({ ...cur, todos: cur.todos.filter((todo) => todo.id !== id) }));
+    setCurTodo((cur) => cur.filter((todo) => todo.id !== id));
   };
 
   return (
@@ -47,7 +43,7 @@ function TodoList() {
       </div>
       <div>
         <ul>
-          {curTodo.todos.map(({ id, isChecked, todoContent }) => {
+          {curTodo.map(({ id, isChecked, todoContent }) => {
             return (
               <li key={id}>
                 <input id={id} type="checkbox" defaultChecked={isChecked} onChange={changeTodoCheckHandler} />
