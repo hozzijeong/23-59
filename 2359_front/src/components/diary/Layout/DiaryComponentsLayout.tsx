@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import { ContentOptionProps } from 'pages/Diary';
+import { ContentOptionProps, CONTENT_OPTION } from 'pages/Diary';
 import tw from 'tailwind-styled-components';
 
 interface DiaryComponentLayoutProps {
@@ -8,11 +8,11 @@ interface DiaryComponentLayoutProps {
 }
 
 function DiaryComponentsLayout({ contents, children }: DiaryComponentLayoutProps) {
-  const id = contents.title.replaceAll(' ', '-');
+  const id = CONTENT_OPTION[contents.title].replaceAll(' ', '-');
 
   return (
     <ContentContainer id={id}>
-      <Title>{contents.title}</Title>
+      <Title>{CONTENT_OPTION[contents.title]}</Title>
       {children}
     </ContentContainer>
   );

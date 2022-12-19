@@ -33,7 +33,7 @@ function TodoList() {
     setCurTodo((cur) => ({ ...cur, todos: updateTodos }));
   };
 
-  const todoDeleteHandler = (event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+  const todoDeleteHandler = (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
     setCurTodo((cur) => ({ ...cur, todos: cur.todos.filter((todo) => todo.id !== id) }));
   };
 

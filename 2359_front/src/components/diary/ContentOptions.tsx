@@ -1,4 +1,4 @@
-import { ContentOptionProps } from 'pages/Diary';
+import { ContentOptionProps, CONTENT_OPTION } from 'pages/Diary';
 import React, { useMemo, useCallback } from 'react';
 import tw from 'tailwind-styled-components';
 import DiaryCheckOptionLayout from './Layout/DiaryCheckOptionLayout';
@@ -22,15 +22,16 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
   const contentCheckBox = useMemo(() => {
     return state.map(({ id, title, isChecked }) => (
       <li key={id}>
-        <input className="text-lg" id={id} type="checkbox" value={title} onChange={optionHandler} checked={isChecked} />
-        <label htmlFor={id}>{title}</label>
+        <input className="text-lg" id={id} type="checkbox" onChange={optionHandler} checked={isChecked} />
+        <label htmlFor={id}>{CONTENT_OPTION[title]}</label>
       </li>
     ));
   }, [state, optionHandler]);
 
   const tableContents = useMemo(() => {
     const filterdContents = state.filter(({ isChecked }) => isChecked);
-    return filterdContents.map(({ title }) => (
+    const titles = filterdContents.map(({ title }) => CONTENT_OPTION[title]);
+    return titles.map((title) => (
       <li key={title}>
         <a href={`#${title.replaceAll(' ', '-')}`}>{title}</a>
       </li>
@@ -39,8 +40,8 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
 
   return (
     <RelativeDiv>
-      <DiaryCheckOptionLayout isLeft component={contentCheckBox} />
-      <DiaryCheckOptionLayout isLeft={false} component={tableContents} />
+      <DiaryCheckOptionLayout isleft component={contentCheckBox} />
+      <DiaryCheckOptionLayout isleft={false} component={tableContents} />
     </RelativeDiv>
   );
 }
