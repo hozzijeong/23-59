@@ -1,6 +1,5 @@
 import { ContentOptionProps } from 'pages/Diary';
 import React, { useMemo, useCallback } from 'react';
-import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 import DiaryCheckOptionLayout from './Layout/DiaryCheckOptionLayout';
 
@@ -21,9 +20,9 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
   );
 
   const contentCheckBox = useMemo(() => {
-    return state.map(({ id, title }) => (
+    return state.map(({ id, title, isChecked }) => (
       <li key={id}>
-        <input className="text-lg" id={id} type="checkbox" value={title} onChange={optionHandler} />
+        <input className="text-lg" id={id} type="checkbox" value={title} onChange={optionHandler} checked={isChecked} />
         <label htmlFor={id}>{title}</label>
       </li>
     ));

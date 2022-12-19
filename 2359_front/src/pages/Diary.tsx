@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState, ReactNode } from 'react';
+import React, { useMemo, useState, ReactNode } from 'react';
 import AccountBook from 'components/diary/AccountBook';
 import DiaryComponentsLayout from 'components/diary/Layout/DiaryComponentsLayout';
 import EmotionDiary from 'components/diary/EmotionDiary';
@@ -22,34 +22,38 @@ export interface ContentOptionProps {
 }
 
 const TEMP_DATA: ContentOptionProps[] = [
-  { id: '1', title: 'To Do List', isChecked: false },
-  { id: '2', title: '오늘의 질문', isChecked: false },
+  { id: '1', title: 'To Do List', isChecked: true },
+  { id: '2', title: '오늘의 질문', isChecked: true },
   { id: '3', title: '감정 일기', isChecked: false },
   { id: '4', title: '가계부', isChecked: false },
 ];
 
 function Diary() {
+  // 여기 체크 상태 데이터는 서버에서 유저가 체크해 놓은 데이터를 받아오면 됨.
+  // 그리고 그 받아온 데이터를 useState를 통해 변환하면 된다 생각함.
+  // 결국에 서버에서 받아오는 이유는 같은 방법을 사용하지 않기 위함이니까
+
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>(TEMP_DATA);
 
-  const diaryContents = useMemo(
-    () =>
-      contentOptions.every((options) => options.isChecked === false)
-        ? '좌측 옵션을 선택해주세요'
-        : contentOptions.map((options) => {
-            const { title, isChecked } = options;
-            if (!isChecked) return null;
+  const diaryContents = useMemo(() => {
+    if (contentOptions.every((options) => options.isChecked === false)) {
+      return '좌측 옵션을 선택해주세요';
+    }
 
-            const diaryContentMap: DiaryContentsPrpos = {
-              'To Do List': <TodoList />,
-              '오늘의 질문': <TodayQuestion />,
-              '감정 일기': <EmotionDiary />,
-              가계부: <AccountBook />,
-            };
+    return contentOptions.map((options) => {
+      const { title, isChecked } = options;
+      if (!isChecked) return null;
 
-            return <DiaryComponentsLayout contents={options}>{diaryContentMap[title]}</DiaryComponentsLayout>;
-          }),
-    [contentOptions]
-  );
+      const diaryContentMap: DiaryContentsPrpos = {
+        'To Do List': <TodoList />,
+        '오늘의 질문': <TodayQuestion />,
+        '감정 일기': <EmotionDiary />,
+        가계부: <AccountBook />,
+      };
+
+      return <DiaryComponentsLayout contents={options}>{diaryContentMap[title]}</DiaryComponentsLayout>;
+    });
+  }, [contentOptions]);
 
   return (
     <DiarySection>
@@ -57,7 +61,15 @@ function Diary() {
         <Title>Title</Title>
         <ContentOptions state={contentOptions} setState={setContentOptions} />
       </HeadContent>
-      <Content>{diaryContents}</Content>
+      <Content>
+        {diaryContents}
+        {contentOptions.every((options) => options.isChecked === false) ? null : (
+          <div>
+            <button type="button">취소하기</button>
+            <button type="button">작성하기</button>
+          </div>
+        )}
+      </Content>
     </DiarySection>
   );
 }
