@@ -1,51 +1,52 @@
 import React, { useMemo, useCallback } from 'react';
+import uuid from 'react-uuid';
 import { useRecoilState } from 'recoil';
-import { diaryAtom, emotionTypes } from 'recoil/diaryAtom';
+import { emotionEnums, emotionRecord, EMOTIONS } from 'recoil/diaryAtom';
 
-const EMOTION_STATE = ['Very Bad', 'Bad', 'SoSo', 'Good', 'Very Good'];
+const EMOTION_STATE = Object.values(emotionEnums);
 
 function EmotionDiary() {
-  const [{ emotionRecord }, setEmotionRecord] = useRecoilState(diaryAtom);
+  const [emotion, setEmotion] = useRecoilState(emotionRecord);
 
   const emotionChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { target } = event;
       if (target instanceof HTMLInputElement) {
-        setEmotionRecord((cur) => ({
+        setEmotion((cur) => ({
           ...cur,
-          emotionRecord: { ...cur.emotionRecord, emotionState: target.value as emotionTypes },
+          emotionState: target.value as emotionEnums,
         }));
       }
 
       if (target instanceof HTMLTextAreaElement) {
-        setEmotionRecord((cur) => ({
+        setEmotion((cur) => ({
           ...cur,
-          emotionRecord: { ...cur.emotionRecord, emotionDiary: target.value },
+          emotionDiary: target.value,
         }));
       }
     },
-    [setEmotionRecord]
+    [setEmotion]
   );
 
   const emotionRadio = useMemo(
     () =>
-      EMOTION_STATE.map((emotion) => {
-        const { emotionState } = emotionRecord;
+      EMOTION_STATE.map((state) => {
+        const { emotionState } = emotion;
         return (
-          <li key={emotion}>
+          <li key={uuid()}>
             <input
-              checked={emotionState === emotion}
-              id={emotion}
+              checked={emotionState === state}
+              id={state}
               type="radio"
               name="emotion"
-              value={emotion}
+              value={state}
               onChange={emotionChangeHandler}
             />
-            <label htmlFor={emotion}>{emotion}</label>
+            <label htmlFor={state}>{EMOTIONS[state]}</label>
           </li>
         );
       }),
-    [emotionChangeHandler, emotionRecord]
+    [emotion, emotionChangeHandler]
   );
 
   return (
@@ -56,7 +57,7 @@ function EmotionDiary() {
       </div>
       <div>
         <p>오늘 하루 무슨 일이 있었는지 남겨주세요.</p>
-        <textarea value={emotionRecord.emotionDiary} onChange={emotionChangeHandler} />
+        <textarea value={emotion.emotionDiary} onChange={emotionChangeHandler} />
       </div>
     </div>
   );

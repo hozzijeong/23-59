@@ -1,6 +1,20 @@
 import { atom } from 'recoil';
 
-type emotionTypes = 'Very Bad' | 'Bad' | 'SoSo' | 'Good' | 'Very Good' | null;
+enum emotionEnums {
+  VERY_BAD = 'Very Bad',
+  BAD = 'Bad',
+  SO_SO = 'SoSo',
+  GOOD = 'Good',
+  VERY_GOOD = 'Very Good',
+}
+
+const EMOTIONS = {
+  [emotionEnums.VERY_BAD]: '매우 안좋음',
+  [emotionEnums.BAD]: '안좋음',
+  [emotionEnums.SO_SO]: '보통',
+  [emotionEnums.GOOD]: '좋음',
+  [emotionEnums.VERY_GOOD]: '매우 좋음',
+};
 
 type accountCategory =
   | '식비'
@@ -39,14 +53,15 @@ interface TodoListProps {
 }
 
 interface EmotionRecordProps {
-  emotionState: emotionTypes;
+  emotionState: emotionEnums;
   emotionDiary: string;
 }
 
 interface DiaryStateProps {
-  todos: TodoListProps[];
-  questionAnswer: string;
-  emotionRecord: EmotionRecordProps;
+  todos?: TodoListProps[];
+  questionAnswer?: string;
+  emotionRecord?: EmotionRecordProps;
+  accountTable?: AccountTableRow[];
 }
 
 const diaryAtom = atom<DiaryStateProps>({
@@ -55,9 +70,28 @@ const diaryAtom = atom<DiaryStateProps>({
     todos: [],
     questionAnswer: '',
     emotionRecord: {
-      emotionState: 'Bad',
+      emotionState: emotionEnums.SO_SO,
       emotionDiary: '',
     },
+    accountTable: [],
+  },
+});
+
+const todayTodo = atom<TodoListProps[]>({
+  key: 'todayTodoState',
+  default: [],
+});
+
+const questionAnswer = atom<string>({
+  key: 'questionAnswerState',
+  default: '',
+});
+
+const emotionRecord = atom<EmotionRecordProps>({
+  key: 'emotionRecordState',
+  default: {
+    emotionState: emotionEnums.SO_SO,
+    emotionDiary: '',
   },
 });
 
@@ -66,5 +100,5 @@ const accountTableAtom = atom<AccountTableRow[]>({
   default: [],
 });
 
-export { diaryAtom, accountTableAtom };
-export type { AccountTableRow, emotionTypes, accountCategory, moneyFlowCategory };
+export { diaryAtom, accountTableAtom, todayTodo, questionAnswer, emotionRecord, emotionEnums, EMOTIONS };
+export type { AccountTableRow, accountCategory, moneyFlowCategory };
