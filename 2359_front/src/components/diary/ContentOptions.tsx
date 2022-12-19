@@ -1,5 +1,6 @@
 import { ContentOptionProps, CONTENT_OPTION } from 'pages/Diary';
 import React, { useMemo, useCallback } from 'react';
+import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
 import DiaryCheckOptionLayout from './Layout/DiaryCheckOptionLayout';
 
@@ -21,7 +22,7 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
 
   const contentCheckBox = useMemo(() => {
     return state.map(({ id, title, isChecked }) => (
-      <li key={id}>
+      <li key={uuid()}>
         <input className="text-lg" id={id} type="checkbox" onChange={optionHandler} checked={isChecked} />
         <label htmlFor={id}>{CONTENT_OPTION[title]}</label>
       </li>
@@ -32,7 +33,7 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
     const filterdContents = state.filter(({ isChecked }) => isChecked);
     const titles = filterdContents.map(({ title }) => CONTENT_OPTION[title]);
     return titles.map((title) => (
-      <li key={title}>
+      <li key={uuid()}>
         <a href={`#${title.replaceAll(' ', '-')}`}>{title}</a>
       </li>
     ));

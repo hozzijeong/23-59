@@ -82,9 +82,9 @@ const todayTodo = atom<TodoListProps[]>({
   default: [],
 });
 
-const questionAnswer = atom<string>({
+const questionAnswer = atom<{ answer: string }>({
   key: 'questionAnswerState',
-  default: '',
+  default: { answer: '' },
 });
 
 const emotionRecord = atom<EmotionRecordProps>({

@@ -3,17 +3,17 @@ import { useRecoilState } from 'recoil';
 import { questionAnswer } from 'recoil/diaryAtom';
 
 function TodayQuestion() {
-  const [answer, setAnswer] = useRecoilState(questionAnswer);
+  const [{ answer }, setAnswer] = useRecoilState(questionAnswer);
 
   const answerChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = event.target;
-    setAnswer(value);
+    setAnswer({ answer: value });
   };
 
   return (
     <div>
       <p>오늘 하루 어떠셨나요?</p>
-      <textarea value={answer} onChange={answerChangeHandler} />
+      <textarea defaultValue={answer} onChange={answerChangeHandler} />
     </div>
   );
 }

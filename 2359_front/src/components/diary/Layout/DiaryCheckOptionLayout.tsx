@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 
 interface AbsoluteDivProps {
-  isleft: boolean;
+  left: boolean;
 }
 
 interface DiaryCheckOptionLayoutProps {
@@ -11,9 +11,9 @@ interface DiaryCheckOptionLayoutProps {
   isleft: boolean;
 }
 
-function DiaryCheckOptionLayout({ isleft = true, component }: DiaryCheckOptionLayoutProps) {
+function DiaryCheckOptionLayout({ isleft, component }: DiaryCheckOptionLayoutProps) {
   return (
-    <AbsoluteDiv isleft={isleft}>
+    <AbsoluteDiv left={isleft}>
       <FixedUl>{component}</FixedUl>
     </AbsoluteDiv>
   );
@@ -23,7 +23,7 @@ export default DiaryCheckOptionLayout;
 
 const AbsoluteDiv = tw.div<AbsoluteDivProps>`
   absolute
-  ${(props) => (props.isleft ? 'left-[-7.5rem]' : 'right-0')}
+  ${(props) => (props.left ? 'left-[-7.5rem]' : 'right-0')}
   mt-12
 
 `;

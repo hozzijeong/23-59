@@ -95,10 +95,10 @@ function AccountBook() {
       <div>
         <p>오늘 수입/지출을 알려주세요</p>
         <div onChange={todayAccountInfoChangeHandler}>
-          <select name="moneyFlow" value={todayAccountInfo.moneyFlow}>
+          <select name="moneyFlow" defaultValue={todayAccountInfo.moneyFlow}>
             {moneyFlowOptions}
           </select>
-          <select name="category" value={todayAccountInfo.category}>
+          <select name="category" defaultValue={todayAccountInfo.category}>
             {categoryOptions}
           </select>
           <div>
@@ -107,11 +107,17 @@ function AccountBook() {
               min={0}
               placeholder="금액을 입력해주세요"
               name="amount"
-              value={todayAccountInfo.amount}
+              defaultValue={todayAccountInfo.amount}
             />
             <label htmlFor="memo">원</label>
           </div>
-          <input id="memo" type="text" placeholder="메모를 입력해주세요" name="memo" value={todayAccountInfo.memo} />
+          <input
+            id="memo"
+            type="text"
+            placeholder="메모를 입력해주세요"
+            name="memo"
+            defaultValue={todayAccountInfo.memo}
+          />
           <button type="button" onClick={appendAccountInfoHandler}>
             추가하기
           </button>

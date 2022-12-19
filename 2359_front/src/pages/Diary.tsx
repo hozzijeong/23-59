@@ -6,6 +6,9 @@ import TodayQuestion from 'components/diary/TodayQuestion';
 import TodoList from 'components/diary/ToDoList';
 import ContentOptions from 'components/diary/ContentOptions';
 import tw from 'tailwind-styled-components';
+import { useRecoilValue } from 'recoil';
+import { accountTableAtom, emotionRecord, questionAnswer, todayTodo } from 'recoil/diaryAtom';
+import uuid from 'react-uuid';
 
 enum OptionEnums {
   TODO_LIST = 'TODO_LIST',
@@ -59,6 +62,10 @@ function Diary() {
   ); // 이렇게 따로 변수로 합쳐서 만들어도 되는지? 클라이언트에서만 사용되는 값들이고, 사용자가 화면에서 동적으로 변경했을 때 그 변경되는 값을 바로바로 적용해줘야 합니다.
 
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>(mixedData);
+  const todayTodoState = useRecoilValue(todayTodo);
+  const questionAnswerState = useRecoilValue(questionAnswer);
+  const emotionRecordState = useRecoilValue(emotionRecord);
+  const accountTableAtomState = useRecoilValue(accountTableAtom);
 
   const diaryContents = useMemo(() => {
     if (contentOptions.every((options) => options.isChecked === false)) {
@@ -76,9 +83,17 @@ function Diary() {
         [OptionEnums.ACCOUNT_BOOK]: <AccountBook />,
       };
 
-      return <DiaryComponentsLayout contents={options}>{diaryContentMap[title]}</DiaryComponentsLayout>;
+      return (
+        <DiaryComponentsLayout key={uuid()} contents={options}>
+          {diaryContentMap[title]}
+        </DiaryComponentsLayout>
+      );
     });
   }, [contentOptions]);
+
+  const submitHandler = () => {
+    console.log(todayTodoState, questionAnswerState, emotionRecordState, accountTableAtomState);
+  };
 
   return (
     <DiarySection>
@@ -91,7 +106,9 @@ function Diary() {
         {contentOptions.every((options) => options.isChecked === false) ? null : (
           <div>
             <button type="button">취소하기</button>
-            <button type="button">작성하기</button>
+            <button type="button" onClick={submitHandler}>
+              작성하기
+            </button>
           </div>
         )}
       </Content>

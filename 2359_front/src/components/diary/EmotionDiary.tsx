@@ -57,7 +57,7 @@ function EmotionDiary() {
       </div>
       <div>
         <p>오늘 하루 무슨 일이 있었는지 남겨주세요.</p>
-        <textarea value={emotion.emotionDiary} onChange={emotionChangeHandler} />
+        <textarea defaultValue={emotion.emotionDiary} onChange={emotionChangeHandler} />
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import { useRecoilState } from 'recoil';
 import { todayTodo } from 'recoil/diaryAtom';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 import tw from 'tailwind-styled-components';
+import uuid from 'react-uuid';
 
 function TodoList() {
   const [todoInput, setTodoInput] = useState<string>('');
@@ -45,7 +46,7 @@ function TodoList() {
         <ul>
           {curTodo.map(({ id, isChecked, todoContent }) => {
             return (
-              <li key={id}>
+              <li key={uuid()}>
                 <input id={id} type="checkbox" defaultChecked={isChecked} onChange={changeTodoCheckHandler} />
                 <label htmlFor={id}>{todoContent}</label>
                 <button onClick={(event) => todoDeleteHandler(event, id)} type="button">
