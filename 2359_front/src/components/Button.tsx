@@ -34,9 +34,9 @@ hover:shadow-lg
 ease-linear 
 transition-all 
 duration-150
-${(props) => props.btntype === 'basic' && `bg-primaryLight`}
+${(props) => props.btntype === 'basic' && `bg-primary`}
 ${(props) => props.btntype === 'save' && `bg-primaryDark`}
-${(props) => props.btntype === 'cancel' && `bg-primary`}
+${(props) => props.btntype === 'cancel' && `bg-primaryLight`}
 
 ${(props) => props.btnsize === 'sm' && `px-3 py-1 text-sm`}
 ${(props) => props.btnsize === 'base' && `px-3 py-1 text-base`}
