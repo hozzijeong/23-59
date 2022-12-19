@@ -1,15 +1,11 @@
 import React, { useCallback, useMemo, useState, ReactNode } from 'react';
 import AccountBook from 'components/diary/AccountBook';
-import DiaryComponentsLayout from 'components/diary/DiaryComponentsLayout';
+import DiaryComponentsLayout from 'components/diary/Layout/DiaryComponentsLayout';
 import EmotionDiary from 'components/diary/EmotionDiary';
 import TodayQuestion from 'components/diary/TodayQuestion';
 import TodoList from 'components/diary/ToDoList';
-import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
-
-interface AbsoluteDivProps {
-  isLeft: boolean;
-}
+import ContentOptions from 'components/diary/ContentOptions';
 
 type ContentOptionTypes = 'To Do List' | '오늘의 질문' | '감정 일기' | '가계부';
 
@@ -17,6 +13,8 @@ type DiaryContentsPrpos = {
   [key in ContentOptionTypes]: ReactNode;
 };
 
+// 해당 상태관리를 할 때 현재 해당 옵션이 체크되었는지 아닌지가 중요함.
+//
 export interface ContentOptionProps {
   id: string;
   title: ContentOptionTypes;
@@ -32,31 +30,6 @@ const TEMP_DATA: ContentOptionProps[] = [
 
 function Diary() {
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>(TEMP_DATA);
-
-  const optionHandler = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { id } = event.target;
-    setContentOptions((currentOptions) =>
-      currentOptions.map((options) => (options.id === id ? { ...options, isChecked: !options.isChecked } : options))
-    );
-  }, []);
-
-  const contentCheckBox = useMemo(() => {
-    return contentOptions.map(({ id, title }) => (
-      <li key={id}>
-        <input className="text-lg" id={id} type="checkbox" value={title} onChange={optionHandler} />
-        <label htmlFor={id}>{title}</label>
-      </li>
-    ));
-  }, [contentOptions, optionHandler]);
-
-  const tableContents = useMemo(() => {
-    const filterdContents = contentOptions.filter(({ isChecked }) => isChecked);
-    return filterdContents.map(({ title }) => (
-      <li key={title}>
-        <a href={`#${title.replaceAll(' ', '-')}`}>{title}</a>
-      </li>
-    ));
-  }, [contentOptions]);
 
   const diaryContents = useMemo(
     () =>
@@ -82,14 +55,7 @@ function Diary() {
     <DiarySection>
       <HeadContent>
         <Title>Title</Title>
-        <RelativeDiv>
-          <AbsoluteDiv isLeft>
-            <FixedUl>{contentCheckBox}</FixedUl>
-          </AbsoluteDiv>
-          <AbsoluteDiv isLeft={false}>
-            <FixedUl>{tableContents}</FixedUl>
-          </AbsoluteDiv>
-        </RelativeDiv>
+        <ContentOptions state={contentOptions} setState={setContentOptions} />
       </HeadContent>
       <Content>{diaryContents}</Content>
     </DiarySection>
@@ -121,27 +87,4 @@ const Title = tw.p`
   text-5xl
   font-extrabold
   break-keep	
-`;
-
-const RelativeDiv = tw.div`
-  relative
-`;
-
-const AbsoluteDiv = tw.div<AbsoluteDivProps>`
-  absolute
-  ${(props) => (props.isLeft ? 'left-[-7.5rem]' : 'right-0')}
-  mt-12
-
-`;
-
-const Ullists = styled.ul`
-  li {
-    display: flex;
-    align-content: center;
-    font-size: 14px;
-  }
-`;
-
-const FixedUl = tw(Ullists)`
-  fixed
 `;
