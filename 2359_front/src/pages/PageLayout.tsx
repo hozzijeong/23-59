@@ -12,6 +12,7 @@ const Container = tw.div`
 const Main = tw.main`
   w-full
   bg-primary
+  min-h-[800px]
 `;
 
 function PageLayout({ children }: { children: ReactNode }) {
