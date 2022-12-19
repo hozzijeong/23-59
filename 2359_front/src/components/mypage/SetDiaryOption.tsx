@@ -1,11 +1,9 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
-import { useLocation } from 'react-router-dom';
+
 // import { useParams } from 'react-router-dom';
 
 function SetDiaryOption() {
-  const { pathname } = useLocation();
-  console.log(pathname);
   return (
     <Container>
       <div className="justify-self-start">작성페이지 옵션 설정</div>
