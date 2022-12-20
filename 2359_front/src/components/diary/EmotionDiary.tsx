@@ -2,6 +2,7 @@ import React, { useMemo, useCallback } from 'react';
 import uuid from 'react-uuid';
 import { useRecoilState } from 'recoil';
 import { emotionRecord } from 'recoil/diaryAtom';
+import { useSWRConfig } from 'swr';
 import { EMOTIONS } from 'types/enumConverter';
 import { emotionEnums as EMOTION } from 'types/enums';
 
@@ -14,16 +15,30 @@ function EmotionDiary() {
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { target } = event;
       if (target instanceof HTMLInputElement) {
-        setEmotion((cur) => ({
-          ...cur,
-          emotionState: target.value as EMOTION,
-        }));
+        console.log(target.type);
+        if (target.type === 'radio') {
+          setEmotion((cur) => ({
+            ...cur,
+            emotionState: target.value as EMOTION,
+          }));
+        } else if (target.type === 'text') {
+          setEmotion((cur) => ({
+            ...cur,
+            emotionDiary: {
+              ...cur.emotionDiary,
+              title: target.value,
+            },
+          }));
+        }
       }
 
       if (target instanceof HTMLTextAreaElement) {
         setEmotion((cur) => ({
           ...cur,
-          emotionDiary: target.value,
+          emotionDiary: {
+            ...cur.emotionDiary,
+            content: target.value,
+          },
         }));
       }
     },
@@ -57,9 +72,15 @@ function EmotionDiary() {
         <p>오늘 하루 어떠셨는지 감정으로 남겨주세요.</p>
         <ul>{emotionRadio}</ul>
       </div>
-      <div>
+      <div style={{ display: 'flex', flexDirection: 'column' }}>
         <p>오늘 하루 무슨 일이 있었는지 남겨주세요.</p>
-        <textarea defaultValue={emotion.emotionDiary} onChange={emotionChangeHandler} />
+        <input
+          type="text"
+          placeholder="제목을 입력해주세요"
+          defaultValue={emotion.emotionDiary.title}
+          onChange={emotionChangeHandler}
+        />
+        <textarea defaultValue={emotion.emotionDiary.content} onChange={emotionChangeHandler} />
       </div>
     </div>
   );

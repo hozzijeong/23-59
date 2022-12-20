@@ -1,27 +1,31 @@
 import {
-  accountEnums as ACCOUNT,
+  expenseEnums as EXPENSE,
+  incomeEnums as INCOME,
   emotionEnums as EMOTION,
-  moneyFlowEnums as MONEY,
+  clsEnums,
   OptionEnums as OPTIONS,
 } from 'types/enums';
 
 interface AccountTableRow {
   id: string;
-  moneyFlow: MONEY;
-  category: ACCOUNT;
+  cls: clsEnums;
+  category: EXPENSE | INCOME;
   amount: number;
   memo: string;
 }
 
 interface TodoListProps {
   id: string;
-  isChecked: boolean;
-  todoContent: string;
+  done: boolean;
+  item: string;
 }
 
 interface EmotionRecordProps {
   emotionState: EMOTION;
-  emotionDiary: string;
+  emotionDiary: {
+    title: string;
+    content: string;
+  };
 }
 
 interface DiaryStateProps {

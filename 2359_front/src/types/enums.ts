@@ -6,7 +6,7 @@ enum emotionEnums {
   VERY_GOOD = 'VERY_GOOD',
 }
 
-enum accountEnums {
+enum expenseEnums {
   FOOD = 'FOOD',
   CAFE = 'CAFE',
   ENTERTAIN = 'ENTERTAIN',
@@ -27,10 +27,17 @@ enum accountEnums {
   PRESENT = 'PRESENT',
 }
 
-enum moneyFlowEnums {
+enum incomeEnums {
+  PAY = 'PAY',
+  POKEY_MONEY = 'POKEY_MONEY',
+  FINANCE = 'FINANCE',
+  BUSINESS = 'BUSINESS',
+  ETC = 'ETC',
+}
+
+enum clsEnums {
   EXPENSE = 'EXPENSE',
   INCOME = 'INCOME',
-  TRANSFER = 'TRANSFER',
 }
 
 enum OptionEnums {
@@ -40,4 +47,4 @@ enum OptionEnums {
   ACCOUNT_BOOK = 'ACCOUNT_BOOK',
 }
 
-export { emotionEnums, accountEnums, moneyFlowEnums, OptionEnums };
+export { incomeEnums, emotionEnums, expenseEnums, clsEnums, OptionEnums };
