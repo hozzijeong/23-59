@@ -1,9 +1,15 @@
-import { accountEnums as ACCOUNT, emotionEnums as EMOTION, clsEnums, OptionEnums as OPTIONS } from 'types/enums';
+import {
+  expenseEnums as EXPENSE,
+  incomeEnums as INCOME,
+  emotionEnums as EMOTION,
+  clsEnums,
+  OptionEnums as OPTIONS,
+} from 'types/enums';
 
 interface AccountTableRow {
   id: string;
   cls: clsEnums;
-  category: ACCOUNT;
+  category: EXPENSE | INCOME;
   amount: number;
   memo: string;
 }
