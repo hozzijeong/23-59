@@ -9,6 +9,8 @@ import tw from 'tailwind-styled-components';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionRecord, questionAnswer, todayTodo } from 'recoil/diaryAtom';
 import uuid from 'react-uuid';
+import Button from 'components/Button';
+import { useNavigate } from 'react-router-dom';
 
 enum OptionEnums {
   TODO_LIST = 'TODO_LIST',
@@ -55,7 +57,7 @@ function Diary() {
   // 서버에 데이터를 받아옴.
   // 옵션 목록이 따로 있고, 체크 여부가 따로 존재함.
   // 그렇게 2개를 따로 받아오기
-
+  const navigation = useNavigate();
   const mixedData = useMemo(
     () => TEMP_DATA.map((data) => ({ ...data, isChecked: TEMP_OPTIONS.includes(data.id) })),
     []
@@ -94,6 +96,12 @@ function Diary() {
   const submitHandler = () => {
     console.log(todayTodoState, questionAnswerState, emotionRecordState, accountTableAtomState);
   };
+  const cancelHandler = () => {
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm('정말 취소하시겠습니까?\n 작성하신 내용은 저장되지 않습니다.')) {
+      navigation('/');
+    }
+  };
 
   return (
     <DiarySection>
@@ -104,12 +112,14 @@ function Diary() {
       <Content>
         {diaryContents}
         {contentOptions.every((options) => options.isChecked === false) ? null : (
-          <div>
-            <button type="button">취소하기</button>
-            <button type="button" onClick={submitHandler}>
+          <SubmitContainer>
+            <Button onClick={cancelHandler} btntype="cancel">
+              취소하기
+            </Button>
+            <Button onClick={submitHandler} btntype="save">
               작성하기
-            </button>
-          </div>
+            </Button>
+          </SubmitContainer>
         )}
       </Content>
     </DiarySection>
@@ -141,4 +151,11 @@ const Title = tw.p`
   text-5xl
   font-extrabold
   break-keep	
+`;
+
+const SubmitContainer = tw.div`
+  flex
+  justify-between
+  mt-[20px]
+
 `;

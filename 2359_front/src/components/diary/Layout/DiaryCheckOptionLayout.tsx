@@ -14,7 +14,7 @@ interface DiaryCheckOptionLayoutProps {
 function DiaryCheckOptionLayout({ isleft, component }: DiaryCheckOptionLayoutProps) {
   return (
     <AbsoluteDiv left={isleft}>
-      <FixedUl>{component}</FixedUl>
+      <FixedDiv>{component}</FixedDiv>
     </AbsoluteDiv>
   );
 }
@@ -28,14 +28,8 @@ const AbsoluteDiv = tw.div<AbsoluteDivProps>`
 
 `;
 
-const Ullists = styled.ul`
-  li {
-    display: flex;
-    align-content: center;
-    font-size: 14px;
-  }
-`;
-
-const FixedUl = tw(Ullists)`
+const FixedDiv = tw.div`
   fixed
+  flex
+  flex-col
 `;

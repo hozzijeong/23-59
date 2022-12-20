@@ -1,3 +1,4 @@
+import { TutorialOptions } from 'components/tutorial/TutorialOption';
 import { ContentOptionProps, CONTENT_OPTION } from 'pages/Diary';
 import React, { useMemo, useCallback } from 'react';
 import uuid from 'react-uuid';
@@ -22,10 +23,10 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
 
   const contentCheckBox = useMemo(() => {
     return state.map(({ id, title, isChecked }) => (
-      <li key={uuid()}>
+      <TutorialOptions key={uuid()} htmlFor={id} textSize="text-sm">
         <input className="text-lg" id={id} type="checkbox" onChange={optionHandler} checked={isChecked} />
-        <label htmlFor={id}>{CONTENT_OPTION[title]}</label>
-      </li>
+        <span className="ml-2">{CONTENT_OPTION[title]}</span>
+      </TutorialOptions>
     ));
   }, [state, optionHandler]);
 
@@ -33,9 +34,9 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
     const filterdContents = state.filter(({ isChecked }) => isChecked);
     const titles = filterdContents.map(({ title }) => CONTENT_OPTION[title]);
     return titles.map((title) => (
-      <li key={uuid()}>
+      <span key={uuid()} className="text-sm my-4">
         <a href={`#${title.replaceAll(' ', '-')}`}>{title}</a>
-      </li>
+      </span>
     ));
   }, [state]);
 

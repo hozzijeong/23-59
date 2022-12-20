@@ -1,6 +1,10 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 
+interface LabelProps {
+  textSize?: 'text-xs' | 'text-sm' | 'text-base' | 'text-lg' | 'text-xl';
+}
+
 function TutorialOption() {
   return (
     <div>
@@ -29,9 +33,11 @@ function TutorialOption() {
 
 export default TutorialOption;
 
-const TutorialOptions = tw.label`
-my-4 
-text-gray-500 
-text-lg 
-leading-relaxed
+export const TutorialOptions = tw.label<LabelProps>`
+  my-4 
+  text-gray-500 
+  leading-relaxed
+  flex
+  items-center
+  ${(props) => props.textSize ?? 'text-lg'}
 `;
