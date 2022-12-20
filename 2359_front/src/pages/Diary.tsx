@@ -28,7 +28,12 @@ const TEMP_DATA: OptionProps[] = [
   { id: '4', title: OPTION.ACCOUNT_BOOK },
 ];
 
-const TEMP_OPTIONS = ['1', '2'];
+const TEMP_OPTIONS = {
+  [OPTION.TODO_LIST]: true,
+  [OPTION.TODAY_QUESTION]: false,
+  [OPTION.EMOTION_DIARY]: false,
+  [OPTION.ACCOUNT_BOOK]: false,
+};
 
 function Diary() {
   // 여기 체크 상태 데이터는 서버에서 유저가 체크해 놓은 데이터를 받아오면 됨.
@@ -38,10 +43,7 @@ function Diary() {
   // 옵션 목록이 따로 있고, 체크 여부가 따로 존재함.
   // 그렇게 2개를 따로 받아오기
   const navigation = useNavigate();
-  const mixedData = useMemo(
-    () => TEMP_DATA.map((data) => ({ ...data, isChecked: TEMP_OPTIONS.includes(data.id) })),
-    []
-  ); // 이렇게 따로 변수로 합쳐서 만들어도 되는지? 클라이언트에서만 사용되는 값들이고, 사용자가 화면에서 동적으로 변경했을 때 그 변경되는 값을 바로바로 적용해줘야 합니다.
+  const mixedData = useMemo(() => TEMP_DATA.map((data) => ({ ...data, isChecked: TEMP_OPTIONS[data.title] })), []); // 이렇게 따로 변수로 합쳐서 만들어도 되는지? 클라이언트에서만 사용되는 값들이고, 사용자가 화면에서 동적으로 변경했을 때 그 변경되는 값을 바로바로 적용해줘야 합니다.
 
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>(mixedData);
   const todayTodoState = useRecoilValue(todayTodo);
@@ -86,7 +88,7 @@ function Diary() {
   return (
     <DiarySection>
       <HeadContent>
-        <Title>Title</Title>
+        <Title>Date</Title>
         <ContentOptions state={contentOptions} setState={setContentOptions} />
       </HeadContent>
       <Content>
