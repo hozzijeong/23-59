@@ -44,4 +44,17 @@ interface ContentOptionProps extends OptionProps {
   isChecked: boolean;
 }
 
-export type { OptionProps, ContentOptionProps, AccountTableRow, TodoListProps, EmotionRecordProps, DiaryStateProps };
+interface ContentOptionsProps {
+  state: ContentOptionProps[];
+  setState: React.Dispatch<React.SetStateAction<ContentOptionProps[]>>;
+}
+
+export type {
+  OptionProps,
+  ContentOptionProps,
+  AccountTableRow,
+  TodoListProps,
+  EmotionRecordProps,
+  DiaryStateProps,
+  ContentOptionsProps,
+};

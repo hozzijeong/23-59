@@ -1,17 +1,13 @@
-import { TutorialOptions } from 'components/tutorial/TutorialOption';
+import { UserOptions } from 'components/ContentOptions';
 import React, { useMemo, useCallback } from 'react';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
 import { CONTENT_OPTION } from 'types/enumConverter';
-import { ContentOptionProps } from 'types/interfaces';
+import { ContentOptionsProps } from 'types/interfaces';
 import { DiaryCheckOptionLayout } from './Layout/DiaryCheckOptionLayout';
 
-interface ContentOptionsProps {
-  state: ContentOptionProps[];
-  setState: React.Dispatch<React.SetStateAction<ContentOptionProps[]>>;
-}
-
 function ContentOptions({ state, setState }: ContentOptionsProps) {
+  // option Handler 추가로 구현하기.
   const optionHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { id } = event.target;
@@ -23,12 +19,7 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
   );
 
   const contentCheckBox = useMemo(() => {
-    return state.map(({ id, title, isChecked }) => (
-      <TutorialOptions key={uuid()} htmlFor={id} textSize="text-sm" marginY="my-1">
-        <input className="text-lg" id={id} type="checkbox" onChange={optionHandler} checked={isChecked} />
-        <span className="ml-2">{CONTENT_OPTION[title]}</span>
-      </TutorialOptions>
-    ));
+    return state.map((option) => <UserOptions state={option} handler={optionHandler} />);
   }, [state, optionHandler]);
 
   const tableContents = useMemo(() => {
