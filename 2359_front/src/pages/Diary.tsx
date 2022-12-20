@@ -88,7 +88,7 @@ function Diary() {
   return (
     <DiarySection>
       <HeadContent>
-        <Title>Title</Title>
+        <Title>Date</Title>
         <ContentOptions state={contentOptions} setState={setContentOptions} />
       </HeadContent>
       <Content>

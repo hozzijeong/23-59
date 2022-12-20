@@ -2,8 +2,8 @@ import React, { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
 import { useRecoilState } from 'recoil';
 import { accountTableAtom } from 'recoil/diaryAtom';
-import { ACCOUNT_CATEGORY, MONEY_FLOW } from 'types/enumConverter';
-import { accountEnums as ACCOUNT, moneyFlowEnums as MONEY } from 'types/enums';
+import { ACCOUNT_CATEGORY, CLS } from 'types/enumConverter';
+import { accountEnums as ACCOUNT, clsEnums as MONEY } from 'types/enums';
 import { AccountTableRow } from 'types/interfaces';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 
@@ -13,7 +13,7 @@ const MONEY_STATE = Object.values(MONEY);
 
 const initialAccountInfo: AccountTableRow = {
   id: getCurrentDate(),
-  moneyFlow: MONEY.EXPENSE,
+  cls: MONEY.EXPENSE,
   category: ACCOUNT.FOOD,
   amount: 0,
   memo: '',
@@ -44,7 +44,7 @@ function AccountBook() {
     () =>
       MONEY_STATE.map((type) => (
         <option key={uuid()} value={type}>
-          {MONEY_FLOW[type]}
+          {CLS[type]}
         </option>
       )),
     []
@@ -62,11 +62,11 @@ function AccountBook() {
 
   const tableInfo = useMemo(
     () =>
-      accountTable.map(({ id, moneyFlow, category, amount, memo }) => (
+      accountTable.map(({ id, cls, category, amount, memo }) => (
         <tr key={uuid()}>
-          <th>{moneyFlow}</th>
-          <th>{category}</th>
-          <th>{amount}</th>
+          <th>{CLS[cls]}</th>
+          <th>{ACCOUNT_CATEGORY[category]}</th>
+          <th>{`${amount.toLocaleString('ko-KR')}`}원</th>
           <th>{memo}</th>
           <th>
             <button type="button" onClick={(e) => deleteTableInfoHandler(e, id)}>
@@ -79,11 +79,12 @@ function AccountBook() {
   );
 
   return (
+    // 수입/이체 카테고리 설정하기
     <div>
       <div>
         <p>오늘 수입/지출을 알려주세요</p>
         <div onChange={todayAccountInfoChangeHandler}>
-          <select name="moneyFlow" defaultValue={todayAccountInfo.moneyFlow}>
+          <select name="moneyFlow" defaultValue={todayAccountInfo.cls}>
             {moneyFlowOptions}
           </select>
           <select name="category" defaultValue={todayAccountInfo.category}>

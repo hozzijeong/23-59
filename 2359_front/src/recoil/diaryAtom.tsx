@@ -16,7 +16,10 @@ const emotionRecord = atom<EmotionRecordProps>({
   key: 'emotionRecordState',
   default: {
     emotionState: EMOTION.SO_SO,
-    emotionDiary: '',
+    emotionDiary: {
+      title: '',
+      content: '',
+    },
   },
 });
 

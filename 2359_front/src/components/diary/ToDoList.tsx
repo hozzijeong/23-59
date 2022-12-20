@@ -15,7 +15,7 @@ function TodoList() {
       alert('한 글자 이상 입력해주세요!');
       return;
     }
-    setCurTodo((cur) => [...cur, { id: getCurrentDate(), isChecked: false, todoContent: todoInput }]);
+    setCurTodo((cur) => [...cur, { id: getCurrentDate(), done: false, item: todoInput }]);
     setTodoInput('');
   };
 
@@ -26,7 +26,7 @@ function TodoList() {
 
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
-    const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, isChecked: !todo.isChecked } : { ...todo }));
+    const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, isChecked: !todo.done } : { ...todo }));
 
     setCurTodo(updateTodos);
   };
@@ -45,12 +45,12 @@ function TodoList() {
       </div>
       <div>
         <ul>
-          {curTodo.map(({ id, isChecked, todoContent }) => {
+          {curTodo.map(({ id, done, item }) => {
             return (
               <li key={uuid()}>
                 <label htmlFor={id}>
-                  <input id={id} type="checkbox" defaultChecked={isChecked} onChange={changeTodoCheckHandler} />
-                  <Span isChecked={isChecked}>{todoContent}</Span>
+                  <input id={id} type="checkbox" defaultChecked={done} onChange={changeTodoCheckHandler} />
+                  <Span isChecked={done}>{item}</Span>
                 </label>
                 <button onClick={(event) => todoDeleteHandler(event, id)} type="button">
                   삭제하기

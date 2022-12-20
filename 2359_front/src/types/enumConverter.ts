@@ -1,9 +1,4 @@
-import {
-  accountEnums as ACCOUNT,
-  emotionEnums as EMOTION,
-  moneyFlowEnums as MONEY,
-  OptionEnums as OPTION,
-} from 'types/enums';
+import { accountEnums as ACCOUNT, emotionEnums as EMOTION, clsEnums, OptionEnums as OPTION } from 'types/enums';
 
 const EMOTIONS = {
   [EMOTION.VERY_BAD]: '매우 안좋음',
@@ -34,10 +29,10 @@ const ACCOUNT_CATEGORY = {
   [ACCOUNT.PRESENT]: '경조/선물',
 };
 
-const MONEY_FLOW = {
-  [MONEY.EXPENSE]: '지출',
-  [MONEY.INCOME]: '수입',
-  [MONEY.TRANSFER]: '이체',
+const CLS = {
+  [clsEnums.EXPENSE]: '지출',
+  [clsEnums.INCOME]: '수입',
+  [clsEnums.TRANSFER]: '이체',
 };
 
 const CONTENT_OPTION = {
@@ -47,4 +42,4 @@ const CONTENT_OPTION = {
   [OPTION.ACCOUNT_BOOK]: '가계부',
 };
 
-export { EMOTIONS, ACCOUNT_CATEGORY, MONEY_FLOW, CONTENT_OPTION };
+export { EMOTIONS, ACCOUNT_CATEGORY, CLS, CONTENT_OPTION };

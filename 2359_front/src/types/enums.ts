@@ -27,7 +27,7 @@ enum accountEnums {
   PRESENT = 'PRESENT',
 }
 
-enum moneyFlowEnums {
+enum clsEnums {
   EXPENSE = 'EXPENSE',
   INCOME = 'INCOME',
   TRANSFER = 'TRANSFER',
@@ -40,4 +40,4 @@ enum OptionEnums {
   ACCOUNT_BOOK = 'ACCOUNT_BOOK',
 }
 
-export { emotionEnums, accountEnums, moneyFlowEnums, OptionEnums };
+export { emotionEnums, accountEnums, clsEnums, OptionEnums };
