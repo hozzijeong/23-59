@@ -1,6 +1,7 @@
 import { Schema, model, connect } from 'mongoose';
 
 interface IQuestion {
+  _id: Schema.Types.ObjectId;
   item: string;
   tag: string;
 }
