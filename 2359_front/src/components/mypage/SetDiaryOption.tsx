@@ -66,11 +66,14 @@ const ScriptDiv = tw.div`
   my-10
   w-11/12
   mx-auto
-  space-y-4
+  space-y-2
+  shadow-xl
+  p-8
+  rounded-lg
 `;
 
 const Script = tw.div`
-  text-xl
+  text-lg
   text-bold
 `;
 
