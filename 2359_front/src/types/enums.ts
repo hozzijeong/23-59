@@ -1,9 +1,9 @@
 enum emotionEnums {
-  VERY_BAD = 'Very Bad',
-  BAD = 'Bad',
-  SO_SO = 'SoSo',
-  GOOD = 'Good',
-  VERY_GOOD = 'Very Good',
+  VERY_BAD = 'VERY_BAD',
+  BAD = 'BAD',
+  SO_SO = 'SO_SO',
+  GOOD = 'GOOD',
+  VERY_GOOD = 'VERY_GOOD',
 }
 
 enum accountEnums {
