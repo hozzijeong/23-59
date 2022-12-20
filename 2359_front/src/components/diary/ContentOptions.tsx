@@ -1,8 +1,9 @@
 import { TutorialOptions } from 'components/tutorial/TutorialOption';
-import { ContentOptionProps, CONTENT_OPTION } from 'pages/Diary';
 import React, { useMemo, useCallback } from 'react';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
+import { CONTENT_OPTION } from 'types/enumConverter';
+import { ContentOptionProps } from 'types/interfaces';
 import { DiaryCheckOptionLayout } from './Layout/DiaryCheckOptionLayout';
 
 interface ContentOptionsProps {

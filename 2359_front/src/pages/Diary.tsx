@@ -12,13 +12,7 @@ import uuid from 'react-uuid';
 import Button from 'components/Button';
 import { useNavigate } from 'react-router-dom';
 import { OptionEnums as OPTION } from 'types/enums';
-
-export const CONTENT_OPTION = {
-  [OPTION.TODO_LIST]: 'To Do List',
-  [OPTION.TODAY_QUESTION]: '오늘의 질문',
-  [OPTION.EMOTION_DIARY]: '감정 일기',
-  [OPTION.ACCOUNT_BOOK]: '가계부',
-};
+import { ContentOptionProps, OptionProps } from 'types/interfaces';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -26,14 +20,6 @@ type DiaryContentsPrpos = {
 
 // 해당 상태관리를 할 때 현재 해당 옵션이 체크되었는지 아닌지가 중요함.
 //
-interface OptionProps {
-  id: string;
-  title: OPTION;
-}
-
-export interface ContentOptionProps extends OptionProps {
-  isChecked: boolean;
-}
 
 const TEMP_DATA: OptionProps[] = [
   { id: '1', title: OPTION.TODO_LIST },

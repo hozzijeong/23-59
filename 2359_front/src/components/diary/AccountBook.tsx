@@ -1,8 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
 import { useRecoilState } from 'recoil';
-import { accountTableAtom, AccountTableRow, ACCOUNT_CATEGORY, MONEY_FLOW } from 'recoil/diaryAtom';
+import { accountTableAtom } from 'recoil/diaryAtom';
+import { ACCOUNT_CATEGORY, MONEY_FLOW } from 'types/enumConverter';
 import { accountEnums as ACCOUNT, moneyFlowEnums as MONEY } from 'types/enums';
+import { AccountTableRow } from 'types/interfaces';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 
 const ACCOUNT_STATE = Object.values(ACCOUNT);

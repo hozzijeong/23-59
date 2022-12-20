@@ -1,7 +1,8 @@
 import React, { useMemo, useCallback } from 'react';
 import uuid from 'react-uuid';
 import { useRecoilState } from 'recoil';
-import { emotionRecord, EMOTIONS } from 'recoil/diaryAtom';
+import { emotionRecord } from 'recoil/diaryAtom';
+import { EMOTIONS } from 'types/enumConverter';
 import { emotionEnums as EMOTION } from 'types/enums';
 
 const EMOTION_STATE = Object.values(EMOTION);

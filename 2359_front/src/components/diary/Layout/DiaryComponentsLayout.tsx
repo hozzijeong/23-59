@@ -1,6 +1,7 @@
 import React, { ReactNode } from 'react';
-import { ContentOptionProps, CONTENT_OPTION } from 'pages/Diary';
 import tw from 'tailwind-styled-components';
+import { CONTENT_OPTION } from 'types/enumConverter';
+import { ContentOptionProps } from 'types/interfaces';
 
 interface DiaryComponentLayoutProps {
   contents: ContentOptionProps;
