@@ -36,14 +36,13 @@ function Navbar() {
     <SideNavbar>
       <Link to="user">회원 정보 수정</Link>
       <Link to="select-option">작성페이지 옵션 설정</Link>
-      <button
-        type="button"
+      <div
         onClick={() => {
           openHandler();
         }}
       >
         통계 보기
-      </button>
+      </div>
       {isOpen ? <AverageDetailMenu /> : null}
       <Link to="collect-question">오늘의 질문 모아보기</Link>
     </SideNavbar>

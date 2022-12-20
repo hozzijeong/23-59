@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { diaryAtom } from 'recoil/diaryAtom';
+import { todayTodo } from 'recoil/diaryAtom';
+import { getCurrentDate } from 'utilities/getCurrentDate';
 import tw from 'tailwind-styled-components';
+import uuid from 'react-uuid';
+import styled from 'styled-components';
 
 function TodoList() {
   const [todoInput, setTodoInput] = useState<string>('');
-  const [curTodo, setCurTodo] = useRecoilState(diaryAtom);
+  const [curTodo, setCurTodo] = useRecoilState(todayTodo);
 
   const addTodoHandler = () => {
     if (!todoInput.length) {
       alert('한 글자 이상 입력해주세요!');
       return;
     }
-    const date = Date.now();
-    setCurTodo((cur) => ({
-      ...cur,
-      todos: [...cur.todos, { id: date.toString(10), isChecked: false, todoContent: todoInput }],
-    }));
+    setCurTodo((cur) => [...cur, { id: getCurrentDate(), isChecked: false, todoContent: todoInput }]);
     setTodoInput('');
   };
 
@@ -25,23 +24,15 @@ function TodoList() {
     setTodoInput(value);
   };
 
-  // typescript에서 li에 onClick event를 설정하고 싶은데 그게 되지 않음. 그 이유는 eslint의
-  // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/4abc751d87a8491219a9a3d2dacd80ea8adcb79b/docs/rules/click-events-have-key-events.md
-  // 때문에 안된다고함
-  const todoClickHandler = (event: React.MouseEvent<HTMLInputElement | HTMLButtonElement | HTMLLIElement>) => {
-    console.log(event.target, event.currentTarget);
-  };
-
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
-    const { todos } = curTodo;
-    const updateTodos = todos.map((todo) => (todo.id === id ? { ...todo, isChecked: !todo.isChecked } : { ...todo }));
+    const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, isChecked: !todo.isChecked } : { ...todo }));
 
-    setCurTodo((cur) => ({ ...cur, todos: updateTodos }));
+    setCurTodo(updateTodos);
   };
 
-  const todoDeleteHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-    return null;
+  const todoDeleteHandler = (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    setCurTodo((cur) => cur.filter((todo) => todo.id !== id));
   };
 
   return (
@@ -54,12 +45,14 @@ function TodoList() {
       </div>
       <div>
         <ul>
-          {curTodo.todos.map(({ id, isChecked, todoContent }) => {
+          {curTodo.map(({ id, isChecked, todoContent }) => {
             return (
-              <li key={id}>
-                <input id={id} type="checkbox" defaultChecked={isChecked} onChange={changeTodoCheckHandler} />
-                <label htmlFor={id}>{todoContent}</label>
-                <button onClick={todoDeleteHandler} type="button">
+              <li key={uuid()}>
+                <label htmlFor={id}>
+                  <input id={id} type="checkbox" defaultChecked={isChecked} onChange={changeTodoCheckHandler} />
+                  <Span isChecked={isChecked}>{todoContent}</Span>
+                </label>
+                <button onClick={(event) => todoDeleteHandler(event, id)} type="button">
                   삭제하기
                 </button>
               </li>
@@ -71,4 +64,8 @@ function TodoList() {
   );
 }
 
-export default TodoList;
+export { TodoList };
+
+const Span = styled.label<{ isChecked: boolean }>`
+  text-decoration: ${(props) => (props.isChecked ? 'line-through' : '')};
+`;
