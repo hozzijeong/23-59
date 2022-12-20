@@ -41,5 +41,5 @@ export const TutorialOptions = tw.label<LabelProps>`
   flex
   items-center
   ${(props) => props.textSize ?? 'text-lg'}
-  ${(props) => props.marginY ?? 'my-4'}
+  ${(props) => props.marginY ?? 'my-0'}
 `;
