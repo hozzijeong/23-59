@@ -16,7 +16,7 @@ contentRouter.get('/', async (req, res, next) => {
   }
 });
 
-contentRouter.get('/:id', async (req, res, next) => {
+contentRouter.get('/id/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const content = await contentService.getContentById(id);
@@ -26,10 +26,34 @@ contentRouter.get('/:id', async (req, res, next) => {
   }
 });
 
-contentRouter.get('/:selectedDate', async (req, res, next) => {
+contentRouter.get('/selectedDate/:selectedDate', async (req, res, next) => {
   try {
     const { selectedDate } = req.params;
     const content = await contentService.getContentBySelectedDate(selectedDate);
+    res.status(200).json(content);
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get('/:date', async (req, res, next) => {
+  try {
+    const { date } = req.params;
+    const splitDate = date.split('-');
+    console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
+    const content = await contentService.filterDate(splitDate[0], splitDate[1]);
+    res.status(200).json(content);
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get('/filter/:date', async (req, res, next) => {
+  try {
+    const { date } = req.params;
+    const splitDate = date.split('-');
+    console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
+    const content = await contentService.filterEmotion(splitDate[0], splitDate[1]);
     res.status(200).json(content);
   } catch (error) {
     next(error);
@@ -45,10 +69,11 @@ contentRouter.post('/', async (req, res, next) => {
       throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
     }
     // diary, todo, account, answer
-    const { selectedDate, diary, todo, account, answer } = req.body;
+    const { selectedDate, emotion, diary, todo, account, answer } = req.body;
 
     const newContent = await contentService.addContent({
       selectedDate,
+      emotion,
       diary,
       todo,
       account,

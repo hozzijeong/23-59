@@ -57,6 +57,40 @@ class ContentService {
 
     return { result: 'success' };
   }
+
+  // 해당 날짜내의 컨텐츠 조회
+  async filterDate(prevDate: string, nextDate: string) {
+    const contents = await this.contentModel.filterByDate(prevDate, nextDate);
+    if (!contents) {
+      console.log('해당 날짜내의 컨텐츠가 없습니다.');
+    }
+    console.log('contents: ', contents);
+    return contents;
+  }
+
+  // 감정 통계
+  async filterEmotion(prevDate: string, nextDate: string) {
+    const emotions = await this.contentModel.filterByEmotion(prevDate, nextDate);
+    if (!emotions) {
+      console.log('저장된 감정표시가 없습니다.');
+    }
+    const filtered = emotions.map((obj: any) => obj.emotion);
+    console.log('filtered: ', filtered);
+    //const e = filteredEmotions.map((obj: any) => obj.diary);
+    // const emotionsArr = [];
+    // for (let i = 0; i < filtered.length; i++) {
+    //   if (filtered[i] === undefined) {
+    //     continue;
+    //   }
+    //   emotionsArr.push(filtered[i].emotion);
+    // }
+    const filteredEmotions = filtered.reduce((a: any, i: number) => {
+      return (a[i] = (a[i] || 0) + 1), a;
+    }, {});
+    //console.log('emotionsArr: ', emotionsArr);
+    console.log('filteredEmotions: ', filteredEmotions);
+    return filteredEmotions;
+  }
 }
 
 const contentService = new ContentService(contentModel);

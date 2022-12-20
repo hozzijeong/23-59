@@ -35,7 +35,7 @@ const deleteById = async (contentId: string) => {
 };
 
 const findById = async (id: string) => {
-  const content = await Content.find({ id });
+  const content = await Content.find({ _id: id });
   return content;
 };
 
@@ -49,10 +49,31 @@ const findByAuthor = async (author: string) => {
   return content;
 };
 
+// 해당 날짜내의 컨텐츠 조회
+const filterByDate = async (prevDate: string, nextDate: string) => {
+  const prev = parseInt(prevDate, 10);
+  const next = parseInt(nextDate, 10);
+
+  const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev } });
+  console.log('filteredContents: ', filteredContents[0]);
+  return filteredContents;
+};
+
 // 감정 통계
-// 감정 종류 정하기 필요..
-// 해당 날짜 범위의 데이터 가져오기
-const filterByEmotion = async () => {};
+const filterByEmotion = async (prevDate: string, nextDate: string) => {
+  const prev = parseInt(prevDate, 10);
+  const next = parseInt(nextDate, 10);
+
+  const emotions = ['happy', 'sad', 'soso'];
+
+  const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev }, emotion: { $in: emotions } });
+  //const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev } }, { diary: { emotion: 1 } });
+  // const e = filteredContents[1].diary;
+  // console.log('model-emotions: ', e);
+  console.log('model-emotions: ', filteredContents);
+  return filteredContents;
+};
+
 // 가계부 수입/지출별 통계
 const filterByCls = async () => {};
 // 가계부 카테고리별 통계
@@ -62,6 +83,16 @@ const findAllQuestions = async () => {};
 // 질문 태그별 통계
 const filterByTag = async () => {};
 // 질문 날짜별 통계
-const filterByDate = async () => {};
+//const filterByDate = async () => {};
 
-export default { createContent, findAll, updateContent, deleteById, findById, findBySelectedDate, findByAuthor };
+export default {
+  createContent,
+  findAll,
+  updateContent,
+  deleteById,
+  findById,
+  findBySelectedDate,
+  findByAuthor,
+  filterByDate,
+  filterByEmotion,
+};

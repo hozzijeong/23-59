@@ -1,23 +1,25 @@
 import mongoose, { Schema, model, connect, ObjectId } from 'mongoose';
 
 interface IContent {
+  _id: Schema.Types.ObjectId;
   selectedDate: string;
   month: string;
   //author: ObjectId;
   author: string;
+  emotion: string;
   diary: object;
   todo: object;
   account: object;
-  answer: object;
+  qna: object;
 }
 
 interface IDiary {
-  emotion: string;
   title: string;
   diaryContent: string;
 }
 
 interface ITodo {
+  id: string;
   done: boolean;
   item: string;
 }
@@ -26,9 +28,10 @@ interface IAccount {
   cls: string;
   category: string;
   amount: number;
+  memo: string;
 }
 
-interface IAnswer {
+interface IQnA {
   question: object;
   answer: string;
   tag: string;
@@ -36,7 +39,6 @@ interface IAnswer {
 
 const diarySchema = new Schema<IDiary>(
   {
-    emotion: String,
     title: String,
     diaryContent: String,
   },
@@ -47,6 +49,7 @@ const diarySchema = new Schema<IDiary>(
 
 const todoSchema = new Schema<ITodo>(
   {
+    id: String,
     done: Boolean,
     item: String,
   },
@@ -66,9 +69,12 @@ const accountSchema = new Schema<IAccount>({
   amount: {
     type: Number,
   },
+  memo: {
+    type: String,
+  },
 });
 
-const answerSchema = new Schema<IAnswer>({
+const qnaSchema = new Schema<IQnA>({
   // question: {
   //   type: Schema.Types.ObjectId,
   //   ref: 'questions',
@@ -102,6 +108,9 @@ const ContentSchema = new Schema<IContent>(
     author: {
       type: String,
     },
+    emotion: {
+      type: String,
+    },
     diary: {
       type: diarySchema,
     },
@@ -111,8 +120,8 @@ const ContentSchema = new Schema<IContent>(
     account: {
       type: [accountSchema],
     },
-    answer: {
-      type: answerSchema,
+    qna: {
+      type: qnaSchema,
     },
   },
   {
