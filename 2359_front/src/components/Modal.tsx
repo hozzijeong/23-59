@@ -2,15 +2,21 @@ import React, { useState } from 'react';
 import tw from 'tailwind-styled-components';
 import Button from './Button';
 
-interface ModalProps {
+interface ModalProps<T> {
   title?: string;
   children?: React.ReactNode;
   btnclose?: string;
   btnsave?: string;
+  state: T;
 }
 
-function Modal({ title, children, btnclose, btnsave }: ModalProps) {
+function Modal<T>({ title, children, btnclose, btnsave, state }: ModalProps<T>) {
   const [showModal, setShowModal] = useState(true);
+
+  const saveHandler = () => {
+    setShowModal(false);
+    console.log(state);
+  };
 
   return (
     <div>
@@ -30,7 +36,7 @@ function Modal({ title, children, btnclose, btnsave }: ModalProps) {
                   <Button btntype="cancel" onClick={() => setShowModal(false)}>
                     {btnclose}
                   </Button>
-                  <Button btntype="save" onClick={() => setShowModal(false)}>
+                  <Button btntype="save" onClick={saveHandler}>
                     {btnsave}
                   </Button>
                 </ModalFooter>

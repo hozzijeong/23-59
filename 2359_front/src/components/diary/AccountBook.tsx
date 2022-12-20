@@ -2,19 +2,20 @@ import React, { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
 import { useRecoilState } from 'recoil';
 import { accountTableAtom } from 'recoil/diaryAtom';
-import { ACCOUNT_CATEGORY, MONEY_FLOW } from 'types/enumConverter';
-import { accountEnums as ACCOUNT, moneyFlowEnums as MONEY } from 'types/enums';
+import { EXPENSE_CATEGORY, INCOME_CATEGORY, CLS } from 'types/enumConverter';
+import { expenseEnums as EXPENSE, incomeEnums as INCOME, clsEnums as MONEY } from 'types/enums';
 import { AccountTableRow } from 'types/interfaces';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 
-const ACCOUNT_STATE = Object.values(ACCOUNT);
+const EXPENSE_STATE = Object.values(EXPENSE);
+const INCOME_STATE = Object.values(INCOME);
 
 const MONEY_STATE = Object.values(MONEY);
 
 const initialAccountInfo: AccountTableRow = {
   id: getCurrentDate(),
-  moneyFlow: MONEY.EXPENSE,
-  category: ACCOUNT.FOOD,
+  cls: MONEY.EXPENSE,
+  category: EXPENSE.FOOD,
   amount: 0,
   memo: '',
 };
@@ -44,29 +45,40 @@ function AccountBook() {
     () =>
       MONEY_STATE.map((type) => (
         <option key={uuid()} value={type}>
-          {MONEY_FLOW[type]}
+          {CLS[type]}
         </option>
       )),
     []
   );
 
-  const categoryOptions = useMemo(
-    () =>
-      ACCOUNT_STATE.map((category) => (
+  const categoryOptions = useMemo(() => {
+    const { cls } = todayAccountInfo;
+
+    if (cls === MONEY.EXPENSE) {
+      return EXPENSE_STATE.map((category) => (
         <option key={uuid()} value={category}>
-          {ACCOUNT_CATEGORY[category]}
+          {EXPENSE_CATEGORY[category]}
         </option>
-      )),
-    []
-  );
+      ));
+    }
+    if (cls === MONEY.INCOME) {
+      return INCOME_STATE.map((category) => (
+        <option key={uuid()} value={category}>
+          {INCOME_CATEGORY[category]}
+        </option>
+      ));
+    }
+
+    return null;
+  }, [todayAccountInfo]);
 
   const tableInfo = useMemo(
     () =>
-      accountTable.map(({ id, moneyFlow, category, amount, memo }) => (
+      accountTable.map(({ id, cls, category, amount, memo }) => (
         <tr key={uuid()}>
-          <th>{moneyFlow}</th>
-          <th>{category}</th>
-          <th>{amount}</th>
+          <th>{CLS[cls]}</th>
+          <th>{cls === MONEY.EXPENSE ? EXPENSE_CATEGORY[category as EXPENSE] : INCOME_CATEGORY[category as INCOME]}</th>
+          <th>{`${amount.toLocaleString('ko-KR')}`}원</th>
           <th>{memo}</th>
           <th>
             <button type="button" onClick={(e) => deleteTableInfoHandler(e, id)}>
@@ -79,14 +91,15 @@ function AccountBook() {
   );
 
   return (
+    // 수입/이체 카테고리 설정하기
     <div>
       <div>
         <p>오늘 수입/지출을 알려주세요</p>
         <div onChange={todayAccountInfoChangeHandler}>
-          <select name="moneyFlow" defaultValue={todayAccountInfo.moneyFlow}>
+          <select name="cls" value={todayAccountInfo.cls}>
             {moneyFlowOptions}
           </select>
-          <select name="category" defaultValue={todayAccountInfo.category}>
+          <select name="category" value={todayAccountInfo.category}>
             {categoryOptions}
           </select>
           <div>
@@ -95,17 +108,11 @@ function AccountBook() {
               min={0}
               placeholder="금액을 입력해주세요"
               name="amount"
-              defaultValue={todayAccountInfo.amount}
+              value={todayAccountInfo.amount}
             />
             <label htmlFor="memo">원</label>
           </div>
-          <input
-            id="memo"
-            type="text"
-            placeholder="메모를 입력해주세요"
-            name="memo"
-            defaultValue={todayAccountInfo.memo}
-          />
+          <input id="memo" type="text" placeholder="메모를 입력해주세요" name="memo" value={todayAccountInfo.memo} />
           <button type="button" onClick={appendAccountInfoHandler}>
             추가하기
           </button>
