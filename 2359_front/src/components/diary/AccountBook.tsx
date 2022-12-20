@@ -1,24 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
 import { useRecoilState } from 'recoil';
-import {
-  accountEnums,
-  accountTableAtom,
-  AccountTableRow,
-  moneyFlowEnums,
-  ACCOUNT_CATEGORY,
-  MONEY_FLOW,
-} from 'recoil/diaryAtom';
+import { accountTableAtom, AccountTableRow, ACCOUNT_CATEGORY, MONEY_FLOW } from 'recoil/diaryAtom';
+import { accountEnums as ACCOUNT, moneyFlowEnums as MONEY } from 'types/enums';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 
-const ACCOUNT_STATE = Object.values(accountEnums);
+const ACCOUNT_STATE = Object.values(ACCOUNT);
 
-const MONEY_STATE = Object.values(moneyFlowEnums);
+const MONEY_STATE = Object.values(MONEY);
 
 const initialAccountInfo: AccountTableRow = {
   id: getCurrentDate(),
-  moneyFlow: moneyFlowEnums.EXPENSE,
-  category: accountEnums.FOOD,
+  moneyFlow: MONEY.EXPENSE,
+  category: ACCOUNT.FOOD,
   amount: 0,
   memo: '',
 };
@@ -131,4 +125,4 @@ function AccountBook() {
   );
 }
 
-export default AccountBook;
+export { AccountBook };

@@ -3,7 +3,7 @@ import { ContentOptionProps, CONTENT_OPTION } from 'pages/Diary';
 import React, { useMemo, useCallback } from 'react';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
-import DiaryCheckOptionLayout from './Layout/DiaryCheckOptionLayout';
+import { DiaryCheckOptionLayout } from './Layout/DiaryCheckOptionLayout';
 
 interface ContentOptionsProps {
   state: ContentOptionProps[];
@@ -23,7 +23,7 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
 
   const contentCheckBox = useMemo(() => {
     return state.map(({ id, title, isChecked }) => (
-      <TutorialOptions key={uuid()} htmlFor={id} textSize="text-sm">
+      <TutorialOptions key={uuid()} htmlFor={id} textSize="text-sm" marginY="my-1">
         <input className="text-lg" id={id} type="checkbox" onChange={optionHandler} checked={isChecked} />
         <span className="ml-2">{CONTENT_OPTION[title]}</span>
       </TutorialOptions>
@@ -34,7 +34,7 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
     const filterdContents = state.filter(({ isChecked }) => isChecked);
     const titles = filterdContents.map(({ title }) => CONTENT_OPTION[title]);
     return titles.map((title) => (
-      <span key={uuid()} className="text-sm my-4">
+      <span key={uuid()} className="text-sm my-1">
         <a href={`#${title.replaceAll(' ', '-')}`}>{title}</a>
       </span>
     ));
@@ -48,7 +48,7 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
   );
 }
 
-export default ContentOptions;
+export { ContentOptions };
 
 const RelativeDiv = tw.div`
   relative

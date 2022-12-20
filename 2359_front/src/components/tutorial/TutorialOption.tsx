@@ -3,9 +3,11 @@ import tw from 'tailwind-styled-components';
 
 interface LabelProps {
   textSize?: 'text-xs' | 'text-sm' | 'text-base' | 'text-lg' | 'text-xl';
+  marginY?: 'my-0' | 'my-1' | 'my-2' | 'my-3' | 'my-4' | 'my-5' | 'my-6';
 }
 
 function TutorialOption() {
+  // tutorialOption을 그냥 options 페이지로 통일 시키는 것에 대하여...
   return (
     <div>
       <TutorialOptions htmlFor="todolist">
@@ -34,10 +36,10 @@ function TutorialOption() {
 export default TutorialOption;
 
 export const TutorialOptions = tw.label<LabelProps>`
-  my-4 
   text-gray-500 
   leading-relaxed
   flex
   items-center
   ${(props) => props.textSize ?? 'text-lg'}
+  ${(props) => props.marginY ?? 'my-4'}
 `;

@@ -4,6 +4,7 @@ import { todayTodo } from 'recoil/diaryAtom';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
+import styled from 'styled-components';
 
 function TodoList() {
   const [todoInput, setTodoInput] = useState<string>('');
@@ -47,8 +48,10 @@ function TodoList() {
           {curTodo.map(({ id, isChecked, todoContent }) => {
             return (
               <li key={uuid()}>
-                <input id={id} type="checkbox" defaultChecked={isChecked} onChange={changeTodoCheckHandler} />
-                <label htmlFor={id}>{todoContent}</label>
+                <label htmlFor={id}>
+                  <input id={id} type="checkbox" defaultChecked={isChecked} onChange={changeTodoCheckHandler} />
+                  <Span isChecked={isChecked}>{todoContent}</Span>
+                </label>
                 <button onClick={(event) => todoDeleteHandler(event, id)} type="button">
                   삭제하기
                 </button>
@@ -61,4 +64,8 @@ function TodoList() {
   );
 }
 
-export default TodoList;
+export { TodoList };
+
+const Span = styled.label<{ isChecked: boolean }>`
+  text-decoration: ${(props) => (props.isChecked ? 'line-through' : '')};
+`;

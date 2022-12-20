@@ -18,7 +18,7 @@ function DiaryComponentsLayout({ contents, children }: DiaryComponentLayoutProps
   );
 }
 
-export default DiaryComponentsLayout;
+export { DiaryComponentsLayout };
 
 const ContentContainer = tw.div`
   mt-[2rem] 

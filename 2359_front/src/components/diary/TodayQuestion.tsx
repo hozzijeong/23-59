@@ -18,4 +18,4 @@ function TodayQuestion() {
   );
 }
 
-export default TodayQuestion;
+export { TodayQuestion };

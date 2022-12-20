@@ -1,9 +1,10 @@
 import React, { useMemo, useCallback } from 'react';
 import uuid from 'react-uuid';
 import { useRecoilState } from 'recoil';
-import { emotionEnums, emotionRecord, EMOTIONS } from 'recoil/diaryAtom';
+import { emotionRecord, EMOTIONS } from 'recoil/diaryAtom';
+import { emotionEnums as EMOTION } from 'types/enums';
 
-const EMOTION_STATE = Object.values(emotionEnums);
+const EMOTION_STATE = Object.values(EMOTION);
 
 function EmotionDiary() {
   const [emotion, setEmotion] = useRecoilState(emotionRecord);
@@ -14,7 +15,7 @@ function EmotionDiary() {
       if (target instanceof HTMLInputElement) {
         setEmotion((cur) => ({
           ...cur,
-          emotionState: target.value as emotionEnums,
+          emotionState: target.value as EMOTION,
         }));
       }
 
@@ -63,4 +64,4 @@ function EmotionDiary() {
   );
 }
 
-export default EmotionDiary;
+export { EmotionDiary };

@@ -19,7 +19,7 @@ function DiaryCheckOptionLayout({ isleft, component }: DiaryCheckOptionLayoutPro
   );
 }
 
-export default DiaryCheckOptionLayout;
+export { DiaryCheckOptionLayout };
 
 const AbsoluteDiv = tw.div<AbsoluteDivProps>`
   absolute

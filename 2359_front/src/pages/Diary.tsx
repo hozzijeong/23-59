@@ -1,40 +1,34 @@
 import React, { useMemo, useState, ReactNode } from 'react';
-import AccountBook from 'components/diary/AccountBook';
-import DiaryComponentsLayout from 'components/diary/Layout/DiaryComponentsLayout';
-import EmotionDiary from 'components/diary/EmotionDiary';
-import TodayQuestion from 'components/diary/TodayQuestion';
-import TodoList from 'components/diary/ToDoList';
-import ContentOptions from 'components/diary/ContentOptions';
+import { AccountBook } from 'components/diary/AccountBook';
+import { DiaryComponentsLayout } from 'components/diary/Layout/DiaryComponentsLayout';
+import { EmotionDiary } from 'components/diary/EmotionDiary';
+import { TodayQuestion } from 'components/diary/TodayQuestion';
+import { TodoList } from 'components/diary/ToDoList';
+import { ContentOptions } from 'components/diary/ContentOptions';
 import tw from 'tailwind-styled-components';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionRecord, questionAnswer, todayTodo } from 'recoil/diaryAtom';
 import uuid from 'react-uuid';
 import Button from 'components/Button';
 import { useNavigate } from 'react-router-dom';
-
-enum OptionEnums {
-  TODO_LIST = 'TODO_LIST',
-  TODAY_QUESTION = 'TODAY_QUESTION',
-  EMOTION_DIARY = 'EMOTION_DIARY',
-  ACCOUNT_BOOK = 'ACCOUNT_BOOK',
-}
+import { OptionEnums as OPTION } from 'types/enums';
 
 export const CONTENT_OPTION = {
-  [OptionEnums.TODO_LIST]: 'To Do List',
-  [OptionEnums.TODAY_QUESTION]: '오늘의 질문',
-  [OptionEnums.EMOTION_DIARY]: '감정 일기',
-  [OptionEnums.ACCOUNT_BOOK]: '가계부',
+  [OPTION.TODO_LIST]: 'To Do List',
+  [OPTION.TODAY_QUESTION]: '오늘의 질문',
+  [OPTION.EMOTION_DIARY]: '감정 일기',
+  [OPTION.ACCOUNT_BOOK]: '가계부',
 };
 
 type DiaryContentsPrpos = {
-  [key in OptionEnums]: ReactNode;
+  [key in OPTION]: ReactNode;
 };
 
 // 해당 상태관리를 할 때 현재 해당 옵션이 체크되었는지 아닌지가 중요함.
 //
 interface OptionProps {
   id: string;
-  title: OptionEnums;
+  title: OPTION;
 }
 
 export interface ContentOptionProps extends OptionProps {
@@ -42,10 +36,10 @@ export interface ContentOptionProps extends OptionProps {
 }
 
 const TEMP_DATA: OptionProps[] = [
-  { id: '1', title: OptionEnums.TODO_LIST },
-  { id: '2', title: OptionEnums.TODAY_QUESTION },
-  { id: '3', title: OptionEnums.EMOTION_DIARY },
-  { id: '4', title: OptionEnums.ACCOUNT_BOOK },
+  { id: '1', title: OPTION.TODO_LIST },
+  { id: '2', title: OPTION.TODAY_QUESTION },
+  { id: '3', title: OPTION.EMOTION_DIARY },
+  { id: '4', title: OPTION.ACCOUNT_BOOK },
 ];
 
 const TEMP_OPTIONS = ['1', '2'];
@@ -79,10 +73,10 @@ function Diary() {
       if (!isChecked) return null;
 
       const diaryContentMap: DiaryContentsPrpos = {
-        [OptionEnums.TODO_LIST]: <TodoList />,
-        [OptionEnums.TODAY_QUESTION]: <TodayQuestion />,
-        [OptionEnums.EMOTION_DIARY]: <EmotionDiary />,
-        [OptionEnums.ACCOUNT_BOOK]: <AccountBook />,
+        [OPTION.TODO_LIST]: <TodoList />,
+        [OPTION.TODAY_QUESTION]: <TodayQuestion />,
+        [OPTION.EMOTION_DIARY]: <EmotionDiary />,
+        [OPTION.ACCOUNT_BOOK]: <AccountBook />,
       };
 
       return (
