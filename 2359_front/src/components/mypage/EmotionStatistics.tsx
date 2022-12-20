@@ -17,11 +17,15 @@ function EmotionStatistics() {
   return (
     <div style={{ width: '100%' }}>
       <div>여기도 차트를 보여줄거에여~</div>
-      <div style={{ width: '700px', height: '700px', margin: '0 auto' }}>
+      <div style={{ width: '700px', height: '600px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '25px', marginTop: '20px' }}>
+          감정 통계 - 12월😘
+        </div>
         <ResponsiveBar
           data={data}
           keys={['행복', '기쁨', '좌절', '슬픔', '분노']}
-          margin={{ top: 100, right: 130, bottom: 60, left: 60 }}
+          margin={{ top: 30, right: 130, bottom: 60, left: 60 }}
+          indexBy="name"
           padding={0.1}
           groupMode="grouped"
           innerPadding={30}
@@ -34,24 +38,24 @@ function EmotionStatistics() {
             from: 'color',
             modifiers: [['darker', 1.1]],
           }}
-          axisTop={null}
-          axisRight={null}
-          axisBottom={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: '개수',
-            legendPosition: 'middle',
-            legendOffset: 35,
-          }}
-          axisLeft={{
-            tickSize: 6,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: '감정',
-            legendPosition: 'middle',
-            legendOffset: -50,
-          }}
+          // axisTop={null}
+          // axisRight={null}
+          // axisBottom={{
+          //   tickSize: 5,
+          //   tickPadding: 5,
+          //   tickRotation: 0,
+          //   legend: '개수',
+          //   legendPosition: 'middle',
+          //   legendOffset: 35,
+          // }}
+          // axisLeft={{
+          //   tickSize: 6,
+          //   tickPadding: 5,
+          //   tickRotation: 0,
+          //   legend: '감정',
+          //   legendPosition: 'middle',
+          //   legendOffset: -50,
+          // }}
           enableGridX
           labelTextColor={{
             from: 'color',

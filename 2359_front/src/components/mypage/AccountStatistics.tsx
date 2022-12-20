@@ -1,13 +1,15 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsivePie } from '@nivo/pie';
-import { useParams } from 'react-router-dom';
 
 function AccountStatistics() {
   return (
     <div style={{ width: '100%' }}>
-      <div style={{ width: '700px', height: '700px', margin: '0 auto' }}>
-        <div>자 여기 차트가 나와요</div>
+      <div>자 여기 차트가 나와요</div>
+      <div style={{ width: '700px', height: '600px', margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '25px', marginTop: '20px' }}>
+          가계부 통계 - 12월😘
+        </div>
         <ResponsivePie
           data={data}
           margin={{ top: 100, right: 200, bottom: 80, left: 100 }}

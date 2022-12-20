@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import tw from 'tailwind-styled-components';
 
-const tagData: string[] = ['#슬픔', '#기쁨', '#행복', '#죽음', '#공부', '#연애', '#사랑', '#고민', '#걱정'];
+const tagData: string[] = [
+  '#슬픔',
+  '#기쁨',
+  '#행복',
+  '#죽음',
+  '#공부',
+  '#연애',
+  '#사랑',
+  '#고민',
+  '#걱정',
+  '#배고파',
+  '#음식',
+  '#취업',
+  '#워라벨',
+];
 
 interface IData {
   [key: string]: boolean;
@@ -37,7 +51,7 @@ function CollectQuestion() {
   return (
     <Container>
       <div>오늘의 질문 모아보기</div>
-      <div>
+      <ButtonContainer>
         {tagData.map((item) => {
           return (
             <TagButtons className={selectedTag(item)} key={item} type="button" onClick={() => handleTagName(item)}>
@@ -45,10 +59,12 @@ function CollectQuestion() {
             </TagButtons>
           );
         })}
-      </div>
+      </ButtonContainer>
       <div>
         <AnswerUl>
-          <AnswerList onClick={() => setShowModal(true)}>해당하는 질문 1이 보여질거에여</AnswerList>
+          <AnswerList onClick={() => setShowModal(true)}>
+            태그를 선택하면 해당하는 질문에 대한 질문 1이 보여질거에여
+          </AnswerList>
           <AnswerList onClick={() => setShowModal(true)}>이건 질문 2임</AnswerList>
           <AnswerList onClick={() => setShowModal(true)}>요거슨 3번째 알맞는 질문임</AnswerList>
         </AnswerUl>
@@ -107,18 +123,19 @@ function CollectQuestion() {
 
 export default CollectQuestion;
 
-const TagButtons = tw.button`
-  mr-3
-`;
-
 const selectBtnClass = `
   inline-block px-2.5 py-1 bg-blue-600 text-white font-medium text-xs leading-tight rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg 
   mr-3
+  mb-3
+  text-xs
+  
 `;
 
 const nonSelectBtnClass = `
   inline-block px-2.5 py-1 text-blue font-medium text-xs leading-tight rounded-xl shadow-md hover:shadow-lg hover:bg-neutral-300
   mr-3
+  mb-3
+  text-xs
 `;
 
 const Container = tw.div`
@@ -129,6 +146,22 @@ const Container = tw.div`
   space-y-4
 `;
 
+const ButtonContainer = tw.div`
+  w-[94%]
+  mx-auto
+  min-h-[60px]
+`;
+
+const TagButtons = tw.button`
+  mr-3
+  w-16
+  h-7
+  
+`;
+// 아웃라인 넣을지 고민
+// hover:outline
+// outline-2
+// outline-offset-4
 const AnswerUl = tw.ul`
   w-full
   p-4
