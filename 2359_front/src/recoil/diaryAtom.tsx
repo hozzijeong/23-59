@@ -1,18 +1,28 @@
 import { atom } from 'recoil';
+import { emotionEnums as EMOTION } from 'types/enums';
+import { AccountTableRow, EmotionRecordProps, TodoListProps } from 'types/interfaces';
 
-interface TodoListProps {
-  id: string;
-  isChecked: boolean;
-  todoContent: string;
-}
+const todayTodo = atom<TodoListProps[]>({
+  key: 'todayTodoState',
+  default: [],
+});
 
-interface DiaryStateProps {
-  todos: TodoListProps[];
-}
+const questionAnswer = atom<{ answer: string }>({
+  key: 'questionAnswerState',
+  default: { answer: '' },
+});
 
-export const diaryAtom = atom<DiaryStateProps>({
-  key: 'diaryState',
+const emotionRecord = atom<EmotionRecordProps>({
+  key: 'emotionRecordState',
   default: {
-    todos: [],
+    emotionState: EMOTION.SO_SO,
+    emotionDiary: '',
   },
 });
+
+const accountTableAtom = atom<AccountTableRow[]>({
+  key: 'accountTableState',
+  default: [],
+});
+
+export { accountTableAtom, todayTodo, questionAnswer, emotionRecord };

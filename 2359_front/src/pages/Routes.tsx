@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Routes as ReactRouterRoutes, Navigate } from 'react-router-dom';
 import Diary from 'pages/Diary';
-import Home from './Home';
-import MyPage from './MyPage';
-import UserInfo from '../components/mypage/UserInfo';
-import SetDiaryOption from '../components/mypage/SetDiaryOption';
-import EmotionStatistics from '../components/mypage/EmotionStatistics';
-import AccountStatistics from '../components/mypage/AccountStatistics';
-import CollectQuestion from '../components/mypage/CollectQuestion';
+import Home from 'pages/Home';
+import MyPage from 'pages/MyPage';
+import UserInfo from 'components/mypage/UserInfo';
+import SetDiaryOption from 'components/mypage/SetDiaryOption';
+import EmotionStatistics from 'components/mypage/EmotionStatistics';
+import AccountStatistics from 'components/mypage/AccountStatistics';
+import CollectQuestion from 'components/mypage/CollectQuestion';
 import SignUp from './SignUp';
 
 export default function Routes() {
