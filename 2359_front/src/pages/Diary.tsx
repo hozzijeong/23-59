@@ -118,12 +118,12 @@ const HeadContent = tw.div`
   max-w-screen-md
   my-0
   mx-auto
-  pt-[5rem]
+  pt-[3rem]
 `;
 
 const Content = tw.div`
   max-w-screen-md
-  mt-[5rem]
+  mt-[3rem]
   md-0
   mx-auto
   text-lg	
@@ -139,5 +139,5 @@ const SubmitContainer = tw.div`
   flex
   justify-between
   mt-[20px]
-
+  pb-[40px]
 `;

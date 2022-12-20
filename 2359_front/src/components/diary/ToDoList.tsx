@@ -36,7 +36,7 @@ function TodoList() {
   };
 
   return (
-    <div>
+    <TodoContainer>
       <div>
         <input placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
         <button type="button" onClick={addTodoHandler}>
@@ -60,11 +60,15 @@ function TodoList() {
           })}
         </ul>
       </div>
-    </div>
+    </TodoContainer>
   );
 }
 
 export { TodoList };
+
+const TodoContainer = tw.div`
+
+`;
 
 const Span = styled.label<{ isChecked: boolean }>`
   text-decoration: ${(props) => (props.isChecked ? 'line-through' : '')};
