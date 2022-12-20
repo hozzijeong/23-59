@@ -10,9 +10,10 @@ function AccountStatistics() {
         <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '25px', marginTop: '20px' }}>
           가계부 통계 - 12월😘
         </div>
+        <div style={{ textAlign: 'end', margin: '20px' }}>수입 총 계: 여기에 나옴</div>
         <ResponsivePie
           data={data}
-          margin={{ top: 100, right: 200, bottom: 80, left: 100 }}
+          margin={{ top: 50, right: 200, bottom: 80, left: 120 }}
           sortByValue
           cornerRadius={5}
           activeOuterRadiusOffset={15}

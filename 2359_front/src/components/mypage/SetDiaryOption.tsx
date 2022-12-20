@@ -7,7 +7,7 @@ function SetDiaryOption() {
       <div className="justify-self-start">작성페이지 옵션 설정</div>
       <ScriptDiv>
         <Script>1. 일일 결산을할 때 고정적으로 적용할 옵션을 설정하는 페이지 입니다.</Script>
-        <Script>2. 원하시는 옵션을 체크하고 자신만의 결산 템플릿을 만들어 보세요!</Script>
+        <Script>2. 원하는 옵션을 체크하고 자신만의 결산 템플릿을 만들어 보세요!</Script>
       </ScriptDiv>
       <CheckboxArea>
         <div>
@@ -27,9 +27,16 @@ function SetDiaryOption() {
         <div>
           <CheckLabel htmlFor="diaryCheck">
             <CheckInput type="checkbox" id="diaryCheck" />
-            감정 일기
+            일기 작성
           </CheckLabel>
-          <p>👉 일기를 쓰고 오늘의 감정을 선택할 수 있어요!</p>
+          <p>👉 일기를 쓰고 오늘 하루를 마무리 해보세요!</p>
+        </div>
+        <div>
+          <CheckLabel htmlFor="diaryCheck">
+            <CheckInput type="checkbox" id="diaryCheck" />
+            하루 감정
+          </CheckLabel>
+          <p>👉 오늘 하루 느꼈던 감정을 기록할 수 있어요!</p>
         </div>
         <div>
           <CheckLabel htmlFor="diaryCheck">
