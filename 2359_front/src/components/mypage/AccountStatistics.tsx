@@ -1,16 +1,20 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsivePie } from '@nivo/pie';
+import { StatisticsScript, Container, BarChartContainer } from './EmotionStatistics';
+
+const IncomeTotal = tw.div`
+  text-end
+  m-5
+`;
 
 function AccountStatistics() {
   return (
-    <div style={{ width: '100%' }}>
+    <Container>
       <div>자 여기 차트가 나와요</div>
-      <div style={{ width: '700px', height: '600px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '25px', marginTop: '20px' }}>
-          가계부 통계 - 12월😘
-        </div>
-        <div style={{ textAlign: 'end', margin: '20px' }}>수입 총 계: 여기에 나옴</div>
+      <BarChartContainer>
+        <StatisticsScript>가계부 통계 - 12월😘</StatisticsScript>
+        <IncomeTotal>수입 총 계: 여기에 나옴</IncomeTotal>
         <ResponsivePie
           data={data}
           margin={{ top: 50, right: 200, bottom: 80, left: 120 }}
@@ -59,8 +63,8 @@ function AccountStatistics() {
             },
           ]}
         />
-      </div>
-    </div>
+      </BarChartContainer>
+    </Container>
   );
 }
 

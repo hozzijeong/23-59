@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import tw from 'tailwind-styled-components';
 
 const tagData: string[] = [
@@ -28,7 +28,7 @@ const setData = (): void => {
   });
 };
 setData();
-console.log('newData', newData);
+// console.log('newData', newData);
 
 function CollectQuestion() {
   const [isSelect, setIsSelect] = useState(newData);
