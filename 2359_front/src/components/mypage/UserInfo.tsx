@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { UpdateFormValue } from 'types/interfaces';
+import { UpdateFormValue } from '../../types/interfaces';
 import { emailCheck } from '../../utilities/regex';
 import * as SC from '../signup/FormStyled';
 /* eslint-disable react/jsx-props-no-spreading */

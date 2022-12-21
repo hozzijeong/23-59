@@ -4,6 +4,7 @@ import Diary from 'pages/Diary';
 import Home from 'pages/Home';
 import MyPage from 'pages/MyPage';
 import UserInfo from 'components/mypage/UserInfo';
+import Login from 'pages/Login';
 import SetDiaryOption from 'components/mypage/SetDiaryOption';
 import EmotionStatistics from 'components/mypage/EmotionStatistics';
 import AccountStatistics from 'components/mypage/AccountStatistics';
@@ -22,6 +23,7 @@ export default function Routes() {
       </Route>
       <Route path="/diary" element={<Diary />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/" element={<Home />} />
       <Route path="*" element={<Navigate replace to="/" />} />
     </ReactRouterRoutes>

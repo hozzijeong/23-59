@@ -1,10 +1,10 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { emailCheck } from '../../utilities/regex';
 import * as SC from '../signup/FormStyled';
+import { emailCheck } from '../../utilities/regex';
 import { useLogin } from '../../hooks/useLogin';
-import { LoginFormValue } from 'types/interfaces';
+import { LoginFormValue } from '../../types/interfaces';
 
 /* eslint-disable react/jsx-props-no-spreading */
 

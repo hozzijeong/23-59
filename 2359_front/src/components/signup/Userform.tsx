@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { emailCheck } from '../../utilities/regex';
 import { useRegister } from '../../hooks/useRegister';
 import * as SC from './FormStyled';
-import { RegisterFormValue } from 'types/interfaces';
+import { RegisterFormValue } from '../../types/interfaces';
 
 /* eslint-disable react/jsx-props-no-spreading */
 
@@ -22,6 +22,7 @@ function Userform() {
   const OnSubmit: SubmitHandler<RegisterFormValue> = (data) => {
     console.log(data);
     useRegister(data);
+    navigate('/login');
   };
 
   return (
