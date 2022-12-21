@@ -1,12 +1,16 @@
 import tw from 'tailwind-styled-components';
 
+interface BtnProps {
+  type?: React.ButtonHTMLAttributes<HTMLButtonElement>;
+  delete?: true;
+}
+
 const Container = tw.div`
+w-full
 flex
+flex-col
 justify-center
 items-center
-w-auto
-border
-border-[red]
 `;
 
 const Form = tw.form`
@@ -16,43 +20,59 @@ flex-col
 items-start
 p-12
 border
-border-[#3F51A2]
+rounded-2xl 
+shadow-xl
 `;
 
 const FormTitle = tw.div`
-  text-4xl
+  mb-3 text-2xl font-bold
   mx-auto
   mt-auto
-  flex
-  justify-center
-  items-center
   mb-4
   `;
 
 const FormLabel = tw.div`
-  text-xl
+  text-lg
   `;
 
 const FormInput = tw.input`
+  outline-none focus:outline-none
   mx-auto
   mt-auto
   rounded-xl
   w-[220px]
   p-1.5
-  mb-2
+  mb-1
   `;
 
-const SubmitButton = tw.button`
-mx-auto
-mt-5
-bg-[#A69B97]  rounded-[10px]
-text-2xl
-w-40
+const SubmitButton = tw.button<BtnProps>`
+w-full 
+font-bold
+hover:bg-primaryLight
+active:translate-y-[0.125rem]
+mt-[10px]
+rounded-lg 
+hover:shadow-lg
+ease-linear 
+transition-all 
+duration-150
+bg-primaryDark
+px-3 py-1 text-base
 
+${(props) => props.delete && `bg-[primary]`}
+`;
+
+const SignUpLink = tw.a`
+  mx-auto
+  mt-3 
+  hover:text-primaryDark
+  ease-linear
+  transition-all 
+  duration-150
 `;
 
 const ErrorMesg = tw.span`
 text-[red]
 `;
 
-export { ErrorMesg, SubmitButton, FormInput, FormLabel, FormTitle, Form, Container };
+export { ErrorMesg, SubmitButton, FormInput, FormLabel, FormTitle, Form, Container, SignUpLink };
