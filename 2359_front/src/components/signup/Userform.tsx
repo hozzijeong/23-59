@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { emailCheck } from 'util/regex';
+import { emailCheck } from '../../utilities/regex';
 import { useRegister } from '../../hooks/useRegister';
 import * as SC from './FormStyled';
 

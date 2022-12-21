@@ -1,7 +1,7 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { emailCheck } from 'util/regex';
+import { emailCheck } from '../../utilities/regex';
 import * as SC from '../signup/FormStyled';
 import { useLogin } from '../../hooks/useLogin';
 
