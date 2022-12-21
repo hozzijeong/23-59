@@ -15,8 +15,19 @@ contentRouter.get('/', async (req, res, next) => {
     next(error);
   }
 });
+// api/contents/calendar/:selectedDate
+contentRouter.get('/calendar/:selectedDate', async (req, res, next) => {
+  try {
+    const { selectedDate } = req.params;
+    const contents = await contentService.getCalendar(selectedDate);
 
-contentRouter.get('/id/:id', async (req, res, next) => {
+    res.status(200).json(contents);
+  } catch (error) {
+    next(error);
+  }
+});
+// api/contents/63a026bb13e614f3a952659f
+contentRouter.get('/:id', async (req, res, next) => {
   try {
     const { id } = req.params;
     const content = await contentService.getContentById(id);
@@ -25,8 +36,8 @@ contentRouter.get('/id/:id', async (req, res, next) => {
     next(error);
   }
 });
-
-contentRouter.get('/selectedDate/:selectedDate', async (req, res, next) => {
+// api/contents/20221225
+contentRouter.get('/date/:selectedDate', async (req, res, next) => {
   try {
     const { selectedDate } = req.params;
     const content = await contentService.getContentBySelectedDate(selectedDate);
@@ -35,25 +46,13 @@ contentRouter.get('/selectedDate/:selectedDate', async (req, res, next) => {
     next(error);
   }
 });
-
-contentRouter.get('/:date', async (req, res, next) => {
+// api/contents/20221201-20221231
+contentRouter.get('/filterDate/:date', async (req, res, next) => {
   try {
     const { date } = req.params;
     const splitDate = date.split('-');
     console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
     const content = await contentService.filterDate(splitDate[0], splitDate[1]);
-    res.status(200).json(content);
-  } catch (error) {
-    next(error);
-  }
-});
-
-contentRouter.get('/filter/:date', async (req, res, next) => {
-  try {
-    const { date } = req.params;
-    const splitDate = date.split('-');
-    console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
-    const content = await contentService.filterEmotion(splitDate[0], splitDate[1]);
     res.status(200).json(content);
   } catch (error) {
     next(error);
@@ -124,6 +123,47 @@ contentRouter.delete('/:contentId', async (req, res, next) => {
     const deletedContent = await contentService.deleteContent(contentId);
 
     res.status(200).json(deletedContent);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// api/filterEmotion/20221201-20221231
+contentRouter.get('/filterEmotion/:date', async (req, res, next) => {
+  try {
+    const { date } = req.params;
+    const splitDate = date.split('-');
+    console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
+    const content = await contentService.filterEmotion(splitDate[0], splitDate[1]);
+    res.status(200).json(content);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// api/filterCls/20221201-20221231
+contentRouter.get('/filterCls/:date', async (req, res, next) => {
+  try {
+    const { date } = req.params;
+    const splitDate = date.split('-');
+    console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
+    const content = await contentService.filterCls(splitDate[0], splitDate[1]);
+    res.status(200).json(content);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// api/filterCategory/20221201-20221231
+contentRouter.get('/filterCategory/:date', async (req, res, next) => {
+  try {
+    const { date } = req.params;
+    const splitDate = date.split('-');
+    console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
+    const content = await contentService.filterCategory(splitDate[0], splitDate[1]);
+    console.log('router-content: ', content);
+    //console.log('json-content: ', res.json(content));
+    res.status(200).json(content);
   } catch (error) {
     next(error);
   }
