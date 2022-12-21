@@ -1,14 +1,6 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.userSchema = void 0;
 const mongoose_1 = require("mongoose");
 const userSchema = new mongoose_1.Schema({
     email: {
@@ -25,42 +17,40 @@ const userSchema = new mongoose_1.Schema({
     },
     firstLogin: {
         type: Boolean,
-        default: true, // 첫 로그인 = true 반환
+        default: true, // 최초로그인 시, ture 반환
     },
     createOption: {
         type: new mongoose_1.Schema({
-            answer: Boolean,
+            question: Boolean,
             todo: Boolean,
             diary: Boolean,
-            emotion: Boolean,
             account: Boolean,
         }, {
             _id: false,
         }),
         required: false,
         default: {
-            answer: false,
+            question: false,
             todo: false,
             diary: false,
-            emotion: false,
             account: false,
         },
     },
 }, {
+    collection: 'users',
     timestamps: true,
 });
-const User = (0, mongoose_1.model)('User', userSchema);
-run().catch((err) => console.log(err));
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        // 4. Connect to MongoDB
-        yield (0, mongoose_1.connect)('mongodb://localhost:27017/test');
-        const user = new User({
-            email: 'abc@cc.com',
-            password: 'abc123',
-            nickname: 'st',
-        });
-        yield user.save();
-        console.log(user);
-    });
-}
+exports.userSchema = userSchema;
+// const User = model<IUser>('User', userSchema);
+// run().catch((err) => console.log(err));
+// async function run() {
+//   // 4. Connect to MongoDB
+//   await connect('mongodb://localhost:27017/test');
+//   const user = new User({
+//     email: 'abc@cc.com',
+//     password: 'abc123',
+//     nickname: 'st',
+//   });
+//   await user.save();
+//   console.log(user);
+// }
