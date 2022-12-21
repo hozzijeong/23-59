@@ -3,7 +3,7 @@ import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { emailCheck } from '../../utilities/regex';
-import useRegister from '../../hooks/useRegister';
+import useRegister from '../../hooks/useUserRegister';
 import * as SC from './FormStyled';
 import { RegisterFormValue } from '../../types/interfaces';
 
