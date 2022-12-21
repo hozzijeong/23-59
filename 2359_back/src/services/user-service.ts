@@ -101,7 +101,6 @@ class UserService {
     return userModel.delete(userId);
   }
 }
-
 const userService = new UserService();
 
 export { userService };
