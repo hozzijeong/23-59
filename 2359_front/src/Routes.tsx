@@ -8,7 +8,7 @@ import SetDiaryOption from 'components/mypage/SetDiaryOption';
 import EmotionStatistics from 'components/mypage/EmotionStatistics';
 import AccountStatistics from 'components/mypage/AccountStatistics';
 import CollectQuestion from 'components/mypage/CollectQuestion';
-import SignUp from './SignUp';
+import SignUp from './pages/SignUp';
 
 export default function Routes() {
   return (
