@@ -30,4 +30,7 @@ const Question = tw.p`
 const DiaryArea = tw.textarea`
   w-full
   h-24
+  max-h-36
+  resize-none
+  p-2
 `;
