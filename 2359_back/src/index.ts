@@ -1,8 +1,9 @@
 import 'dotenv/config';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import express from 'express';
+import cors from 'cors';import express from 'express';
 import connectDB from './DB/index';
+import { userRouter, userOptionRouter } from './routers';
 
 import { userRouter, userOptionRouter } from './routers/user-router';
 
