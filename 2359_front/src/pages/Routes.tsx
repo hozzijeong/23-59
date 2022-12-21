@@ -9,6 +9,7 @@ import EmotionStatistics from '../components/mypage/EmotionStatistics';
 import AccountStatistics from '../components/mypage/AccountStatistics';
 import CollectQuestion from '../components/mypage/CollectQuestion';
 import SignUp from './SignUp';
+import Login from './Login';
 
 export default function Routes() {
   return (
@@ -22,6 +23,7 @@ export default function Routes() {
       </Route>
       <Route path="/diary" element={<Diary />} />
       <Route path="/signup" element={<SignUp />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/" element={<Home />} />
       <Route path="*" element={<Navigate replace to="/" />} />
     </ReactRouterRoutes>
