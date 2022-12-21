@@ -2,6 +2,7 @@
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
   content: [],
+  darkMode: ['class', '[data-mode="dark"]'],
   theme: {
     extend: {
       margin: {

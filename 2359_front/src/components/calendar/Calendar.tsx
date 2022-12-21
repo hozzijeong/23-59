@@ -3,12 +3,12 @@ import { format, subMonths, addMonths } from 'date-fns';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
 import Button from 'components/Button';
+import { useNavigate } from 'react-router-dom';
 import { CalendarWeeks, dayColor, takeMonth, todayColor } from './Utils';
 
 function Calendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  console.log(selectedDate);
+  const navigate = useNavigate();
 
   const data = takeMonth(currentDate)();
   const prevMonth = () => {
@@ -16,6 +16,10 @@ function Calendar() {
   };
   const nextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1));
+  };
+  const onDateClick = (day: Date) => {
+    const diaryId = format(day, 'yyyyMMdd');
+    navigate(`/diary/${diaryId}`);
   };
 
   return (
@@ -36,7 +40,7 @@ function Calendar() {
       {data.map((week) => (
         <DaysContainer key={uuid()}>
           {week.map((day) => (
-            <CalendarDays key={day.toString()} className={`${todayColor(day)}`} onClick={() => setSelectedDate(day)}>
+            <CalendarDays key={day.toString()} className={`${todayColor(day)}`} onClick={() => onDateClick(day)}>
               <CalendarDay className={`${dayColor(day, currentDate)}`}>{format(day, 'dd')}</CalendarDay>
             </CalendarDays>
           ))}

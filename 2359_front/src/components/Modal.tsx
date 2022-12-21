@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import tw from 'tailwind-styled-components';
 import Button from './Button';
+import Tooltip from './Tooltip';
 
 interface ModalProps<T> {
   title?: string;
   children?: React.ReactNode;
   btnclose?: string;
   btnsave?: string;
-  state: T;
+  state?: T;
 }
 
 function Modal<T>({ title, children, btnclose, btnsave, state }: ModalProps<T>) {
@@ -27,9 +28,7 @@ function Modal<T>({ title, children, btnclose, btnsave, state }: ModalProps<T>) 
               <ModalBox>
                 <ModalHeader>
                   <ModalTitle>{title}</ModalTitle>
-                  <Tooltip type="button">
-                    <span className="text-lg flex justify-center leading-none">?</span>
-                  </Tooltip>
+                  <Tooltip text="매일 작성하는 옵션을 설정하고,   마이페이지에서 수정할 수 있어요" />
                 </ModalHeader>
                 <ModalContent>{children}</ModalContent>
                 <ModalFooter>
@@ -57,6 +56,7 @@ Modal.defaultProps = {
   children: null,
   btnclose: '닫기',
   btnsave: '저장',
+  state: null,
 };
 
 const ModalScreen = tw.div`
@@ -79,10 +79,10 @@ bg-black
 `;
 const ModalContainer = tw.div`
 relative 
-w-1/5
+w-full
 my-6
 mx-auto 
-max-w-lg
+max-w-sm
 `;
 const ModalBox = tw.div`
 border-0
@@ -113,18 +113,6 @@ text-xl
 font-semibold
 `;
 
-const Tooltip = tw.button`
-h-6
-w-6
-bg-primaryDark 
-rounded-xl 
-text-white 
-shadow 
-hover:bg-primary 
-ease-linear 
-transition-all 
-duration-150
-`;
 const ModalContent = tw.div`
 relative
 p-6 

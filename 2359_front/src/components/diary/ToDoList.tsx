@@ -26,7 +26,6 @@ function TodoList() {
 
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
-    console.log(id, curTodo, 123);
     const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : { ...todo }));
 
     setCurTodo(updateTodos);
@@ -50,10 +49,10 @@ function TodoList() {
             return (
               <LiContainer key={uuid()}>
                 <TodoLabel htmlFor={id}>
-                  <input id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
+                  <CheckBox id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
                   <ToDoSpan isChecked={done}>{item}</ToDoSpan>
                 </TodoLabel>
-                <Button onClick={(event) => todoDeleteHandler(event, id)} type="button" marginRight="mr-2.5">
+                <Button onClick={(event) => todoDeleteHandler(event, id)} type="button">
                   삭제하기
                 </Button>
               </LiContainer>
@@ -65,7 +64,7 @@ function TodoList() {
   );
 }
 
-export { TodoList };
+export { TodoList, Button };
 
 const ToDoHeader = tw.div`
   mb-3  
@@ -83,14 +82,13 @@ const ToDoInput = tw.input`
   text-grey-darker
 `;
 
-const Button = tw.button<{ marginRight?: 'mr-2.5' }>`
+const Button = tw.button`
  flex-no-shrink 
- p-2 
+ p-1 
  border-2 
  rounded 
  bg-primaryDark
  text-white 
- ${(props) => props.marginRight ?? ''}
  hover:bg-primaryDeepDark
 `;
 
@@ -98,7 +96,6 @@ const LiContainer = tw.li`
   flex 
   mb-1
   items-center
-  justify-between
 `;
 
 const Label = styled.label`
@@ -110,7 +107,14 @@ const Label = styled.label`
 const TodoLabel = tw(Label)`
   py-2 
   px-3 
-  mr-4 
+  mr-4
+  w-10/12
+  text-lg
+`;
+
+const CheckBox = tw.input`
+  w-4
+  h-4  
 `;
 
 const Span = styled.span<{ isChecked: boolean }>`

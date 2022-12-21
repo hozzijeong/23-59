@@ -20,7 +20,6 @@ type DiaryContentsPrpos = {
 };
 
 // 해당 상태관리를 할 때 현재 해당 옵션이 체크되었는지 아닌지가 중요함.
-//
 
 const TEMP_DATA: OptionProps[] = [
   { id: '1', title: OPTION.TODO_LIST },
@@ -81,8 +80,7 @@ function Diary() {
   }, [contentOptions]);
 
   const submitHandler = () => {
-    console.log(todayTodoState, questionAnswerState, emotionState,
-      todayDiaryState, accountTableAtomState);
+    console.log(todayTodoState, questionAnswerState, emotionState, todayDiaryState, accountTableAtomState);
   };
   const cancelHandler = () => {
     // eslint-disable-next-line no-restricted-globals
@@ -90,6 +88,8 @@ function Diary() {
       navigation('/');
     }
   };
+
+  // Read 페이지를 어떠헥 만들 것인지 생각해보기
 
   return (
     <DiarySection>
