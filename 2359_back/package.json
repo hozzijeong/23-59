@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && npm run build && node dist/index.js",
+    "start": "npm run build && node dist/index.js",
     "build": "tsc -p .",
     "dev": "nodemon --watch \"src/**/*.ts\" --exec \"ts-node\" src/index.ts",
     "lint": "eslint src/**/*.ts"
@@ -36,7 +36,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.8.0",
     "prettier": "^2.8.1",
-    "mongodb": "^4.12.1",
     "prettier-eslint": "^15.0.1"
   }
 }
