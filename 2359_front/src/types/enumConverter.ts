@@ -51,7 +51,8 @@ const CLS = {
 const CONTENT_OPTION = {
   [OPTION.TODO_LIST]: 'To Do List',
   [OPTION.TODAY_QUESTION]: '오늘의 질문',
-  [OPTION.EMOTION_DIARY]: '감정 일기',
+  [OPTION.EMOTION]: '오늘의 감정',
+  [OPTION.DIARY]: '일기',
   [OPTION.ACCOUNT_BOOK]: '가계부',
 };
 

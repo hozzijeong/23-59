@@ -9,14 +9,16 @@ import { OptionEnums as OPTION } from 'types/enums';
 const TEMP_DATA: OptionProps[] = [
   { id: '1', title: OPTION.TODO_LIST },
   { id: '2', title: OPTION.TODAY_QUESTION },
-  { id: '3', title: OPTION.EMOTION_DIARY },
-  { id: '4', title: OPTION.ACCOUNT_BOOK },
+  { id: '3', title: OPTION.EMOTION },
+  { id: '4', title: OPTION.DIARY },
+  { id: '5', title: OPTION.ACCOUNT_BOOK },
 ];
 
 const TEMP_OPTIONS = {
   [OPTION.TODO_LIST]: true,
   [OPTION.TODAY_QUESTION]: false,
-  [OPTION.EMOTION_DIARY]: false,
+  [OPTION.DIARY]: false,
+  [OPTION.EMOTION]: false,
   [OPTION.ACCOUNT_BOOK]: false,
 };
 
