@@ -20,7 +20,7 @@ export default function Routes() {
         <Route path="account" element={<AccountStatistics />} />
         <Route path="collect-question" element={<CollectQuestion />} />
       </Route>
-      <Route path="/diary" element={<Diary />} />
+      <Route path="/diary/:id" element={<Diary />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/" element={<Home />} />
       <Route path="*" element={<Navigate replace to="/" />} />
