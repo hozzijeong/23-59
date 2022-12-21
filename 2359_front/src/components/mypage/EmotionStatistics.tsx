@@ -1,6 +1,7 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsiveBar } from '@nivo/bar';
+import axios from 'axios';
 
 const data = [
   {
@@ -12,6 +13,12 @@ const data = [
     분노: 20,
   },
 ];
+
+// async function getFilterEmotion() {
+//   const res = await axios.get('/api/contents/filter/20221222-20221226');
+//   console.log(res);
+// }
+// getFilterEmotion();
 
 function EmotionStatistics() {
   return (

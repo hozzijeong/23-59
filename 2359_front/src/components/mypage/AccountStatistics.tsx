@@ -3,11 +3,6 @@ import tw from 'tailwind-styled-components';
 import { ResponsivePie } from '@nivo/pie';
 import { StatisticsScript, Container, BarChartContainer } from './EmotionStatistics';
 
-const IncomeTotal = tw.div`
-  text-end
-  m-5
-`;
-
 function AccountStatistics() {
   return (
     <Container>
@@ -69,6 +64,11 @@ function AccountStatistics() {
 }
 
 export default AccountStatistics;
+
+const IncomeTotal = tw.div`
+  text-end
+  m-5
+`;
 
 interface Idata {
   id: string;
