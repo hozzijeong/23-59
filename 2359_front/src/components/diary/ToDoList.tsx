@@ -65,7 +65,7 @@ function TodoList() {
   );
 }
 
-export { TodoList };
+export { TodoList, Button };
 
 const ToDoHeader = tw.div`
   mb-3  
@@ -85,7 +85,7 @@ const ToDoInput = tw.input`
 
 const Button = tw.button`
  flex-no-shrink 
- p-2 
+ p-1 
  border-2 
  rounded 
  bg-primaryDark

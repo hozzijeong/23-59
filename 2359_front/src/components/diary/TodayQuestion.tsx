@@ -36,5 +36,5 @@ const AnswerArea = tw.textarea`
   border 
   rounded 
   text-grey-darker
-
+  shadow
 `;
