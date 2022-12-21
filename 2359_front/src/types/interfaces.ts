@@ -34,7 +34,6 @@ interface DiaryStateProps {
 }
 
 interface OptionProps {
-  id: string;
   title: OPTIONS;
 }
 

@@ -7,11 +7,11 @@ import { OptionEnums as OPTION } from 'types/enums';
 
 // 서버에서 값을 받아 처리하는게 좋을듯. 그리고 서버에서 관리하는 값과 별개로 해당 state를 관리하는 useState가 필요
 const TEMP_DATA: OptionProps[] = [
-  { id: '1', title: OPTION.TODO_LIST },
-  { id: '2', title: OPTION.TODAY_QUESTION },
-  { id: '3', title: OPTION.EMOTION },
-  { id: '4', title: OPTION.DIARY },
-  { id: '5', title: OPTION.ACCOUNT_BOOK },
+  { title: OPTION.TODO_LIST },
+  { title: OPTION.TODAY_QUESTION },
+  { title: OPTION.EMOTION },
+  { title: OPTION.DIARY },
+  { title: OPTION.ACCOUNT_BOOK },
 ];
 
 const TEMP_OPTIONS = {

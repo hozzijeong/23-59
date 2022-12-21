@@ -22,11 +22,11 @@ type DiaryContentsPrpos = {
 // 해당 상태관리를 할 때 현재 해당 옵션이 체크되었는지 아닌지가 중요함.
 
 const TEMP_DATA: OptionProps[] = [
-  { id: '1', title: OPTION.TODO_LIST },
-  { id: '2', title: OPTION.TODAY_QUESTION },
-  { id: '3', title: OPTION.EMOTION },
-  { id: '4', title: OPTION.DIARY },
-  { id: '5', title: OPTION.ACCOUNT_BOOK },
+  { title: OPTION.TODO_LIST },
+  { title: OPTION.TODAY_QUESTION },
+  { title: OPTION.EMOTION },
+  { title: OPTION.DIARY },
+  { title: OPTION.ACCOUNT_BOOK },
 ];
 
 const TEMP_OPTIONS = {
@@ -52,7 +52,7 @@ function Diary() {
       navigation('/');
       return;
     }
-    setDate(`${id?.slice(0, 4)} ${id?.slice(4, 6)} ${id?.slice(6, 8)} `);
+    setDate(`${id?.slice(0, 4)}년 ${id?.slice(4, 6)}월 ${id?.slice(6, 8)}일 결산`);
   }, [date, id, navigation]);
 
   const mixedData = useMemo(() => TEMP_DATA.map((data) => ({ ...data, isChecked: TEMP_OPTIONS[data.title] })), []); // 이렇게 따로 변수로 합쳐서 만들어도 되는지? 클라이언트에서만 사용되는 값들이고, 사용자가 화면에서 동적으로 변경했을 때 그 변경되는 값을 바로바로 적용해줘야 합니다.
@@ -100,7 +100,6 @@ function Diary() {
   };
 
   // Read 페이지를 어떠헥 만들 것인지 생각해보기
-
   return (
     <DiarySection>
       <HeadContent>
