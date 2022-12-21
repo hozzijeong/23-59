@@ -3,7 +3,7 @@ import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as SC from '../signup/FormStyled';
 import { emailCheck } from '../../utilities/regex';
-import useLogin from '../../hooks/useLogin';
+import useLogin from '../../hooks/useUserLogin';
 import { LoginFormValue } from '../../types/interfaces';
 
 /* eslint-disable react/jsx-props-no-spreading */
