@@ -53,7 +53,7 @@ function TodoList() {
                   <input id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
                   <ToDoSpan isChecked={done}>{item}</ToDoSpan>
                 </TodoLabel>
-                <Button onClick={(event) => todoDeleteHandler(event, id)} type="button" marginRight="mr-2.5">
+                <Button onClick={(event) => todoDeleteHandler(event, id)} type="button">
                   삭제하기
                 </Button>
               </LiContainer>
@@ -83,14 +83,13 @@ const ToDoInput = tw.input`
   text-grey-darker
 `;
 
-const Button = tw.button<{ marginRight?: 'mr-2.5' }>`
+const Button = tw.button`
  flex-no-shrink 
  p-2 
  border-2 
  rounded 
  bg-primaryDark
  text-white 
- ${(props) => props.marginRight ?? ''}
  hover:bg-primaryDeepDark
 `;
 
@@ -98,7 +97,6 @@ const LiContainer = tw.li`
   flex 
   mb-1
   items-center
-  justify-between
 `;
 
 const Label = styled.label`
@@ -110,7 +108,9 @@ const Label = styled.label`
 const TodoLabel = tw(Label)`
   py-2 
   px-3 
-  mr-4 
+  mr-4
+  w-10/12
+  text-lg
 `;
 
 const Span = styled.span<{ isChecked: boolean }>`
