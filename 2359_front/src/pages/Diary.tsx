@@ -31,7 +31,7 @@ const TEMP_DATA: OptionProps[] = [
 
 const TEMP_OPTIONS = {
   [OPTION.TODO_LIST]: true,
-  [OPTION.TODAY_QUESTION]: false,
+  [OPTION.TODAY_QUESTION]: true,
   [OPTION.DIARY]: false,
   [OPTION.EMOTION]: false,
   [OPTION.ACCOUNT_BOOK]: false,
@@ -44,9 +44,16 @@ function Diary() {
   // 서버에 데이터를 받아옴.
   // 옵션 목록이 따로 있고, 체크 여부가 따로 존재함.
   // 그렇게 2개를 따로 받아오기
+  const [isRead, setIsRead] = useState(true); // 읽기 모드냐 아니냐의 차이?
+  /**
+   * 1. read 일때는 수정/삭제가 나타나야 한다.
+   * 2. read 일때 option이 없으면 작성하기 버튼이 생성된다. -> 수정 페이지로 이동하게 된다.
+   * 3.
+   */
   const navigation = useNavigate();
   const { id } = useParams();
   const [date, setDate] = useState(id);
+
   useEffect(() => {
     if (id === undefined) {
       navigation('/');
@@ -71,7 +78,17 @@ function Diary() {
 
   const diaryContents = useMemo(() => {
     if (everyUnChecked) {
-      return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
+      return (
+        <EmptyContainer>
+          {isRead ? (
+            <button type="button" onClick={() => setIsRead(false)}>
+              작성하기
+            </button>
+          ) : (
+            '좌측 옵션을 선택해주세요.'
+          )}
+        </EmptyContainer>
+      );
     }
 
     return contentOptions.map((options) => {
@@ -92,14 +109,14 @@ function Diary() {
         </DiaryComponentsLayout>
       );
     });
-  }, [contentOptions, everyUnChecked]);
+  }, [contentOptions, everyUnChecked, isRead]);
 
   const submitHandler = () => {
     console.log(todayTodoState, questionAnswerState, emotionState, todayDiaryState, accountTableAtomState);
   };
   const cancelHandler = () => {
     // eslint-disable-next-line no-restricted-globals
-    if (confirm('정말 취소하시겠습니까?\n 작성하신 내용은 저장되지 않습니다.')) {
+    if (confirm('정말 취소하시겠습니까?\n작성하신 내용은 저장되지 않습니다.')) {
       navigation('/');
     }
   };
@@ -109,20 +126,29 @@ function Diary() {
     <DiarySection>
       <HeadContent>
         <Title isEmpty={everyUnChecked}>{date}</Title>
-        <ContentOptions state={contentOptions} setState={setContentOptions} />
+        <UpdateDiv>
+          {isRead && (
+            <UpdateButton type="button" onClick={() => setIsRead(false)}>
+              수정하기
+            </UpdateButton>
+          )}
+          <UpdateButton type="button">삭제하기</UpdateButton>
+        </UpdateDiv>
+        <ContentOptions state={contentOptions} setState={setContentOptions} isRead={isRead} />
       </HeadContent>
       <Content>
         {diaryContents}
-        {everyUnChecked ? null : (
-          <SubmitContainer>
-            <Button onClick={cancelHandler} btntype="cancel">
-              취소하기
-            </Button>
-            <Button onClick={submitHandler} btntype="save">
-              작성하기
-            </Button>
-          </SubmitContainer>
-        )}
+        {!isRead &&
+          (everyUnChecked ? null : (
+            <SubmitContainer>
+              <Button onClick={cancelHandler} btntype="cancel">
+                취소하기
+              </Button>
+              <Button onClick={submitHandler} btntype="save">
+                작성하기
+              </Button>
+            </SubmitContainer>
+          ))}
       </Content>
     </DiarySection>
   );
@@ -139,6 +165,21 @@ const HeadContent = tw.div`
   my-0
   mx-auto
   pt-[3rem]
+`;
+
+const UpdateDiv = tw.div`
+  w-full
+  border-b-2
+  border-primaryDark
+  text-primaryDark
+  pb-1
+  text-right
+`;
+
+const UpdateButton = tw.button`
+  mx-[10px]
+  hover:font-semibold
+  hover:text-primaryDeepDark
 `;
 
 const Content = tw.div`

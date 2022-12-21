@@ -44,6 +44,7 @@ interface ContentOptionProps extends OptionProps {
 interface ContentOptionsProps {
   state: ContentOptionProps[];
   setState: React.Dispatch<React.SetStateAction<ContentOptionProps[]>>;
+  isRead?: boolean;
 }
 
 interface UpdateFormValue {

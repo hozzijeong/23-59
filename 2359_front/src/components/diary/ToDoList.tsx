@@ -35,32 +35,36 @@ function TodoList() {
   const todoDeleteHandler = (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
     setCurTodo((cur) => cur.filter((todo) => todo.id !== id));
   };
-
+  const readMode = false;
   return (
     <div>
-      <ToDoHeader>
-        <ToDoInput placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
-        <Button type="button" onClick={addTodoHandler}>
-          추가하기
-        </Button>
-      </ToDoHeader>
-      <div>
-        <ul>
-          {curTodo.map(({ id, done, item }) => {
-            return (
-              <LiContainer key={uuid()}>
-                <TodoLabel htmlFor={id}>
-                  <CheckBox id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
-                  <ToDoSpan isChecked={done}>{item}</ToDoSpan>
-                </TodoLabel>
-                <Button onClick={(event) => todoDeleteHandler(event, id)} type="button">
-                  삭제하기
-                </Button>
-              </LiContainer>
-            );
-          })}
-        </ul>
-      </div>
+      {readMode ? null : (
+        <>
+          <ToDoHeader>
+            <ToDoInput placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
+            <Button type="button" onClick={addTodoHandler}>
+              추가하기
+            </Button>
+          </ToDoHeader>
+          <div>
+            <ul>
+              {curTodo.map(({ id, done, item }) => {
+                return (
+                  <LiContainer key={uuid()}>
+                    <TodoLabel htmlFor={id}>
+                      <CheckBox id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
+                      <ToDoSpan isChecked={done}>{item}</ToDoSpan>
+                    </TodoLabel>
+                    <Button onClick={(event) => todoDeleteHandler(event, id)} type="button">
+                      삭제하기
+                    </Button>
+                  </LiContainer>
+                );
+              })}
+            </ul>
+          </div>
+        </>
+      )}
     </div>
   );
 }

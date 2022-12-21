@@ -26,17 +26,21 @@ function Diary() {
     },
     [setDiary]
   );
-
+  const readMode = false;
   return (
     <div style={{ display: 'flex', flexDirection: 'column' }}>
       <Question>오늘 하루 무슨 일이 있었는지 남겨주세요.</Question>
-      <DiaryTitle
-        type="text"
-        placeholder="제목을 입력해주세요"
-        defaultValue={diary.title}
-        onChange={diaryChangeHandler}
-      />
-      <DiaryArea defaultValue={diary.content} onChange={diaryChangeHandler} />
+      {readMode ? null : (
+        <div>
+          <DiaryTitle
+            type="text"
+            placeholder="제목을 입력해주세요"
+            defaultValue={diary.title}
+            onChange={diaryChangeHandler}
+          />
+          <DiaryArea defaultValue={diary.content} onChange={diaryChangeHandler} />
+        </div>
+      )}
     </div>
   );
 }

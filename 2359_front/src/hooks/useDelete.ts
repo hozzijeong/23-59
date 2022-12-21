@@ -10,7 +10,7 @@ export const useDelete = (Data: UpdateFormValue) => {
   axios
     .delete(`${process.env.REACT_APP_API_URL}/delete`, {
       headers: {
-        Authorization: 'Bearer ' + localStorage.getItem('user'),
+        Authorization: `Bearer ${localStorage.getItem('user')}`,
       },
     })
     .then((res) => {
