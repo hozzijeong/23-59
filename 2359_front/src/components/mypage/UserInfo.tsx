@@ -87,7 +87,7 @@ function UserInfo() {
           })}
           name="newPassword"
           type="password"
-          placeholder="비밀번호를 다시 입력해주세요"
+          placeholder="새로운 비밀번호를 입력해주세요"
         />
         {errors.newPassword && errors.newPassword.type === 'minLength' && (
           <SC.ErrorMesg>6자 이상으로 설정해주세요.</SC.ErrorMesg>
