@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 
-const tagData: string[] = [
-  '#슬픔',
-  '#기쁨',
-  '#행복',
-  '#죽음',
-  '#공부',
-  '#연애',
-  '#사랑',
-  '#고민',
-  '#걱정',
-  '#배고파',
-  '#음식',
-  '#취업',
-  '#워라벨',
-];
+import data from './mock/questionData.json';
+
+let tagData: string[] = [];
 
 interface IData {
   [key: string]: boolean;
+}
+
+function handleTagData() {
+  const tmp = data.map((item) => item.question.tag);
+  tagData = tmp.filter((value, idx) => tmp.indexOf(value) === idx);
+}
+handleTagData();
+
+let result: string[] = [];
+function filterQuestionList(): void {
+  result = [];
+  for (let i = 0; i < data.length; i += 1) {
+    if (tagData.includes(data[i].question.tag)) {
+      result.push(data[i].question.item);
+    }
+  }
 }
 
 const newData: IData = {};
@@ -28,11 +33,14 @@ const setData = (): void => {
   });
 };
 setData();
-// console.log('newData', newData);
 
 function CollectQuestion() {
   const [isSelect, setIsSelect] = useState(newData);
   const [showModal, setShowModal] = React.useState(false);
+
+  useEffect(() => {
+    filterQuestionList();
+  }, [isSelect]);
 
   const selectedTag = () => {
     return Object.keys(isSelect).filter((key) => isSelect[key] === true);
@@ -71,11 +79,11 @@ function CollectQuestion() {
       </ButtonContainer>
       <div>
         <AnswerUl>
-          <AnswerList onClick={() => setShowModal(true)}>
-            태그를 선택하면 해당하는 질문에 대한 질문 1이 보여질거에여
-          </AnswerList>
-          <AnswerList onClick={() => setShowModal(true)}>이건 질문 2임</AnswerList>
-          <AnswerList onClick={() => setShowModal(true)}>요거슨 3번째 알맞는 질문임</AnswerList>
+          {result.map((item) => (
+            <AnswerList key={item} onClick={() => setShowModal(true)}>
+              {item}
+            </AnswerList>
+          ))}
         </AnswerUl>
       </div>
       {showModal ? (
@@ -86,7 +94,7 @@ function CollectQuestion() {
                 <ModalHeader>
                   <ModalTitleH3>Modal Title</ModalTitleH3>
                   <ModalCloseBtn type="button" onClick={() => setShowModal(false)}>
-                    <Close>×</Close>
+                    <Close>X</Close>
                   </ModalCloseBtn>
                 </ModalHeader>
 
@@ -216,3 +224,22 @@ const ModalCancleBtn = tw.button`
 // BtnClass 참고 사항
 // focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg
 // active:bg-blue-800 active:shadow-lg
+
+// const getQuestion = async () => {
+//   const data = await fetch('./questionData.json', {
+//     headers: {
+//       // Accept: 'application / json',
+//     },
+//     method: 'GET',
+//   });
+//   const res = data.json();
+//   console.log(res);
+// };
+
+// const getQuestion = async () => {
+//   // const data = await axios.get('./questionData.json');
+//   console.log({ data });
+// };
+// useEffect(() => {
+//   getQuestion();
+// }, []);

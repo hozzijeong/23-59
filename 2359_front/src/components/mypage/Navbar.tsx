@@ -21,10 +21,6 @@ function Navbar() {
     setIsOpen(!isOpen);
   };
 
-  const check = (str1: string) => {
-    return `font-bold space-y-3 flex flex-col ml-4' + ${str1}`;
-  };
-
   return (
     <SideNavbar>
       <NavLink to="user" className={({ isActive }) => (isActive ? isSelected : isNotSelected)}>
