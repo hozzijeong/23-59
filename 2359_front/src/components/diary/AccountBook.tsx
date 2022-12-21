@@ -30,10 +30,19 @@ function AccountBook() {
 
   const todayAccountInfoChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+    if (value === MONEY.EXPENSE) {
+      setTodatAccountInfo((prevInfo) => ({ ...prevInfo, [name]: value, category: EXPENSE_STATE[0] }));
+      return;
+    }
+    if (value === MONEY.INCOME) {
+      setTodatAccountInfo((prevInfo) => ({ ...prevInfo, [name]: value, category: INCOME_STATE[0] }));
+      return;
+    }
     setTodatAccountInfo((prevInfo) => ({ ...prevInfo, [name]: value }));
   };
 
   const appendAccountInfoHandler = () => {
+    console.log(todayAccountInfo);
     setAccountTable((prev) => [...prev, { ...todayAccountInfo, id: getCurrentDate() }]);
     setTodatAccountInfo(initialAccountInfo);
   };
@@ -66,8 +75,8 @@ function AccountBook() {
       ));
     }
     if (cls === MONEY.INCOME) {
-      return INCOME_STATE.map((category) => (
-        <option key={uuid()} value={category}>
+      return INCOME_STATE.map((category, idx) => (
+        <option key={uuid()} value={category} selected={idx === 0}>
           {INCOME_CATEGORY[category]}
         </option>
       ));
@@ -117,7 +126,7 @@ function AccountBook() {
           <select name="category" value={todayAccountInfo.category}>
             {categoryOptions}
           </select>
-          <div style={{ backgroundColor: 'white' }}>
+          <div style={{ backgroundColor: 'white', width: '100%' }}>
             <label htmlFor="amount">
               <input
                 type="number"
