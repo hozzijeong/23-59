@@ -1,6 +1,7 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsiveBar } from '@nivo/bar';
+import axios from 'axios';
 
 const data = [
   {
@@ -13,14 +14,18 @@ const data = [
   },
 ];
 
+// async function getFilterEmotion() {
+//   const res = await axios.get('/api/contents/filter/20221222-20221226');
+//   console.log(res);
+// }
+// getFilterEmotion();
+
 function EmotionStatistics() {
   return (
-    <div style={{ width: '100%' }}>
+    <Container>
       <div>여기도 차트를 보여줄거에여~</div>
-      <div style={{ width: '700px', height: '600px', margin: '0 auto' }}>
-        <div style={{ textAlign: 'center', fontWeight: 'bold', fontSize: '25px', marginTop: '20px' }}>
-          감정 통계 - 12월😘
-        </div>
+      <BarChartContainer>
+        <StatisticsScript>감정 통계 - 12월😘</StatisticsScript>
         <ResponsiveBar
           data={data}
           keys={['행복', '기쁨', '좌절', '슬픔', '분노']}
@@ -87,16 +92,31 @@ function EmotionStatistics() {
           ]}
           role="application"
           ariaLabel="Nivo bar chart demo"
-          // barAriaLabel={(e) => {
-          //   return e.id + ': ' + e.formattedValue + ' in country: ' + e.indexValue;
-          // }}
         />
-      </div>
-    </div>
+      </BarChartContainer>
+    </Container>
   );
 }
 
 export default EmotionStatistics;
+
+export const Container = tw.div`
+  w-full
+`;
+
+export const BarChartContainer = tw.div`
+  w-[800px]
+  h-[600px]
+  mx-auto
+  my-0
+`;
+
+export const StatisticsScript = tw.div`
+  text-center
+  font-bold
+  text-2xl
+  mt-5
+`;
 
 // 참고할 data 틀
 // const data = [
