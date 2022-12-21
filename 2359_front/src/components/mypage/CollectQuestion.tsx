@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import tw from 'tailwind-styled-components';
 
 const tagData: string[] = [
@@ -28,20 +28,24 @@ const setData = (): void => {
   });
 };
 setData();
-console.log('newData', newData);
+// console.log('newData', newData);
 
 function CollectQuestion() {
   const [isSelect, setIsSelect] = useState(newData);
   const [showModal, setShowModal] = React.useState(false);
 
+  const selectedTag = () => {
+    return Object.keys(isSelect).filter((key) => isSelect[key] === true);
+  };
+
   const handleTagName = (item: string): void => {
     const newSelect = { ...isSelect };
     newSelect[item] = !newSelect[item];
     setIsSelect(newSelect);
-    console.log('newSelect', newSelect);
+    selectedTag();
   };
 
-  const selectedTag = (ele: string): string => {
+  const tagBtnClassName = (ele: string): string => {
     if (isSelect[ele]) {
       return selectBtnClass;
     }
@@ -52,10 +56,15 @@ function CollectQuestion() {
     <Container>
       <div>오늘의 질문 모아보기</div>
       <ButtonContainer>
-        {tagData.map((item) => {
+        {tagData.map((tagItem) => {
           return (
-            <TagButtons className={selectedTag(item)} key={item} type="button" onClick={() => handleTagName(item)}>
-              {item}
+            <TagButtons
+              className={tagBtnClassName(tagItem)}
+              key={tagItem}
+              type="button"
+              onClick={() => handleTagName(tagItem)}
+            >
+              {tagItem}
             </TagButtons>
           );
         })}
@@ -71,50 +80,32 @@ function CollectQuestion() {
       </div>
       {showModal ? (
         <>
-          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
+          <ModalLayout>
             <div className="relative w-auto my-6 mx-auto max-w-3xl">
-              <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">Modal Title</h3>
-                  <button
-                    type="button"
-                    className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
-                    onClick={() => setShowModal(false)}
-                  >
-                    <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      ×
-                    </span>
-                  </button>
-                </div>
+              <ModalContainer>
+                <ModalHeader>
+                  <ModalTitleH3>Modal Title</ModalTitleH3>
+                  <ModalCloseBtn type="button" onClick={() => setShowModal(false)}>
+                    <Close>×</Close>
+                  </ModalCloseBtn>
+                </ModalHeader>
 
-                <div className="relative p-6 flex-auto">
-                  <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                    I always felt like I could do anything. That’s the main thing people are controlled by! Thoughts-
-                    their perception of themselves! Theyre slowed down by their perception of themselves. If youre
-                    taught you can’t do anything, you won’t do anything. I was taught I could do everything.
-                  </p>
-                </div>
+                <ModalMain>
+                  <ModalScript>여기에 이제 질문 답변이 들어갈거임</ModalScript>
+                </ModalMain>
 
-                <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
-                  <button
-                    className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
+                <ModalFooter>
+                  <ModalCancleBtn type="button" onClick={() => setShowModal(false)}>
                     Close
-                  </button>
-                  <button
-                    className="bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
-                    onClick={() => setShowModal(false)}
-                  >
+                  </ModalCancleBtn>
+                  <ModalConfirmBtn type="button" onClick={() => setShowModal(false)}>
                     Save Changes
-                  </button>
-                </div>
-              </div>
+                  </ModalConfirmBtn>
+                </ModalFooter>
+              </ModalContainer>
             </div>
-          </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black">.</div>
+          </ModalLayout>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black">{null}</div>
         </>
       ) : null}
     </Container>
@@ -122,6 +113,27 @@ function CollectQuestion() {
 }
 
 export default CollectQuestion;
+
+const Container = tw.div`
+  w-full  
+  flex
+  align-center
+  flex-col
+  space-y-4
+`;
+
+// 태그영역
+const ButtonContainer = tw.div`
+  w-[94%]
+  mx-auto
+  min-h-[60px]
+`;
+
+const TagButtons = tw.button`
+  mr-3
+  w-16
+  h-7  
+`;
 
 const selectBtnClass = `
   inline-block px-2.5 py-1 bg-blue-600 text-white font-medium text-xs leading-tight rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg 
@@ -138,46 +150,67 @@ const nonSelectBtnClass = `
   text-xs
 `;
 
-const Container = tw.div`
-  w-full  
-  flex
-  align-center
-  flex-col
-  space-y-4
-`;
-
-const ButtonContainer = tw.div`
-  w-[94%]
-  mx-auto
-  min-h-[60px]
-`;
-
-const TagButtons = tw.button`
-  mr-3
-  w-16
-  h-7
-  
-`;
-// 아웃라인 넣을지 고민
-// hover:outline
-// outline-2
-// outline-offset-4
+// 질문 리스트 영역
 const AnswerUl = tw.ul`
   w-full
   p-4
 `;
 
 const AnswerList = tw.li`
-border-solid
-border-2
-rounded-md
-w-full
-shadow-md
-p-3
-m-3
-hover:bg-gray-200
-active:bg-stone-300
-cursor-pointer
+  rounded-md
+  w-full
+  shadow-md
+  p-3
+  m-3
+  hover:bg-gray-200
+  active:bg-stone-300
+  cursor-pointer
+`;
+
+// 모달 영역
+const ModalLayout = tw.div`
+  justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none
+`;
+
+// 모달 내 영역
+const ModalContainer = tw.div`
+  border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none
+`;
+// 모달 헤더
+const ModalHeader = tw.div`
+  flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t
+`;
+
+const ModalTitleH3 = tw.h3`
+  text-3xl font-semibold
+`;
+
+const ModalCloseBtn = tw.button`
+  p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none
+`;
+
+const Close = tw.span`
+  bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none
+`;
+// 모달 메인
+const ModalMain = tw.div`
+  relative p-6 flex-auto
+`;
+
+const ModalScript = tw.p`
+  my-4 text-slate-500 text-lg leading-relaxed
+`;
+// 모달 푸터
+const ModalFooter = tw.div`
+  flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b
+`;
+
+const ModalConfirmBtn = tw.button`
+  bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150
+`;
+
+const ModalCancleBtn = tw.button`
+  text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150
 `;
 
 // BtnClass 참고 사항

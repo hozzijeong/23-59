@@ -1,16 +1,25 @@
 import mongoose, { Schema, model, connect, ObjectId } from 'mongoose';
 
 interface IContent {
-  createDate: Date;
-  yearMonth: string;
-  author: ObjectId;
+  _id: Schema.Types.ObjectId;
+  selectedDate: string;
+  month: string;
+  //author: ObjectId;
+  author: string;
+  emotion: string;
   diary: object;
   todo: object;
   account: object;
-  answer: object;
+  qna: object;
+}
+
+interface IDiary {
+  title: string;
+  diaryContent: string;
 }
 
 interface ITodo {
+  id: string;
   done: boolean;
   item: string;
 }
@@ -19,16 +28,28 @@ interface IAccount {
   cls: string;
   category: string;
   amount: number;
+  memo: string;
 }
 
-interface IAnswer {
+interface IQnA {
   question: object;
+  answer: string;
   tag: string;
-  item: string;
 }
+
+const diarySchema = new Schema<IDiary>(
+  {
+    title: String,
+    diaryContent: String,
+  },
+  {
+    _id: false,
+  }
+);
 
 const todoSchema = new Schema<ITodo>(
   {
+    id: String,
     done: Boolean,
     item: String,
   },
@@ -44,52 +65,54 @@ const accountSchema = new Schema<IAccount>({
   },
   category: {
     type: String,
-    enum: ['식비', '생활', '건강'],
   },
   amount: {
     type: Number,
   },
+  memo: {
+    type: String,
+  },
 });
 
-const answerSchema = new Schema<IAnswer>({
+const qnaSchema = new Schema<IQnA>({
+  // question: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: 'questions',
+  // },
   question: {
-    type: Schema.Types.ObjectId,
-    ref: 'questions',
+    type: String,
+  },
+  answer: {
+    type: String,
   },
   tag: {
     type: String,
   },
-  item: {
-    type: String,
-  },
 });
 
-const contentSchema = new Schema<IContent>(
+const ContentSchema = new Schema<IContent>(
   {
-    createDate: {
-      type: Date,
-      required: true,
-    },
-    yearMonth: {
+    selectedDate: {
       type: String,
       required: true,
     },
+    // month: {
+    //   type: String,
+    //   required: true,
+    // },
+    // author: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: 'users',
+    //   required: true,
+    // },
     author: {
-      type: Schema.Types.ObjectId,
-      ref: 'users',
-      required: true,
+      type: String,
+    },
+    emotion: {
+      type: String,
     },
     diary: {
-      type: new Schema(
-        {
-          emotion: String,
-          title: String,
-          diaryContent: String,
-        },
-        {
-          _id: false,
-        }
-      ),
+      type: diarySchema,
     },
     todo: {
       type: [todoSchema],
@@ -97,8 +120,8 @@ const contentSchema = new Schema<IContent>(
     account: {
       type: [accountSchema],
     },
-    answer: {
-      type: answerSchema,
+    qna: {
+      type: qnaSchema,
     },
   },
   {
@@ -106,6 +129,8 @@ const contentSchema = new Schema<IContent>(
     timestamps: true,
   }
 );
+
+export { ContentSchema };
 
 // const Content = model<IContent>('User', contentSchema);
 
