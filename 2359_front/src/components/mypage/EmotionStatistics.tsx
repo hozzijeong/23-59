@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
@@ -14,13 +14,24 @@ const data = [
   },
 ];
 
-// async function getFilterEmotion() {
-//   const res = await axios.get('/api/contents/filter/20221222-20221226');
-//   console.log(res);
-// }
-// getFilterEmotion();
-
 function EmotionStatistics() {
+  async function getFilterEmotion() {
+    try {
+      const result = await axios.get('/api/contents/filter/20221222-20221227');
+      const res = await result.data;
+      console.log(res);
+    } catch (e) {
+      console.log('err는', e);
+    }
+
+    // fetch(`./emotionData.json`)
+    //   .then((res) => res.json())
+    //   .then((data) => console.log(data));
+  }
+  useEffect(() => {
+    getFilterEmotion();
+  }, []);
+
   return (
     <Container>
       <div>여기도 차트를 보여줄거에여~</div>

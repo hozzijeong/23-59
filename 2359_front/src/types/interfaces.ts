@@ -34,7 +34,6 @@ interface DiaryStateProps {
 }
 
 interface OptionProps {
-  id: string;
   title: OPTIONS;
 }
 
@@ -47,6 +46,25 @@ interface ContentOptionsProps {
   setState: React.Dispatch<React.SetStateAction<ContentOptionProps[]>>;
 }
 
+interface UpdateFormValue {
+  email: string;
+  nickname: string;
+  password: string;
+  newPassword: string;
+}
+
+interface RegisterFormValue {
+  email: string;
+  nickname: string;
+  password: string;
+  passwordConfirm: string;
+}
+
+interface LoginFormValue {
+  email: string;
+  password: string;
+}
+
 export type {
   OptionProps,
   ContentOptionProps,
@@ -55,4 +73,7 @@ export type {
   DiaryStateProps,
   TodayDiaryProps,
   ContentOptionsProps,
+  LoginFormValue,
+  RegisterFormValue,
+  UpdateFormValue,
 };

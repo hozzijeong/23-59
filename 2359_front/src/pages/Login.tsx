@@ -1,7 +1,8 @@
 import React from 'react';
+import Loginform from '../components/login/Loginform';
 
 function Login() {
-  return <div>로그인</div>;
+  return <Loginform />;
 }
 
 export default Login;

@@ -16,17 +16,17 @@ interface LabelProps {
 }
 
 function UserOptions({ state, handler }: UserOptionsProps) {
-  const { id, title, isChecked } = state;
+  const { title, isChecked } = state;
 
   return (
-    <OptionLabel key={uuid()} htmlFor={id} textSize="text-sm" marginY="my-1">
-      <Input id={id} type="checkbox" onChange={handler} checked={isChecked} />
+    <OptionLabel key={uuid()} htmlFor={title} textSize="text-sm" marginY="my-1">
+      <CustomCheckInput id={title} type="checkbox" onChange={handler} checked={isChecked} />
       <CustomCheckBox>{CONTENT_OPTION[title]}</CustomCheckBox>
     </OptionLabel>
   );
 }
 
-export { UserOptions };
+export { UserOptions, CustomCheckInput };
 
 const OptionLabel = tw.label<LabelProps>`
   text-gray-500 
@@ -37,24 +37,30 @@ const OptionLabel = tw.label<LabelProps>`
   ${(props) => props.marginY ?? 'my-0'}
 `;
 
-const Input = styled.input`
+const CustomCheckInput = styled.input`
   appearance: none;
   width: 1rem;
   height: 1rem;
-  border: 1px solid rgb(107 114 128);
+  border: 1px solid #bdb9b9;
   border-radius: 0.25rem;
+  background-image: url("data:image/svg+xml,%3csvg viewBox='3.5 4 9 9' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
+  background-color: #bdb9b9;
 
   &:checked {
     border-color: transparent;
-    background-image: url("data:image/svg+xml,%3csvg viewBox='3.5 4 9 9' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M5.707 7.293a1 1 0 0 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0l4-4a1 1 0 0 0-1.414-1.414L7 8.586 5.707 7.293z'/%3e%3c/svg%3e");
     background-size: 100% 100%;
     background-position: 50%;
     background-repeat: no-repeat;
     background-color: #706e6e;
+    border: 1px solid #706e6e;
 
     &:hover {
       background-color: #575555;
     }
+  }
+
+  &:hover {
+    background-color: #706e6e;
   }
 `;
 

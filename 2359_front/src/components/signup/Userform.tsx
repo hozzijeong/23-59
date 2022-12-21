@@ -1,47 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { UpdateFormValue } from '../../types/interfaces';
 import { emailCheck } from '../../utilities/regex';
-import * as SC from '../signup/FormStyled';
+import { useRegister } from '../../hooks/useRegister';
+import * as SC from './FormStyled';
+import { RegisterFormValue } from '../../types/interfaces';
+
 /* eslint-disable react/jsx-props-no-spreading */
 
-function UserInfo() {
-  const [state, setState] = useState('ghd@nav.com');
-  const [nickname, setNickname] = useState('');
+function Userform() {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
-    setValue,
+    watch,
     formState: { errors },
-  } = useForm<UpdateFormValue>();
+  } = useForm<RegisterFormValue>();
 
-  useEffect(() => {
-    // axios.get('')
-    // 만약 유저가 회원 수정 페이지로 들어오면
-    // axios.get으로 유저 정보를 불러오고, 그 정보를 setValue로 넣어준다.?
-    setValue('email', state);
-    setValue('nickname', state);
-  }, []);
-
-  const OnSubmit: SubmitHandler<UpdateFormValue> = (data) => {
-    const formdata = {
-      currentPassword: data.newPassword,
-      nickname: data.nickname,
-      password: data.password,
-    };
-    console.log(formdata);
+  // data를 보낸다.
+  const OnSubmit: SubmitHandler<RegisterFormValue> = (data) => {
+    console.log(data);
+    useRegister(data);
+    navigate('/login');
   };
 
   return (
     <SC.Container>
       <SC.Form onSubmit={handleSubmit(OnSubmit)}>
-        <SC.FormTitle>회원 정보 수정</SC.FormTitle>
+        <SC.FormTitle>회원가입</SC.FormTitle>
         <SC.FormLabel>이메일</SC.FormLabel>
         <SC.FormInput
-          readOnly
           {...register('email', {
             required: '필수 응답 항목입니다.',
             pattern: { value: emailCheck, message: '이메일 형식이 아닙니다.' },
@@ -66,7 +55,7 @@ function UserInfo() {
         {errors.nickname && errors.nickname.type === 'maxLength' && (
           <SC.ErrorMesg>10자 이하로 설정해주세요.</SC.ErrorMesg>
         )}
-        <SC.FormLabel>현재 비밀번호</SC.FormLabel>
+        <SC.FormLabel>비밀번호</SC.FormLabel>
         <SC.FormInput
           {...register('password', { required: true, minLength: 6 })}
           name="password"
@@ -76,37 +65,29 @@ function UserInfo() {
         {errors.password && errors.password.type === 'required' && (
           <SC.ErrorMesg>비밀번호를 입력해주세요.</SC.ErrorMesg>
         )}
-        {/* 데이터로 받아온 비밀번호가 일치하지 않을 때 ? {errors.password && errors.password.type === 'minLength' && (
-          <SC.ErrorMesg>비밀번호가 일치하지 않습니다.</SC.ErrorMesg>
-        )} */}
-        <SC.FormLabel>새로운 비밀 번호</SC.FormLabel>
-        <SC.FormInput
-          {...register('newPassword', {
-            required: true,
-            minLength: 6,
-          })}
-          name="newPassword"
-          type="password"
-          placeholder="새로운 비밀번호를 입력해주세요"
-        />
-        {errors.newPassword && errors.newPassword.type === 'minLength' && (
+        {errors.password && errors.password.type === 'minLength' && (
           <SC.ErrorMesg>6자 이상으로 설정해주세요.</SC.ErrorMesg>
         )}
-        {errors.newPassword && errors.newPassword.type === 'required' && (
+        <SC.FormLabel>비밀번호 확인</SC.FormLabel>
+        <SC.FormInput
+          {...register('passwordConfirm', {
+            required: true,
+            validate: (value) => value === watch('password'),
+          })}
+          name="passwordConfirm"
+          type="password"
+          placeholder="비밀번호를 다시 입력해주세요"
+        />
+        {errors.passwordConfirm && errors.passwordConfirm.type === 'validate' && (
+          <SC.ErrorMesg>비밀번호가 일치하지 않습니다.</SC.ErrorMesg>
+        )}
+        {errors.passwordConfirm && errors.passwordConfirm.type === 'required' && (
           <SC.ErrorMesg>비밀번호를 입력해주세요.</SC.ErrorMesg>
         )}
-        <SC.SubmitButton type="submit">회원수정</SC.SubmitButton>
-        <SC.SubmitButton
-          delete
-          onClick={() => {
-            console.log('삭제버튼 클릭');
-          }}
-        >
-          회원탈퇴
-        </SC.SubmitButton>
+        <SC.SubmitButton type="submit">회원가입</SC.SubmitButton>
       </SC.Form>
     </SC.Container>
   );
 }
 
-export default UserInfo;
+export default Userform;

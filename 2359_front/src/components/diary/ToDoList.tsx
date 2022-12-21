@@ -5,6 +5,7 @@ import { getCurrentDate } from 'utilities/getCurrentDate';
 import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
 import styled from 'styled-components';
+import { CustomCheckInput } from 'components/ContentOptions';
 
 function TodoList() {
   const [todoInput, setTodoInput] = useState<string>('');
@@ -112,7 +113,7 @@ const TodoLabel = tw(Label)`
   text-lg
 `;
 
-const CheckBox = tw.input`
+const CheckBox = tw(CustomCheckInput)`
   w-4
   h-4  
 `;
@@ -123,5 +124,7 @@ const Span = styled.span<{ isChecked: boolean }>`
 
 const ToDoSpan = tw(Span)`
   w-full
-  text-grey-darkest  
+  text-grey-darkest
+  ml-[0.5rem]
+  hover:font-semibold	 
 `;
