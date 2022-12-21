@@ -20,18 +20,16 @@ interface TodoListProps {
   item: string;
 }
 
-interface EmotionRecordProps {
-  emotionState: EMOTION;
-  emotionDiary: {
-    title: string;
-    content: string;
-  };
+interface TodayDiaryProps {
+  title: string;
+  content: string;
 }
 
 interface DiaryStateProps {
   todos?: TodoListProps[];
   questionAnswer?: string;
-  emotionRecord?: EmotionRecordProps;
+  emotion?: EMOTION;
+  todayDiary?: TodayDiaryProps;
   accountTable?: AccountTableRow[];
 }
 
@@ -54,7 +52,7 @@ export type {
   ContentOptionProps,
   AccountTableRow,
   TodoListProps,
-  EmotionRecordProps,
   DiaryStateProps,
+  TodayDiaryProps,
   ContentOptionsProps,
 };
