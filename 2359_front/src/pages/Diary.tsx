@@ -1,13 +1,14 @@
 import React, { useMemo, useState, ReactNode } from 'react';
 import { AccountBook } from 'components/diary/AccountBook';
 import { DiaryComponentsLayout } from 'components/diary/Layout/DiaryComponentsLayout';
-import { EmotionDiary } from 'components/diary/EmotionDiary';
+import { Emotion } from 'components/diary/Emotion';
+import { Diary as TodayDiary } from 'components/diary/Diary';
 import { TodayQuestion } from 'components/diary/TodayQuestion';
 import { TodoList } from 'components/diary/ToDoList';
 import { ContentOptions } from 'components/diary/ContentOptions';
 import tw from 'tailwind-styled-components';
 import { useRecoilValue } from 'recoil';
-import { accountTableAtom, emotionRecord, questionAnswer, todayTodo } from 'recoil/diaryAtom';
+import { accountTableAtom, questionAnswer, todayTodo, emotionAtom, todayDiaryAtom } from 'recoil/diaryAtom';
 import uuid from 'react-uuid';
 import Button from 'components/Button';
 import { useNavigate } from 'react-router-dom';
@@ -24,14 +25,16 @@ type DiaryContentsPrpos = {
 const TEMP_DATA: OptionProps[] = [
   { id: '1', title: OPTION.TODO_LIST },
   { id: '2', title: OPTION.TODAY_QUESTION },
-  { id: '3', title: OPTION.EMOTION_DIARY },
-  { id: '4', title: OPTION.ACCOUNT_BOOK },
+  { id: '3', title: OPTION.EMOTION },
+  { id: '4', title: OPTION.DIARY },
+  { id: '5', title: OPTION.ACCOUNT_BOOK },
 ];
 
 const TEMP_OPTIONS = {
   [OPTION.TODO_LIST]: true,
   [OPTION.TODAY_QUESTION]: false,
-  [OPTION.EMOTION_DIARY]: false,
+  [OPTION.DIARY]: false,
+  [OPTION.EMOTION]: false,
   [OPTION.ACCOUNT_BOOK]: false,
 };
 
@@ -48,7 +51,8 @@ function Diary() {
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>(mixedData);
   const todayTodoState = useRecoilValue(todayTodo);
   const questionAnswerState = useRecoilValue(questionAnswer);
-  const emotionRecordState = useRecoilValue(emotionRecord);
+  const emotionState = useRecoilValue(emotionAtom);
+  const todayDiaryState = useRecoilValue(todayDiaryAtom);
   const accountTableAtomState = useRecoilValue(accountTableAtom);
 
   const diaryContents = useMemo(() => {
@@ -63,7 +67,8 @@ function Diary() {
       const diaryContentMap: DiaryContentsPrpos = {
         [OPTION.TODO_LIST]: <TodoList />,
         [OPTION.TODAY_QUESTION]: <TodayQuestion />,
-        [OPTION.EMOTION_DIARY]: <EmotionDiary />,
+        [OPTION.EMOTION]: <Emotion />,
+        [OPTION.DIARY]: <TodayDiary />,
         [OPTION.ACCOUNT_BOOK]: <AccountBook />,
       };
 
@@ -76,7 +81,8 @@ function Diary() {
   }, [contentOptions]);
 
   const submitHandler = () => {
-    console.log(todayTodoState, questionAnswerState, emotionRecordState, accountTableAtomState);
+    console.log(todayTodoState, questionAnswerState, emotionState,
+      todayDiaryState, accountTableAtomState);
   };
   const cancelHandler = () => {
     // eslint-disable-next-line no-restricted-globals
@@ -118,12 +124,12 @@ const HeadContent = tw.div`
   max-w-screen-md
   my-0
   mx-auto
-  pt-[5rem]
+  pt-[3rem]
 `;
 
 const Content = tw.div`
   max-w-screen-md
-  mt-[5rem]
+  mt-[3rem]
   md-0
   mx-auto
   text-lg	
@@ -139,5 +145,5 @@ const SubmitContainer = tw.div`
   flex
   justify-between
   mt-[20px]
-
+  pb-[40px]
 `;

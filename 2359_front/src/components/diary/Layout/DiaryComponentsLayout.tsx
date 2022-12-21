@@ -22,9 +22,17 @@ function DiaryComponentsLayout({ contents, children }: DiaryComponentLayoutProps
 export { DiaryComponentsLayout };
 
 const ContentContainer = tw.div`
-  mt-[2rem] 
+  mt-[1rem]
+  rounded 
+  shadow 
+  p-6 
+  m-4 
+  w-full 
+  lg:w-11/12
 `;
 
 const Title = tw.h1`
   text-3xl
+  mb-[1rem]
+  font-bold
 `;

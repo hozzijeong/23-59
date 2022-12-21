@@ -26,7 +26,8 @@ function TodoList() {
 
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
-    const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, isChecked: !todo.done } : { ...todo }));
+    console.log(id, curTodo, 123);
+    const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : { ...todo }));
 
     setCurTodo(updateTodos);
   };
@@ -37,25 +38,25 @@ function TodoList() {
 
   return (
     <div>
-      <div>
-        <input placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
-        <button type="button" onClick={addTodoHandler}>
+      <ToDoHeader>
+        <ToDoInput placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
+        <Button type="button" onClick={addTodoHandler}>
           추가하기
-        </button>
-      </div>
+        </Button>
+      </ToDoHeader>
       <div>
         <ul>
           {curTodo.map(({ id, done, item }) => {
             return (
-              <li key={uuid()}>
-                <label htmlFor={id}>
-                  <input id={id} type="checkbox" defaultChecked={done} onChange={changeTodoCheckHandler} />
-                  <Span isChecked={done}>{item}</Span>
-                </label>
-                <button onClick={(event) => todoDeleteHandler(event, id)} type="button">
+              <LiContainer key={uuid()}>
+                <TodoLabel htmlFor={id}>
+                  <input id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
+                  <ToDoSpan isChecked={done}>{item}</ToDoSpan>
+                </TodoLabel>
+                <Button onClick={(event) => todoDeleteHandler(event, id)} type="button" marginRight="mr-2.5">
                   삭제하기
-                </button>
-              </li>
+                </Button>
+              </LiContainer>
             );
           })}
         </ul>
@@ -66,6 +67,57 @@ function TodoList() {
 
 export { TodoList };
 
-const Span = styled.label<{ isChecked: boolean }>`
+const ToDoHeader = tw.div`
+  mb-3  
+`;
+
+const ToDoInput = tw.input`
+  shadow 
+  appearance-none 
+  border 
+  rounded 
+  w-10/12 
+  py-2 
+  px-3 
+  mr-4 
+  text-grey-darker
+`;
+
+const Button = tw.button<{ marginRight?: 'mr-2.5' }>`
+ flex-no-shrink 
+ p-2 
+ border-2 
+ rounded 
+ bg-primaryDark
+ text-white 
+ ${(props) => props.marginRight ?? ''}
+ hover:bg-primaryDeepDark
+`;
+
+const LiContainer = tw.li`
+  flex 
+  mb-1
+  items-center
+  justify-between
+`;
+
+const Label = styled.label`
+  input {
+    margin-right: 8px;
+  }
+`;
+
+const TodoLabel = tw(Label)`
+  py-2 
+  px-3 
+  mr-4 
+`;
+
+const Span = styled.span<{ isChecked: boolean }>`
   text-decoration: ${(props) => (props.isChecked ? 'line-through' : '')};
+`;
+
+const ToDoSpan = tw(Span)`
+  w-full
+  text-grey-darkest  
 `;
