@@ -1,29 +1,27 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { LoginFormValue } from 'types/interfaces';
+import { useCallback } from 'react';
+import { baseAxios } from 'api';
 
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-export function useLogin(Data: LoginFormValue) {
+function useLogin() {
   const navigate = useNavigate();
-  axios
-    .post(
-      `http:localhost:8000/api/user/login/
-    `,
-      Data,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    )
-    .then((res) => {
-      localStorage.setItem('user', res.data);
-      navigate('/');
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+  const loginRequest = useCallback((Data: LoginFormValue) => {
+    baseAxios
+      .post(`/api/user/login`, Data)
+      .then((res) => {
+        localStorage.setItem('token', res.data.token);
+        navigate('/');
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, []);
+  return { loginRequest };
 }
+
+export default useLogin;
