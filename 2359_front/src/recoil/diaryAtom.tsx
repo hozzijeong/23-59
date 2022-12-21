@@ -1,18 +1,34 @@
+import uuid from 'react-uuid';
 import { atom } from 'recoil';
+import { emotionEnums as EMOTION } from 'types/enums';
+import { AccountTableRow, TodayDiaryProps, TodoListProps } from 'types/interfaces';
 
-interface TodoListProps {
-  id: string;
-  isChecked: boolean;
-  todoContent: string;
-}
+const todayTodo = atom<TodoListProps[]>({
+  key: `todayTodoState/${uuid()}`,
+  default: [],
+});
 
-interface DiaryStateProps {
-  todos: TodoListProps[];
-}
+const questionAnswer = atom<{ answer: string }>({
+  key: `questionAnswerState/${uuid()}`,
+  default: { answer: '' },
+});
 
-export const diaryAtom = atom<DiaryStateProps>({
-  key: 'diaryState',
+const emotionAtom = atom<{ emotion: EMOTION }>({
+  key: `emotionState/${uuid()}`,
+  default: { emotion: EMOTION.SO_SO },
+});
+
+const todayDiaryAtom = atom<TodayDiaryProps>({
+  key: `todayDiaryState/${uuid()}`,
   default: {
-    todos: [],
+    title: '',
+    content: '',
   },
 });
+
+const accountTableAtom = atom<AccountTableRow[]>({
+  key: `accountTableState/${uuid()}`,
+  default: [],
+});
+
+export { accountTableAtom, todayTodo, questionAnswer, emotionAtom, todayDiaryAtom };

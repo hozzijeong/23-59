@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import { useRecoilState } from 'recoil';
-import { diaryAtom } from 'recoil/diaryAtom';
+import { todayTodo } from 'recoil/diaryAtom';
+import { getCurrentDate } from 'utilities/getCurrentDate';
 import tw from 'tailwind-styled-components';
+import uuid from 'react-uuid';
+import styled from 'styled-components';
 
 function TodoList() {
   const [todoInput, setTodoInput] = useState<string>('');
-  const [curTodo, setCurTodo] = useRecoilState(diaryAtom);
+  const [curTodo, setCurTodo] = useRecoilState(todayTodo);
 
   const addTodoHandler = () => {
     if (!todoInput.length) {
       alert('한 글자 이상 입력해주세요!');
       return;
     }
-    const date = Date.now();
-    setCurTodo((cur) => ({
-      ...cur,
-      todos: [...cur.todos, { id: date.toString(10), isChecked: false, todoContent: todoInput }],
-    }));
+    setCurTodo((cur) => [...cur, { id: getCurrentDate(), done: false, item: todoInput }]);
     setTodoInput('');
   };
 
@@ -25,44 +24,39 @@ function TodoList() {
     setTodoInput(value);
   };
 
-  // typescript에서 li에 onClick event를 설정하고 싶은데 그게 되지 않음. 그 이유는 eslint의
-  // https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/4abc751d87a8491219a9a3d2dacd80ea8adcb79b/docs/rules/click-events-have-key-events.md
-  // 때문에 안된다고함
-  const todoClickHandler = (event: React.MouseEvent<HTMLInputElement | HTMLButtonElement | HTMLLIElement>) => {
-    console.log(event.target, event.currentTarget);
-  };
-
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
-    const { todos } = curTodo;
-    const updateTodos = todos.map((todo) => (todo.id === id ? { ...todo, isChecked: !todo.isChecked } : { ...todo }));
+    console.log(id, curTodo, 123);
+    const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : { ...todo }));
 
-    setCurTodo((cur) => ({ ...cur, todos: updateTodos }));
+    setCurTodo(updateTodos);
   };
 
-  const todoDeleteHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
-    return null;
+  const todoDeleteHandler = (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
+    setCurTodo((cur) => cur.filter((todo) => todo.id !== id));
   };
 
   return (
     <div>
-      <div>
-        <input placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
-        <button type="button" onClick={addTodoHandler}>
+      <ToDoHeader>
+        <ToDoInput placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
+        <Button type="button" onClick={addTodoHandler}>
           추가하기
-        </button>
-      </div>
+        </Button>
+      </ToDoHeader>
       <div>
         <ul>
-          {curTodo.todos.map(({ id, isChecked, todoContent }) => {
+          {curTodo.map(({ id, done, item }) => {
             return (
-              <li key={id}>
-                <input id={id} type="checkbox" defaultChecked={isChecked} onChange={changeTodoCheckHandler} />
-                <label htmlFor={id}>{todoContent}</label>
-                <button onClick={todoDeleteHandler} type="button">
+              <LiContainer key={uuid()}>
+                <TodoLabel htmlFor={id}>
+                  <input id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
+                  <ToDoSpan isChecked={done}>{item}</ToDoSpan>
+                </TodoLabel>
+                <Button onClick={(event) => todoDeleteHandler(event, id)} type="button" marginRight="mr-2.5">
                   삭제하기
-                </button>
-              </li>
+                </Button>
+              </LiContainer>
             );
           })}
         </ul>
@@ -71,4 +65,59 @@ function TodoList() {
   );
 }
 
-export default TodoList;
+export { TodoList };
+
+const ToDoHeader = tw.div`
+  mb-3  
+`;
+
+const ToDoInput = tw.input`
+  shadow 
+  appearance-none 
+  border 
+  rounded 
+  w-10/12 
+  py-2 
+  px-3 
+  mr-4 
+  text-grey-darker
+`;
+
+const Button = tw.button<{ marginRight?: 'mr-2.5' }>`
+ flex-no-shrink 
+ p-2 
+ border-2 
+ rounded 
+ bg-primaryDark
+ text-white 
+ ${(props) => props.marginRight ?? ''}
+ hover:bg-primaryDeepDark
+`;
+
+const LiContainer = tw.li`
+  flex 
+  mb-1
+  items-center
+  justify-between
+`;
+
+const Label = styled.label`
+  input {
+    margin-right: 8px;
+  }
+`;
+
+const TodoLabel = tw(Label)`
+  py-2 
+  px-3 
+  mr-4 
+`;
+
+const Span = styled.span<{ isChecked: boolean }>`
+  text-decoration: ${(props) => (props.isChecked ? 'line-through' : '')};
+`;
+
+const ToDoSpan = tw(Span)`
+  w-full
+  text-grey-darkest  
+`;

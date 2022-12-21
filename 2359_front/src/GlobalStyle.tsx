@@ -12,6 +12,10 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
   }
   
+  input, textarea{
+    outline:none;
+  }
+
 `;
 
 export default GlobalStyle;
