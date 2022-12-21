@@ -10,7 +10,9 @@ function TutorialOption({ state, setState }: ContentOptionsProps) {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { id } = event.target;
       setState((currentOptions) =>
-        currentOptions.map((options) => (options.id === id ? { ...options, isChecked: !options.isChecked } : options))
+        currentOptions.map((options) =>
+          options.title === id ? { ...options, isChecked: !options.isChecked } : options
+        )
       );
     },
     [setState]
