@@ -14,23 +14,27 @@ function TodayQuestion() {
   return (
     <div>
       <Question>오늘 하루 어떠셨나요?</Question>
-      <DiaryArea defaultValue={answer} onChange={answerChangeHandler} />
+      <AnswerArea defaultValue={answer} onChange={answerChangeHandler} />
     </div>
   );
 }
 
-export { TodayQuestion };
+export { TodayQuestion, Question };
 
 const Question = tw.p`
   mb-2
-  text-xl
+  text-lg
   font-semibold
 `;
 
-const DiaryArea = tw.textarea`
+const AnswerArea = tw.textarea`
   w-full
   h-24
   max-h-36
   resize-none
   p-2
+  border 
+  rounded 
+  text-grey-darker
+
 `;
