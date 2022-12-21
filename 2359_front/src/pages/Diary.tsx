@@ -64,9 +64,14 @@ function Diary() {
   const todayDiaryState = useRecoilValue(todayDiaryAtom);
   const accountTableAtomState = useRecoilValue(accountTableAtom);
 
+  const everyUnChecked = useMemo(
+    () => contentOptions.every((options) => options.isChecked === false),
+    [contentOptions]
+  );
+
   const diaryContents = useMemo(() => {
-    if (contentOptions.every((options) => options.isChecked === false)) {
-      return '좌측 옵션을 선택해주세요';
+    if (everyUnChecked) {
+      return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
     }
 
     return contentOptions.map((options) => {
@@ -87,7 +92,7 @@ function Diary() {
         </DiaryComponentsLayout>
       );
     });
-  }, [contentOptions]);
+  }, [contentOptions, everyUnChecked]);
 
   const submitHandler = () => {
     console.log(todayTodoState, questionAnswerState, emotionState, todayDiaryState, accountTableAtomState);
@@ -103,12 +108,12 @@ function Diary() {
   return (
     <DiarySection>
       <HeadContent>
-        <Title>{date}</Title>
+        <Title isEmpty={everyUnChecked}>{date}</Title>
         <ContentOptions state={contentOptions} setState={setContentOptions} />
       </HeadContent>
       <Content>
         {diaryContents}
-        {contentOptions.every((options) => options.isChecked === false) ? null : (
+        {everyUnChecked ? null : (
           <SubmitContainer>
             <Button onClick={cancelHandler} btntype="cancel">
               취소하기
@@ -144,10 +149,23 @@ const Content = tw.div`
   text-lg	
 `;
 
-const Title = tw.p`
-  text-5xl
+const Title = tw.p<{ isEmpty: boolean }>`
+  text-4xl
   font-extrabold
   break-keep	
+  ${(props) => props.isEmpty && 'text-gray-500'}
+  
+`;
+
+const EmptyContainer = tw.div`
+  flex
+  w-full
+  h-24
+  justify-center
+  items-center
+  text-2xl
+  font-semibold
+  text-gray-500
 `;
 
 const SubmitContainer = tw.div`
