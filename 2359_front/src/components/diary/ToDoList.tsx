@@ -26,7 +26,6 @@ function TodoList() {
 
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
-    console.log(id, curTodo, 123);
     const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : { ...todo }));
 
     setCurTodo(updateTodos);
@@ -50,7 +49,7 @@ function TodoList() {
             return (
               <LiContainer key={uuid()}>
                 <TodoLabel htmlFor={id}>
-                  <input id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
+                  <CheckBox id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
                   <ToDoSpan isChecked={done}>{item}</ToDoSpan>
                 </TodoLabel>
                 <Button onClick={(event) => todoDeleteHandler(event, id)} type="button">
@@ -111,6 +110,11 @@ const TodoLabel = tw(Label)`
   mr-4
   w-10/12
   text-lg
+`;
+
+const CheckBox = tw.input`
+  w-4
+  h-4  
 `;
 
 const Span = styled.span<{ isChecked: boolean }>`
