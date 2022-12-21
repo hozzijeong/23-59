@@ -3,7 +3,7 @@ import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { emailCheck } from 'util/regex';
-import { useRegister } from './hook/useRegister';
+import { useRegister } from '../../hooks/useRegister';
 import * as SC from './FormStyled';
 
 /* eslint-disable react/jsx-props-no-spreading */
@@ -30,6 +30,7 @@ function Userform({ title }: FormName) {
 
   // data를 보낸다.
   const OnSubmit: SubmitHandler<FormValue> = (data) => {
+    console.log(data);
     useRegister(data);
   };
 
