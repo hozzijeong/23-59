@@ -5,10 +5,10 @@ function SetDiaryOption() {
   return (
     <Container>
       <div className="justify-self-start">작성페이지 옵션 설정</div>
-      <ScriptDiv>
+      <ScriptArea>
         <Script>1. 일일 결산을할 때 고정적으로 적용할 옵션을 설정하는 페이지 입니다.</Script>
         <Script>2. 원하는 옵션을 체크하고 자신만의 결산 템플릿을 만들어 보세요!</Script>
-      </ScriptDiv>
+      </ScriptArea>
       <CheckboxArea>
         <div>
           <CheckLabel htmlFor="todoCheck">
@@ -58,7 +58,7 @@ const Container = tw.div`
   w-full
 `;
 
-const ScriptDiv = tw.div`
+const ScriptArea = tw.div`
   flex
   flex-col
   justify-center
@@ -66,11 +66,15 @@ const ScriptDiv = tw.div`
   my-10
   w-11/12
   mx-auto
-  space-y-4
+  space-y-2
+  shadow-xl
+  p-8
+  rounded-lg
+  bg-neutral-100
 `;
 
 const Script = tw.div`
-  text-xl
+  text-lg
   text-bold
 `;
 
