@@ -1,4 +1,4 @@
-import React, { useMemo, useState, ReactNode } from 'react';
+import React, { useMemo, useState, ReactNode, useEffect } from 'react';
 import { AccountBook } from 'components/diary/AccountBook';
 import { DiaryComponentsLayout } from 'components/diary/Layout/DiaryComponentsLayout';
 import { Emotion } from 'components/diary/Emotion';
@@ -11,7 +11,7 @@ import { useRecoilValue } from 'recoil';
 import { accountTableAtom, questionAnswer, todayTodo, emotionAtom, todayDiaryAtom } from 'recoil/diaryAtom';
 import uuid from 'react-uuid';
 import Button from 'components/Button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { OptionEnums as OPTION } from 'types/enums';
 import { ContentOptionProps, OptionProps } from 'types/interfaces';
 
@@ -45,6 +45,16 @@ function Diary() {
   // 옵션 목록이 따로 있고, 체크 여부가 따로 존재함.
   // 그렇게 2개를 따로 받아오기
   const navigation = useNavigate();
+  const { id } = useParams();
+  const [date, setDate] = useState(id);
+  useEffect(() => {
+    if (id === undefined) {
+      navigation('/');
+      return;
+    }
+    setDate(`${id?.slice(0, 4)} ${id?.slice(4, 6)} ${id?.slice(6, 8)} `);
+  }, [date, id, navigation]);
+
   const mixedData = useMemo(() => TEMP_DATA.map((data) => ({ ...data, isChecked: TEMP_OPTIONS[data.title] })), []); // 이렇게 따로 변수로 합쳐서 만들어도 되는지? 클라이언트에서만 사용되는 값들이고, 사용자가 화면에서 동적으로 변경했을 때 그 변경되는 값을 바로바로 적용해줘야 합니다.
 
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>(mixedData);
@@ -94,7 +104,7 @@ function Diary() {
   return (
     <DiarySection>
       <HeadContent>
-        <Title>Date</Title>
+        <Title>{date}</Title>
         <ContentOptions state={contentOptions} setState={setContentOptions} />
       </HeadContent>
       <Content>
