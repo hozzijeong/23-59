@@ -26,9 +26,9 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
     const filterdContents = state.filter(({ isChecked }) => isChecked);
     const titles = filterdContents.map(({ title }) => CONTENT_OPTION[title]);
     return titles.map((title) => (
-      <span key={uuid()} className="text-sm my-1">
+      <TableContentSpan key={uuid()} className="">
         <a href={`#${title.replaceAll(' ', '-')}`}>{title}</a>
-      </span>
+      </TableContentSpan>
     ));
   }, [state]);
 
@@ -44,4 +44,11 @@ export { ContentOptions };
 
 const RelativeDiv = tw.div`
   relative
+`;
+
+const TableContentSpan = tw.span`
+  text-sm 
+  my-1
+  hover:font-semibold
+  hover:underline
 `;
