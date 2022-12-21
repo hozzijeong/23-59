@@ -2,16 +2,10 @@ import React, { useEffect, useState } from 'react';
 import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { UpdateFormValue } from 'types/interfaces';
 import { emailCheck } from '../../utilities/regex';
 import * as SC from '../signup/FormStyled';
 /* eslint-disable react/jsx-props-no-spreading */
-
-interface FormValue {
-  email: string;
-  nickname: string;
-  password: string;
-  newPassword: string;
-}
 
 function UserInfo() {
   const [state, setState] = useState('ghd@nav.com');
@@ -21,9 +15,8 @@ function UserInfo() {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
-  } = useForm<FormValue>();
+  } = useForm<UpdateFormValue>();
 
   useEffect(() => {
     // axios.get('')
@@ -33,9 +26,13 @@ function UserInfo() {
     setValue('nickname', state);
   }, []);
 
-  const OnSubmit: SubmitHandler<FormValue> = (data) => {
-    console.log(data);
-    setState('');
+  const OnSubmit: SubmitHandler<UpdateFormValue> = (data) => {
+    const formdata = {
+      currentPassword: data.newPassword,
+      nickname: data.nickname,
+      password: data.password,
+    };
+    console.log(formdata);
   };
 
   return (
@@ -79,9 +76,9 @@ function UserInfo() {
         {errors.password && errors.password.type === 'required' && (
           <SC.ErrorMesg>비밀번호를 입력해주세요.</SC.ErrorMesg>
         )}
-        {errors.password && errors.password.type === 'minLength' && (
-          <SC.ErrorMesg>6자 이상으로 설정해주세요.</SC.ErrorMesg>
-        )}
+        {/* 데이터로 받아온 비밀번호가 일치하지 않을 때 ? {errors.password && errors.password.type === 'minLength' && (
+          <SC.ErrorMesg>비밀번호가 일치하지 않습니다.</SC.ErrorMesg>
+        )} */}
         <SC.FormLabel>새로운 비밀 번호</SC.FormLabel>
         <SC.FormInput
           {...register('newPassword', {
@@ -92,8 +89,8 @@ function UserInfo() {
           type="password"
           placeholder="비밀번호를 다시 입력해주세요"
         />
-        {errors.newPassword && errors.newPassword.type === 'validate' && (
-          <SC.ErrorMesg>비밀번호가 일치하지 않습니다.</SC.ErrorMesg>
+        {errors.newPassword && errors.newPassword.type === 'minLength' && (
+          <SC.ErrorMesg>6자 이상으로 설정해주세요.</SC.ErrorMesg>
         )}
         {errors.newPassword && errors.newPassword.type === 'required' && (
           <SC.ErrorMesg>비밀번호를 입력해주세요.</SC.ErrorMesg>
@@ -102,7 +99,7 @@ function UserInfo() {
         <SC.SubmitButton
           delete
           onClick={() => {
-            console.log('dd');
+            console.log('삭제버튼 클릭');
           }}
         >
           회원탈퇴

@@ -5,31 +5,21 @@ import { useNavigate } from 'react-router-dom';
 import { emailCheck } from '../../utilities/regex';
 import { useRegister } from '../../hooks/useRegister';
 import * as SC from './FormStyled';
+import { RegisterFormValue } from 'types/interfaces';
 
 /* eslint-disable react/jsx-props-no-spreading */
 
-export interface FormValue {
-  email: string;
-  nickname: string;
-  password: string;
-  passwordConfirm: string;
-}
-
-interface FormName {
-  title: string;
-}
-
-function Userform({ title }: FormName) {
+function Userform() {
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormValue>();
+  } = useForm<RegisterFormValue>();
 
   // data를 보낸다.
-  const OnSubmit: SubmitHandler<FormValue> = (data) => {
+  const OnSubmit: SubmitHandler<RegisterFormValue> = (data) => {
     console.log(data);
     useRegister(data);
   };
@@ -37,7 +27,7 @@ function Userform({ title }: FormName) {
   return (
     <SC.Container>
       <SC.Form onSubmit={handleSubmit(OnSubmit)}>
-        <SC.FormTitle>{title}</SC.FormTitle>
+        <SC.FormTitle>회원가입</SC.FormTitle>
         <SC.FormLabel>이메일</SC.FormLabel>
         <SC.FormInput
           {...register('email', {

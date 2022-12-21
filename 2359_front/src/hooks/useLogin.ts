@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { LoginValue } from '../components/login/Loginform';
+import { LoginFormValue } from 'types/interfaces';
 
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-export function useLogin(Data: LoginValue) {
+export function useLogin(Data: LoginFormValue) {
   const navigate = useNavigate();
   axios
     .post(

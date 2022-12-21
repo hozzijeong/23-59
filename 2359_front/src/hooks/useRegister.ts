@@ -1,12 +1,12 @@
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { FormValue } from '../components/signup/Userform';
+import { RegisterFormValue } from 'types/interfaces';
 
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-export const useRegister = (Data: FormValue) => {
+export const useRegister = (Data: RegisterFormValue) => {
   const navigate = useNavigate();
   axios
     .post(

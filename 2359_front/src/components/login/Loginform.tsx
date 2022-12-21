@@ -4,22 +4,18 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { emailCheck } from '../../utilities/regex';
 import * as SC from '../signup/FormStyled';
 import { useLogin } from '../../hooks/useLogin';
+import { LoginFormValue } from 'types/interfaces';
 
 /* eslint-disable react/jsx-props-no-spreading */
-
-export interface LoginValue {
-  email: string;
-  password: string;
-}
 
 function Loginform() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginValue>();
+  } = useForm<LoginFormValue>();
 
-  const OnSubmit: SubmitHandler<LoginValue> = (data) => {
+  const OnSubmit: SubmitHandler<LoginFormValue> = (data) => {
     console.log(data);
     useLogin(data);
   };
