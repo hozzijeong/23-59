@@ -34,14 +34,18 @@ function CollectQuestion() {
   const [isSelect, setIsSelect] = useState(newData);
   const [showModal, setShowModal] = React.useState(false);
 
+  const selectedTag = () => {
+    return Object.keys(isSelect).filter((key) => isSelect[key] === true);
+  };
+
   const handleTagName = (item: string): void => {
     const newSelect = { ...isSelect };
     newSelect[item] = !newSelect[item];
     setIsSelect(newSelect);
-    console.log('newSelect', newSelect);
+    selectedTag();
   };
 
-  const selectedTag = (ele: string): string => {
+  const tagBtnClassName = (ele: string): string => {
     if (isSelect[ele]) {
       return selectBtnClass;
     }
@@ -52,10 +56,15 @@ function CollectQuestion() {
     <Container>
       <div>오늘의 질문 모아보기</div>
       <ButtonContainer>
-        {tagData.map((item) => {
+        {tagData.map((tagItem) => {
           return (
-            <TagButtons className={selectedTag(item)} key={item} type="button" onClick={() => handleTagName(item)}>
-              {item}
+            <TagButtons
+              className={tagBtnClassName(tagItem)}
+              key={tagItem}
+              type="button"
+              onClick={() => handleTagName(tagItem)}
+            >
+              {tagItem}
             </TagButtons>
           );
         })}
@@ -155,29 +164,23 @@ const ButtonContainer = tw.div`
 const TagButtons = tw.button`
   mr-3
   w-16
-  h-7
-  
+  h-7  
 `;
-// 아웃라인 넣을지 고민
-// hover:outline
-// outline-2
-// outline-offset-4
+
 const AnswerUl = tw.ul`
   w-full
   p-4
 `;
 
 const AnswerList = tw.li`
-border-solid
-border-2
-rounded-md
-w-full
-shadow-md
-p-3
-m-3
-hover:bg-gray-200
-active:bg-stone-300
-cursor-pointer
+  rounded-md
+  w-full
+  shadow-md
+  p-3
+  m-3
+  hover:bg-gray-200
+  active:bg-stone-300
+  cursor-pointer
 `;
 
 // BtnClass 참고 사항
