@@ -1,23 +1,24 @@
 import axios from 'axios';
+import e from 'express';
 import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 
 import data from './mock/questionData.json';
 
-let tagData: string[] = [];
-
 interface IData {
   [key: string]: boolean;
 }
 
-function handleTagData() {
+// tagData에 태그만 넣어주는 함수
+let tagData: string[] = [];
+function pushTagData() {
   const tmp = data.map((item) => item.question.tag);
   tagData = tmp.filter((value, idx) => tmp.indexOf(value) === idx);
 }
-handleTagData();
 
+// 질문만 걸러내는 함수
 let result: string[] = [];
-function filterQuestionList(): void {
+function filterQuestionList() {
   result = [];
   for (let i = 0; i < data.length; i += 1) {
     if (tagData.includes(data[i].question.tag)) {
@@ -26,38 +27,80 @@ function filterQuestionList(): void {
   }
 }
 
+// 태그를 선택했을때 질문을 해당 태그만 보여주는 함수
+
+// 질문을 클릭했을 때 모달창으로 보여줄 answer item 필터링 함수
+let filterdAnswerItem: any[] = []; // array안에 object가 들어가는데 이럴땐 어떤 type을 줘야하는지..?
+function filterAnswerList(str: string) {
+  filterdAnswerItem = data.filter((ele) => ele.question.item === str);
+  console.log('각 item', filterdAnswerItem);
+}
+// filterAnswerList('오늘 먹은 최고의 음식은?');
+
+// tagData를 Key: boolean 값으로 만들어주는 함수
 const newData: IData = {};
 const setData = (): void => {
   tagData.forEach((item) => {
     newData[item] = true;
   });
 };
-setData();
 
+pushTagData();
+setData();
+filterQuestionList();
+
+// 컴포넌트
 function CollectQuestion() {
   const [isSelect, setIsSelect] = useState(newData);
   const [showModal, setShowModal] = React.useState(false);
+  const [currentList, setCurrentList] = useState({
+    selectedDate: '',
+    question: {
+      item: '',
+      tag: '',
+    },
+    answer: '',
+  });
 
   useEffect(() => {
     filterQuestionList();
   }, [isSelect]);
 
-  const selectedTag = () => {
-    return Object.keys(isSelect).filter((key) => isSelect[key] === true);
-  };
-
-  const handleTagName = (item: string): void => {
-    const newSelect = { ...isSelect };
-    newSelect[item] = !newSelect[item];
-    setIsSelect(newSelect);
-    selectedTag();
-  };
-
+  // 해당 태그가 참 or 거짓에 따라 클래스이름 부여 하는 함수
   const tagBtnClassName = (ele: string): string => {
     if (isSelect[ele]) {
       return selectBtnClass;
     }
     return nonSelectBtnClass;
+  };
+
+  // 태그를 선택할 때마다 값이 true 인것만 반환해줌
+  // 하 이거 배열 안에 객체로 못넣어?????????
+  let tagSelectedAnswer: object[] = [];
+  const selectedTag = () => {
+    const trueKey = Object.keys(isSelect).filter((key) => isSelect[key] === true);
+    console.log('tureTag들', trueKey);
+    // 태그의 true 값만 선택받으면... 그 key만 주르륵 배열로 받아서,
+    // i번째 요소랑 data랑 같은 태그를 찾아...
+    // array안에 object가 들어가는데 이럴땐 어떤 type을 줘야하는지..?
+    const tmpArr: any = [];
+    for (let i = 0; i < trueKey.length; i += 1) {
+      tmpArr.push(data.filter((ele) => trueKey[i] === ele.question.tag));
+    }
+    tagSelectedAnswer = tmpArr.reduce(function (acc: any, cur: any) {
+      return [...acc, ...cur];
+    });
+    // 질문리스트를 반환하는 함수를 만들면됨!
+  };
+  selectedTag();
+
+  // 태그를 선택할 때마다 값이 변경되고, state를 변경해줌
+  const handleTag = (item: string): void => {
+    const newSelect = { ...isSelect };
+    newSelect[item] = !newSelect[item];
+    setIsSelect(newSelect);
+    // selectedTag();
+    console.log('변경된 state', newSelect);
   };
 
   return (
@@ -70,7 +113,7 @@ function CollectQuestion() {
               className={tagBtnClassName(tagItem)}
               key={tagItem}
               type="button"
-              onClick={() => handleTagName(tagItem)}
+              onClick={() => handleTag(tagItem)}
             >
               {tagItem}
             </TagButtons>
@@ -79,9 +122,17 @@ function CollectQuestion() {
       </ButtonContainer>
       <div>
         <AnswerUl>
-          {result.map((item) => (
-            <AnswerList key={item} onClick={() => setShowModal(true)}>
-              {item}
+          {tagSelectedAnswer.map((ele: any) => (
+            // array안에 object가 들어가는데 이럴땐 어떤 type을 줘야하는지..?
+            <AnswerList
+              key={ele.selectedDate}
+              onClick={() => {
+                filterAnswerList(ele);
+                setCurrentList(ele);
+                setShowModal(true);
+              }}
+            >
+              {ele.question.item}
             </AnswerList>
           ))}
         </AnswerUl>
@@ -89,25 +140,22 @@ function CollectQuestion() {
       {showModal ? (
         <>
           <ModalLayout>
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+            <div className="relative w-1/3 my-6 mx-auto max-w-3xl">
               <ModalContainer>
                 <ModalHeader>
-                  <ModalTitleH3>Modal Title</ModalTitleH3>
-                  <ModalCloseBtn type="button" onClick={() => setShowModal(false)}>
-                    <Close>X</Close>
-                  </ModalCloseBtn>
+                  <ModalTitleH3>{currentList.question.item}</ModalTitleH3>
                 </ModalHeader>
 
                 <ModalMain>
-                  <ModalScript>여기에 이제 질문 답변이 들어갈거임</ModalScript>
+                  <ModalScript>
+                    <div>답변: {currentList.answer}</div>
+                    <div>날짜: {currentList.selectedDate}</div>
+                  </ModalScript>
                 </ModalMain>
 
                 <ModalFooter>
-                  <ModalCancleBtn type="button" onClick={() => setShowModal(false)}>
-                    Close
-                  </ModalCancleBtn>
                   <ModalConfirmBtn type="button" onClick={() => setShowModal(false)}>
-                    Save Changes
+                    닫기
                   </ModalConfirmBtn>
                 </ModalFooter>
               </ModalContainer>
@@ -205,7 +253,7 @@ const ModalMain = tw.div`
   relative p-6 flex-auto
 `;
 
-const ModalScript = tw.p`
+const ModalScript = tw.div`
   my-4 text-slate-500 text-lg leading-relaxed
 `;
 // 모달 푸터
