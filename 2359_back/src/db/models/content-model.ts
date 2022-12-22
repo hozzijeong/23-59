@@ -65,7 +65,7 @@ const filterByEmotion = async (prevDate: string, nextDate: string) => {
   const prev = parseInt(prevDate, 10);
   const next = parseInt(nextDate, 10);
 
-  const emotions = ['happy', 'sad', 'soso'];
+  const emotions = ['very sad', 'sad', 'soso', 'happy', 'very happy'];
 
   const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev }, emotion: { $in: emotions } });
   //const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev } }, { diary: { emotion: 1 } });
