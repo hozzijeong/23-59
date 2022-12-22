@@ -1,17 +1,15 @@
 import React, { useState } from 'react';
-import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { emailCheck } from '../../utilities/regex';
-import { useRegister } from '../../hooks/useRegister';
+import useRegister from '../../hooks/useUserRegister';
 import * as SC from './FormStyled';
 import { RegisterFormValue } from '../../types/interfaces';
 
 /* eslint-disable react/jsx-props-no-spreading */
 
 function Userform() {
-  const navigate = useNavigate();
+  const { registerRequest } = useRegister();
 
   const {
     register,
@@ -22,24 +20,7 @@ function Userform() {
 
   // data를 보낸다.
   const OnSubmit: SubmitHandler<RegisterFormValue> = (data) => {
-    console.log(data);
-    // useRegister(data);
-    axios
-      .post(`http://localhost:8000/api/user/register/`, data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then((res) => {
-        const data = res;
-        console.log(data);
-        alert('가입 완료 됐습니다.');
-        navigate('/login');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    // navigate('/login');
+    registerRequest(data);
   };
 
   return (

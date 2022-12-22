@@ -5,12 +5,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import * as SC from '../signup/FormStyled';
 import { emailCheck } from '../../utilities/regex';
-import { useLogin } from '../../hooks/useLogin';
+import useLogin from '../../hooks/useUserLogin';
 import { LoginFormValue } from '../../types/interfaces';
 
 /* eslint-disable react/jsx-props-no-spreading */
 
 function Loginform() {
+  const { loginRequest } = useLogin();
   const {
     register,
     handleSubmit,
@@ -19,22 +20,7 @@ function Loginform() {
   const navigate = useNavigate();
 
   const OnSubmit: SubmitHandler<LoginFormValue> = (data) => {
-    console.log(data);
-    // useLogin(data);
-    axios
-      .post(`http://localhost:8000/api/user/login/`, data, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      .then((res) => res.data)
-      .then((data) => {
-        localStorage.setItem('token', data.token);
-        navigate('/');
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    loginRequest(data);
   };
 
   return (
