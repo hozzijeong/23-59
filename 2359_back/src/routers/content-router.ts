@@ -26,6 +26,19 @@ contentRouter.get('/calendar/:selectedDate', async (req, res, next) => {
     next(error);
   }
 });
+// api/contents/monthCalendar/:date
+contentRouter.get('/monthCalendar/:date', async (req, res, next) => {
+  try {
+    const { date } = req.params;
+    const splitDate = date.split('-');
+    console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
+    const contents = await contentService.getCalendarByMonth(splitDate[0], splitDate[1]);
+
+    res.status(200).json(contents);
+  } catch (error) {
+    next(error);
+  }
+});
 // api/contents/63a026bb13e614f3a952659f
 contentRouter.get('/:id', async (req, res, next) => {
   try {
@@ -36,13 +49,15 @@ contentRouter.get('/:id', async (req, res, next) => {
     next(error);
   }
 });
-// api/contents/20221225
+// api/contents/date/20221225
 contentRouter.get('/date/:selectedDate', async (req, res, next) => {
   try {
     const { selectedDate } = req.params;
     const content = await contentService.getContentBySelectedDate(selectedDate);
     res.status(200).json(content);
   } catch (error) {
+    console.log('err ', error);
+    res.status(400).json('Bad Request');
     next(error);
   }
 });
@@ -68,7 +83,7 @@ contentRouter.post('/', async (req, res, next) => {
       throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
     }
     // diary, todo, account, answer
-    const { selectedDate, emotion, diary, todo, account, answer } = req.body;
+    const { selectedDate, emotion, diary, todo, account, qna } = req.body;
 
     const newContent = await contentService.addContent({
       selectedDate,
@@ -76,7 +91,7 @@ contentRouter.post('/', async (req, res, next) => {
       diary,
       todo,
       account,
-      answer,
+      qna,
     });
 
     res.status(200).json(newContent);
