@@ -1,5 +1,10 @@
 import contentModel from '../db/models/content-model';
-
+import {
+  emotionEnums as EMOTION,
+  incomeEnums as INCOMES,
+  expenseEnums as EXPENSES,
+  clsEnums as CLS,
+} from '../../../2359_front/src/types/enums';
 class ContentService {
   contentModel;
 
@@ -10,6 +15,18 @@ class ContentService {
   // 컨텐츠 생성
   async addContent(contentData: any) {
     const newContent = await this.contentModel.createContent(contentData);
+
+    let isChecked = false;
+    if (newContent.map((obj: any) => obj.todo) === undefined) {
+      isChecked = false;
+    } else if (newContent.map((obj: any) => obj.diary) === undefined) {
+      isChecked = false;
+    } else if (newContent.map((obj: any) => obj.qna) === undefined) {
+      isChecked = false;
+    } else {
+      isChecked = true;
+    }
+
     return newContent;
   }
 
@@ -108,8 +125,26 @@ class ContentService {
     const account = Object.fromEntries(map);
     console.log('account ', account);
 
-    const result = { emotion: emotionArr[0], etc: etcBool, account };
+    const result = { date: selectedDate, emotion: emotionArr[0], etc: etcBool, account };
     console.log('result: ', result);
+    return result;
+  }
+
+  // 한달용
+  async getCalendarByMonth(prevDate: string, nextDate: string) {
+    const content = await this.contentModel.filterByDate(prevDate, nextDate);
+    if (!content) {
+      console.log('해당 날짜의 컨텐츠가 없습니다.');
+    }
+    const dateArr = content.map((obj: any) => obj.selectedDate);
+    console.log('dateArr ', dateArr[1]);
+
+    //const result = this.getCalendar(dateArr[1]);
+    const result = [];
+    for (let i = 0; i < dateArr.length; i++) {
+      result.push(await this.getCalendar(dateArr[i]));
+    }
+    console.log('result2 ', result);
     return result;
   }
 
@@ -129,10 +164,20 @@ class ContentService {
     //   }
     //   emotionsArr.push(filtered[i].emotion);
     // }
+    const emotionArr = Object.keys(EMOTION);
+    const diff = emotionArr.filter((x: string) => !filtered.includes(x));
+    console.log('diff  ', diff);
+    // function checkAvailability(arr: any, val: any) {
+    //   return arr.some((arrVal: any) => val === arrVal);
+    // }
+    //const arr: any = [];
     const filteredEmotions = filtered.reduce((a: any, i: number) => {
+      console.log(`a`, a);
       return (a[i] = (a[i] || 0) + 1), a;
     }, {});
-    //console.log('emotionsArr: ', emotionsArr);
+    for (let x = 0; x < diff.length; x++) {
+      filteredEmotions[diff[x]] = 0;
+    }
     console.log('filteredEmotions: ', filteredEmotions);
     return filteredEmotions;
   }
