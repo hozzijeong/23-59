@@ -84,13 +84,14 @@ const accountSchema = new Schema<IAccount>({
 });
 
 const qnaSchema = new Schema<IQnA>({
-  // question: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'questions',
-  // },
   question: {
-    type: String,
+    type: Schema.Types.ObjectId,
+    ref: 'questions',
+    required: true,
   },
+  // question: {
+  //   type: String,
+  // },
   answer: {
     type: String,
   },

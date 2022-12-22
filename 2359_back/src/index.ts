@@ -2,8 +2,8 @@ import 'dotenv/config';
 import cors from 'cors';
 import express, { application } from 'express';
 import connectDB from './DB/index';
-import { userRouter, userOptionRouter } from './routers';
-import { contentRouter } from './routers/content-router';
+import { userRouter, userOptionRouter, contentRouter, questionRouter } from './routers';
+//import { contentRouter } from './routers/content-router';
 
 connectDB();
 
@@ -21,6 +21,7 @@ app.use(cors());
 app.use('/api', userRouter);
 app.use('/api', userOptionRouter);
 app.use('/api/contents', contentRouter);
+app.use('/api/questions', questionRouter);
 
 app.listen(PORT, () => {
   console.log(`server running on http://localhost:${PORT}`);

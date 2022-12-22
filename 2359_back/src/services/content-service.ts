@@ -5,6 +5,7 @@ import {
   expenseEnums as EXPENSES,
   clsEnums as CLS,
 } from '../../../2359_front/src/types/enums';
+
 class ContentService {
   contentModel;
 
@@ -145,7 +146,7 @@ class ContentService {
       etcBool = true;
     }
     const accounts = content.map((obj: any) => obj.account);
-    console.log('accounts: ', accounts);
+    //console.log('accounts: ', accounts);
 
     const clsArr = [];
     const amountArr = [];
@@ -156,17 +157,17 @@ class ContentService {
       clsArr.push(accounts[0][i].cls);
       amountArr.push(accounts[0][i].amount);
     }
-    console.log('clsArr ', clsArr);
-    console.log('amountArr ', amountArr);
+    //console.log('clsArr ', clsArr);
+    //console.log('amountArr ', amountArr);
 
     const map = new Map();
-    console.log('map: ', map);
+    //console.log('map: ', map);
 
     for (let i = 0; i < clsArr.length; i++) {
       map.set(clsArr[i], (map.get(clsArr[i]) ?? 0) + amountArr[i]);
     }
     const account = Object.fromEntries(map);
-    console.log('account ', account);
+    //console.log('account ', account);
 
     const result = { date: selectedDate, emotion: emotionArr[0], etc: etcBool, account };
     console.log('result: ', result);
@@ -180,7 +181,7 @@ class ContentService {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
     const dateArr = content.map((obj: any) => obj.selectedDate);
-    console.log('dateArr ', dateArr[1]);
+    //console.log('dateArr ', dateArr[1]);
 
     //const result = this.getCalendar(dateArr[1]);
     const result = [];
@@ -188,8 +189,9 @@ class ContentService {
       result.push(this.getCalendar(dateArr[i]));
     }
     //result.push(await this.getCalendar(dateArr[i]));
-    console.log('result2 ', Promise.all(result));
-    return Promise.all(result);
+    const result2 = Promise.all(result);
+    console.log('result2 ', result2);
+    return result2;
   }
 
   // 감정 통계
