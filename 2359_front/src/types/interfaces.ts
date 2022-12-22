@@ -37,6 +37,10 @@ interface OptionProps {
   title: OPTIONS;
 }
 
+type OptionCheckedProps = {
+  [key in OPTIONS]: boolean;
+};
+
 interface ContentOptionProps extends OptionProps {
   isChecked: boolean;
 }
@@ -77,4 +81,5 @@ export type {
   LoginFormValue,
   RegisterFormValue,
   UpdateFormValue,
+  OptionCheckedProps,
 };

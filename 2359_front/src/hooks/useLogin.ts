@@ -10,7 +10,7 @@ export function useLogin(Data: LoginFormValue) {
   const navigate = useNavigate();
   axios
     .post(
-      `http:localhost:8000/api/user/login/
+      `http://localhost:8000/api/user/login/
     `,
       Data,
       {

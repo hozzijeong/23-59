@@ -1,6 +1,8 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import axios from 'axios';
+import { useNavigate } from 'react-router';
 import * as SC from '../signup/FormStyled';
 import { emailCheck } from '../../utilities/regex';
 import { useLogin } from '../../hooks/useLogin';
@@ -14,10 +16,25 @@ function Loginform() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValue>();
+  const navigate = useNavigate();
 
   const OnSubmit: SubmitHandler<LoginFormValue> = (data) => {
     console.log(data);
-    useLogin(data);
+    // useLogin(data);
+    axios
+      .post(`http://localhost:8000/api/user/login/`, data, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => res.data)
+      .then((data) => {
+        localStorage.setItem('token', data.token);
+        navigate('/');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
