@@ -4,6 +4,7 @@ import {
   emotionEnums as EMOTION,
   clsEnums,
   OptionEnums as OPTIONS,
+  DiaryMode,
 } from 'types/enums';
 
 interface AccountTableRow {
@@ -50,7 +51,10 @@ interface ContentOptionProps extends OptionProps {
 interface ContentOptionsProps {
   state: ContentOptionProps[];
   setState: React.Dispatch<React.SetStateAction<ContentOptionProps[]>>;
-  isRead?: boolean;
+}
+
+interface DiaryContentOptionsProps extends ContentOptionsProps {
+  diaryMode: DiaryMode;
 }
 
 interface UpdateFormValue {
@@ -84,4 +88,5 @@ export type {
   RegisterFormValue,
   UpdateFormValue,
   OptionCheckedProps,
+  DiaryContentOptionsProps,
 };

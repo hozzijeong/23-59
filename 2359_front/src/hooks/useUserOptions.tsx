@@ -15,31 +15,33 @@ function useUserOptions() {
   const navigation = useNavigate();
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>([]);
 
-  const { data, error } = useSWR<UserOptionsProps>('/api/user/option/', () =>
-    baseAxios
-      .get('/api/user/option/', {
-        headers: {
-          authorization: accessToken,
-          Accept: 'application/json',
-        },
-      })
-      .then((res) => res.data)
-  );
+  // onSuccess 사용해서 성공시 데이터 맞추기.
+  const { data } = useSWR<UserOptionsProps>(
+    '/api/user/option/',
+    () =>
+      baseAxios
+        .get('/api/user/option/', {
+          headers: {
+            authorization: accessToken,
+            Accept: 'application/json',
+          },
+        })
+        .then((res) => res.data),
+    {
+      onSuccess: (data, key, config) => {
+        const { createOption } = data;
+        const options = Object.keys(data.createOption).map((key) => ({ title: key as OptionEnums }));
 
-  if (error) {
-    navigation('/login');
-  }
-  console.log(data, 'data');
-  useEffect(() => {
-    if (!data) return;
-    const { createOption } = data;
-    const options = Object.keys(data.createOption).map((key) => ({ title: key as OptionEnums }));
-
-    if (options && contentOptions.length === 0) {
-      const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
-      setContentOptions(mixedData);
+        if (options && contentOptions.length === 0) {
+          const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
+          setContentOptions(mixedData);
+        }
+      },
+      onError: () => {
+        navigation('/login');
+      },
     }
-  }, [contentOptions.length, data]);
+  );
 
   return { contentOptions, setContentOptions, firstLogin: data?.firstLogin };
 }

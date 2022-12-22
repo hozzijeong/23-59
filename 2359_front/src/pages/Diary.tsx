@@ -12,7 +12,7 @@ import { accountTableAtom, questionAnswer, todayTodo, emotionAtom, todayDiaryAto
 import uuid from 'react-uuid';
 import Button from 'components/Button';
 import { useNavigate, useParams } from 'react-router-dom';
-import { OptionEnums as OPTION } from 'types/enums';
+import { DiaryMode, OptionEnums as OPTION } from 'types/enums';
 import { useUserOptions } from 'hooks/useUserOptions';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
@@ -39,10 +39,10 @@ function Diary() {
   }, [date, id, navigation]);
 
   const { contentOptions, setContentOptions } = useUserOptions(); // 유저들 옵션 처리
-  console.log(contentOptions, '22');
-  const { isPost, data } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
 
-  const [isRead, setIsRead] = useState(data.length === 0); // 읽기 모드냐 아니냐의 차이?
+  const { todayDiary, setTodayDiary } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
+  // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
+  const { diaryInfo, diaryMode } = todayDiary;
 
   const todayTodoState = useRecoilValue(todayTodo);
   const questionAnswerState = useRecoilValue(questionAnswer);
@@ -56,20 +56,21 @@ function Diary() {
   );
 
   const diaryContents = useMemo(() => {
-    if (everyUnChecked) {
+    // 처음 페이지 & isRead 라면 작성하기 보여줄 것.
+    if (diaryMode === DiaryMode.CREATE)
       return (
         <EmptyContainer>
-          {isRead ? (
-            <button type="button" onClick={() => setIsRead(false)}>
-              작성하기
-            </button>
-          ) : (
-            '좌측 옵션을 선택해주세요.'
-          )}
+          <button type="button" onClick={() => setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.UPDATE }))}>
+            작성하기
+          </button>
         </EmptyContainer>
       );
+
+    if (everyUnChecked) {
+      return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
     }
 
+    // 기본적으로 값
     return contentOptions.map((options) => {
       const { title, isChecked } = options;
       if (!isChecked) return null;
@@ -88,7 +89,7 @@ function Diary() {
         </DiaryComponentsLayout>
       );
     });
-  }, [contentOptions, everyUnChecked, isRead]);
+  }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary]);
 
   const submitHandler = async () => {
     const body = {
@@ -119,23 +120,30 @@ function Diary() {
   };
 
   // Read 페이지를 어떠헥 만들 것인지 생각해보기
+  // 처음에 작성 여부에 따라 Empty페이지 보여줄 것.
+  // 제일 처음에는 Read 페이지 보여줄 것.
+  // 그 다음에 수정하기 누른다면 작성 페이지로 이동할 것.
   return (
     <DiarySection>
       <HeadContent>
         <Title isEmpty={everyUnChecked}>{date}</Title>
         <UpdateDiv>
-          {isRead && (
-            <UpdateButton type="button" onClick={() => setIsRead(false)}>
+          {diaryMode === DiaryMode.CREATE && null}
+          {diaryMode === DiaryMode.READ && (
+            <UpdateButton
+              type="button"
+              onClick={() => setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.UPDATE }))}
+            >
               수정하기
             </UpdateButton>
           )}
-          <UpdateButton type="button">삭제하기</UpdateButton>
+          {diaryMode !== DiaryMode.CREATE && <UpdateButton type="button">삭제하기</UpdateButton>}
         </UpdateDiv>
-        <ContentOptions state={contentOptions} setState={setContentOptions} isRead={isRead} />
+        <ContentOptions state={contentOptions} setState={setContentOptions} diaryMode={diaryMode} />
       </HeadContent>
       <Content>
         {diaryContents}
-        {!isRead &&
+        {diaryMode !== DiaryMode.READ &&
           (everyUnChecked ? null : (
             <SubmitContainer>
               <Button onClick={cancelHandler} btntype="cancel">
