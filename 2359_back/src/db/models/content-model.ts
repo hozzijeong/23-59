@@ -1,6 +1,14 @@
 import { model } from 'mongoose';
 import { ContentSchema } from '../schemas/content-schema';
-
+import {
+  emotionEnums as EMOTION,
+  incomeEnums as INCOMES,
+  expenseEnums as EXPENSES,
+  clsEnums as CLS,
+} from '../../../../2359_front/src/types/enums';
+// D:\2359\initialization\2359_back\src\db\models\content-model.ts
+// D:\2359\initialization\2359_front\src\types\enums.ts
+// initialization\2359_front\src\types\enums.ts
 const Content = model('contents', ContentSchema);
 
 // content CRUD
@@ -56,7 +64,8 @@ const filterByDate = async (prevDate: string, nextDate: string) => {
   const next = parseInt(nextDate, 10);
 
   const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev } });
-  console.log('filteredContents: ', filteredContents[0]);
+  console.log('filteredContents: ', filteredContents);
+  console.log('length ', filteredContents.length);
   return filteredContents;
 };
 
@@ -65,7 +74,9 @@ const filterByEmotion = async (prevDate: string, nextDate: string) => {
   const prev = parseInt(prevDate, 10);
   const next = parseInt(nextDate, 10);
 
-  const emotions = ['very sad', 'sad', 'soso', 'happy', 'very happy'];
+  //const emotions = ['very sad', 'sad', 'soso', 'happy', 'very happy'];
+  const emotions = Object.keys(EMOTION);
+  console.log('EMOTION ', Object.keys(EMOTION));
 
   const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev }, emotion: { $in: emotions } });
   //const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev } }, { diary: { emotion: 1 } });
@@ -80,6 +91,9 @@ const filterByCls = async (prevDate: string, nextDate: string) => {
   const prev = parseInt(prevDate, 10);
   const next = parseInt(nextDate, 10);
 
+  const clsArr = Object.keys(CLS);
+  console.log('clsArr ', clsArr); //  [ 'EXPENSE', 'INCOME' ]
+  console.log(clsArr[1]);
   const incomes = await Content.find({
     selectedDate: { $lte: next, $gte: prev },
     'account.cls': '수입',
@@ -87,7 +101,7 @@ const filterByCls = async (prevDate: string, nextDate: string) => {
 
   const expenses = await Content.find({
     selectedDate: { $lte: next, $gte: prev },
-    'account.cls': '지출',
+    'account.cls': 'EXPENSE',
   });
 
   // const accounts = await Content.find({
