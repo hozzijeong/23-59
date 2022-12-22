@@ -1,5 +1,10 @@
 import contentModel from '../db/models/content-model';
-
+import {
+  emotionEnums as EMOTION,
+  incomeEnums as INCOMES,
+  expenseEnums as EXPENSES,
+  clsEnums as CLS,
+} from '../../../2359_front/src/types/enums';
 class ContentService {
   contentModel;
 
@@ -10,6 +15,25 @@ class ContentService {
   // 컨텐츠 생성
   async addContent(contentData: any) {
     const newContent = await this.contentModel.createContent(contentData);
+
+    const isEmpty = (val: any) => {
+      if (
+        val === '' ||
+        val === null ||
+        val === undefined ||
+        (val !== null && typeof val === 'object' && !Object.keys(val).length)
+      ) {
+        return true;
+      }
+    };
+
+    newContent.checkOption.TODO_LIST = !isEmpty(newContent.todo);
+    newContent.checkOption.TODAY_QUESTION = !isEmpty(newContent.qna);
+    newContent.checkOption.DIARY = !isEmpty(newContent.diary);
+    newContent.checkOption.EMOTION = !isEmpty(newContent.emotion);
+    newContent.checkOption.ACCOUNT_BOOK = !isEmpty(newContent.account);
+    console.log('checkoption ', newContent.checkOption);
+
     return newContent;
   }
 
@@ -34,6 +58,24 @@ class ContentService {
     if (!content) {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
+
+    const isEmpty = (val: any) => {
+      if (
+        val === '' ||
+        val === null ||
+        val === undefined ||
+        (val !== null && typeof val === 'object' && !Object.keys(val).length)
+      ) {
+        return true;
+      }
+    };
+
+    content.checkOption.TODO_LIST = !isEmpty(content.todo);
+    content.checkOption.TODAY_QUESTION = !isEmpty(content.qna);
+    content.checkOption.DIARY = !isEmpty(content.diary);
+    content.checkOption.EMOTION = !isEmpty(content.emotion);
+    content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
+
     return content;
   }
 
@@ -43,6 +85,24 @@ class ContentService {
       contentId,
       update: toUpdate,
     });
+
+    const isEmpty = (val: any) => {
+      if (
+        val === '' ||
+        val === null ||
+        val === undefined ||
+        (val !== null && typeof val === 'object' && !Object.keys(val).length)
+      ) {
+        return true;
+      }
+    };
+
+    updatedContent.checkOption.TODO_LIST = !isEmpty(updatedContent.todo);
+    updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna);
+    updatedContent.checkOption.DIARY = !isEmpty(updatedContent.diary);
+    updatedContent.checkOption.EMOTION = !isEmpty(updatedContent.emotion);
+    updatedContent.checkOption.ACCOUNT_BOOK = !isEmpty(updatedContent.account);
+    //console.log('checkoption ', updatedContent.checkOption);
 
     return updatedContent;
   }
@@ -108,9 +168,28 @@ class ContentService {
     const account = Object.fromEntries(map);
     console.log('account ', account);
 
-    const result = { emotion: emotionArr[0], etc: etcBool, account };
+    const result = { date: selectedDate, emotion: emotionArr[0], etc: etcBool, account };
     console.log('result: ', result);
     return result;
+  }
+
+  // 한달용
+  async getCalendarByMonth(prevDate: string, nextDate: string) {
+    const content = await this.contentModel.filterByDate(prevDate, nextDate);
+    if (!content) {
+      console.log('해당 날짜의 컨텐츠가 없습니다.');
+    }
+    const dateArr = content.map((obj: any) => obj.selectedDate);
+    console.log('dateArr ', dateArr[1]);
+
+    //const result = this.getCalendar(dateArr[1]);
+    const result = [];
+    for (let i = 0; i < dateArr.length; i++) {
+      result.push(this.getCalendar(dateArr[i]));
+    }
+    //result.push(await this.getCalendar(dateArr[i]));
+    console.log('result2 ', Promise.all(result));
+    return Promise.all(result);
   }
 
   // 감정 통계
@@ -129,10 +208,20 @@ class ContentService {
     //   }
     //   emotionsArr.push(filtered[i].emotion);
     // }
+    const emotionArr = Object.keys(EMOTION);
+    const diff = emotionArr.filter((x: string) => !filtered.includes(x));
+    console.log('diff  ', diff);
+    // function checkAvailability(arr: any, val: any) {
+    //   return arr.some((arrVal: any) => val === arrVal);
+    // }
+    //const arr: any = [];
     const filteredEmotions = filtered.reduce((a: any, i: number) => {
+      console.log(`a`, a);
       return (a[i] = (a[i] || 0) + 1), a;
     }, {});
-    //console.log('emotionsArr: ', emotionsArr);
+    for (let x = 0; x < diff.length; x++) {
+      filteredEmotions[diff[x]] = 0;
+    }
     console.log('filteredEmotions: ', filteredEmotions);
     return filteredEmotions;
   }
