@@ -12,8 +12,8 @@ function SetDiaryOption() {
       <CheckboxArea>
         <div>
           <CheckLabel htmlFor="todoCheck">
-            <CheckInput type="checkbox" id="todoCheck" checked />
-            Todo 리스트 작성 <span style={{ fontSize: '15px' }}> (기본 설정)</span>
+            <CheckInput type="checkbox" id="todoCheck" />
+            Todo 리스트 작성
           </CheckLabel>
           <p>👉 TodoList를 쓰고 관리할 수 있어요!</p>
         </div>
