@@ -1,12 +1,23 @@
-import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { baseAxios } from 'api';
+import { useNavigate } from 'react-router';
 import useSWR from 'swr';
+import { OptionEnums } from 'types/enums';
+import { ContentOptionProps, OptionCheckedProps } from 'types/interfaces';
+
+interface UserOptionsProps {
+  createOption: OptionCheckedProps;
+  firstLogin: boolean;
+}
 
 function useUserOptions() {
   const accessToken = localStorage.getItem('token') || '';
+  const navigation = useNavigate();
+  const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>([]);
 
-  const { data, error } = useSWR('/api/user/option/', () =>
-    axios
-      .get('http://localhost:8000/api/user/option/', {
+  const { data, error } = useSWR<UserOptionsProps>('/api/user/option/', () =>
+    baseAxios
+      .get('/api/user/option/', {
         headers: {
           authorization: accessToken,
           Accept: 'application/json',
@@ -15,9 +26,22 @@ function useUserOptions() {
       .then((res) => res.data)
   );
 
-  console.log(error);
-  // 여기서 데이터 옵션 값을 얻고, 옵션 배열과 true/false를 반환해줄 것.
-  return { data };
+  if (error) {
+    navigation('/login');
+  }
+  console.log(data, 'data');
+  useEffect(() => {
+    if (!data) return;
+    const { createOption } = data;
+    const options = Object.keys(data.createOption).map((key) => ({ title: key as OptionEnums }));
+
+    if (options && contentOptions.length === 0) {
+      const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
+      setContentOptions(mixedData);
+    }
+  }, [contentOptions.length, data]);
+
+  return { contentOptions, setContentOptions, firstLogin: data?.firstLogin };
 }
 
 export { useUserOptions };

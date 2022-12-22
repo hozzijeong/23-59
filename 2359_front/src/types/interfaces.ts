@@ -26,6 +26,8 @@ interface TodayDiaryProps {
 }
 
 interface DiaryStateProps {
+  _id?: string;
+  selectedDate?: string;
   todos?: TodoListProps[];
   questionAnswer?: string;
   emotion?: EMOTION;

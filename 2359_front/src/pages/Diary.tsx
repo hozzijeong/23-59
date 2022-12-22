@@ -13,58 +13,37 @@ import uuid from 'react-uuid';
 import Button from 'components/Button';
 import { useNavigate, useParams } from 'react-router-dom';
 import { OptionEnums as OPTION } from 'types/enums';
-import { ContentOptionProps, OptionProps } from 'types/interfaces';
+import { useUserOptions } from 'hooks/useUserOptions';
+import { useTodayDiary } from 'hooks/useTodayDiary';
+import { useSWRConfig } from 'swr';
+import { baseAxios } from 'api';
+import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
 };
 
-// 해당 상태관리를 할 때 현재 해당 옵션이 체크되었는지 아닌지가 중요함.
-
-const TEMP_DATA: OptionProps[] = [
-  { title: OPTION.TODO_LIST },
-  { title: OPTION.TODAY_QUESTION },
-  { title: OPTION.EMOTION },
-  { title: OPTION.DIARY },
-  { title: OPTION.ACCOUNT_BOOK },
-];
-
-const TEMP_OPTIONS = {
-  [OPTION.TODO_LIST]: true,
-  [OPTION.TODAY_QUESTION]: true,
-  [OPTION.DIARY]: false,
-  [OPTION.EMOTION]: false,
-  [OPTION.ACCOUNT_BOOK]: false,
-};
-
 function Diary() {
-  // 여기 체크 상태 데이터는 서버에서 유저가 체크해 놓은 데이터를 받아오면 됨.
-  // 그리고 그 받아온 데이터를 useState를 통해 변환하면 된다 생각함.
-  // 결국에 서버에서 받아오는 이유는 같은 방법을 사용하지 않기 위함이니까
-  // 서버에 데이터를 받아옴.
-  // 옵션 목록이 따로 있고, 체크 여부가 따로 존재함.
-  // 그렇게 2개를 따로 받아오기
-  const [isRead, setIsRead] = useState(true); // 읽기 모드냐 아니냐의 차이?
-  /**
-   * 1. read 일때는 수정/삭제가 나타나야 한다.
-   * 2. read 일때 option이 없으면 작성하기 버튼이 생성된다. -> 수정 페이지로 이동하게 된다.
-   * 3.
-   */
   const navigation = useNavigate();
   const { id } = useParams();
   const [date, setDate] = useState(id);
+
+  const { mutate } = useSWRConfig();
 
   useEffect(() => {
     if (id === undefined) {
       navigation('/');
       return;
     }
-    setDate(`${id?.slice(0, 4)}년 ${id?.slice(4, 6)}월 ${id?.slice(6, 8)}일 결산`);
+    setDate(convertDiaryTitleToKor(id));
   }, [date, id, navigation]);
 
-  const mixedData = useMemo(() => TEMP_DATA.map((data) => ({ ...data, isChecked: TEMP_OPTIONS[data.title] })), []); // 이렇게 따로 변수로 합쳐서 만들어도 되는지? 클라이언트에서만 사용되는 값들이고, 사용자가 화면에서 동적으로 변경했을 때 그 변경되는 값을 바로바로 적용해줘야 합니다.
+  const { contentOptions, setContentOptions } = useUserOptions(); // 유저들 옵션 처리
+  console.log(contentOptions, '22');
+  const { isPost, data } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
 
-  const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>(mixedData);
+  const [isRead, setIsRead] = useState(data.length === 0); // 읽기 모드냐 아니냐의 차이?
+
   const todayTodoState = useRecoilValue(todayTodo);
   const questionAnswerState = useRecoilValue(questionAnswer);
   const emotionState = useRecoilValue(emotionAtom);
@@ -111,9 +90,27 @@ function Diary() {
     });
   }, [contentOptions, everyUnChecked, isRead]);
 
-  const submitHandler = () => {
-    console.log(todayTodoState, questionAnswerState, emotionState, todayDiaryState, accountTableAtomState);
+  const submitHandler = async () => {
+    const body = {
+      selectedDate: id,
+      emotion: emotionState.emotion,
+      diary: {
+        title: todayDiaryState.title,
+        diaryContent: todayDiaryState.content,
+      },
+      answer: {
+        question: '',
+        tag: '',
+        answer: questionAnswerState.answer,
+      },
+      todo: todayTodoState,
+      account: accountTableAtomState,
+    };
+    const sendRequest = baseAxios.post(`/api/contents`, body);
+    console.log(body);
+    mutate('/api/contents', sendRequest).then((res) => console.log(res?.data));
   };
+
   const cancelHandler = () => {
     // eslint-disable-next-line no-restricted-globals
     if (confirm('정말 취소하시겠습니까?\n작성하신 내용은 저장되지 않습니다.')) {
