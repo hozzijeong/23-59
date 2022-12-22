@@ -16,16 +16,23 @@ class ContentService {
   async addContent(contentData: any) {
     const newContent = await this.contentModel.createContent(contentData);
 
-    let isChecked = false;
-    if (newContent.map((obj: any) => obj.todo) === undefined) {
-      isChecked = false;
-    } else if (newContent.map((obj: any) => obj.diary) === undefined) {
-      isChecked = false;
-    } else if (newContent.map((obj: any) => obj.qna) === undefined) {
-      isChecked = false;
-    } else {
-      isChecked = true;
-    }
+    const isEmpty = (val: any) => {
+      if (
+        val === '' ||
+        val === null ||
+        val === undefined ||
+        (val !== null && typeof val === 'object' && !Object.keys(val).length)
+      ) {
+        return true;
+      }
+    };
+
+    newContent.checkOption.TODO_LIST = !isEmpty(newContent.todo);
+    newContent.checkOption.TODAY_QUESTION = !isEmpty(newContent.qna);
+    newContent.checkOption.DIARY = !isEmpty(newContent.diary);
+    newContent.checkOption.EMOTION = !isEmpty(newContent.emotion);
+    newContent.checkOption.ACCOUNT_BOOK = !isEmpty(newContent.account);
+    console.log('checkoption ', newContent.checkOption);
 
     return newContent;
   }
@@ -51,6 +58,24 @@ class ContentService {
     if (!content) {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
+
+    const isEmpty = (val: any) => {
+      if (
+        val === '' ||
+        val === null ||
+        val === undefined ||
+        (val !== null && typeof val === 'object' && !Object.keys(val).length)
+      ) {
+        return true;
+      }
+    };
+
+    content.checkOption.TODO_LIST = !isEmpty(content.todo);
+    content.checkOption.TODAY_QUESTION = !isEmpty(content.qna);
+    content.checkOption.DIARY = !isEmpty(content.diary);
+    content.checkOption.EMOTION = !isEmpty(content.emotion);
+    content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
+
     return content;
   }
 
@@ -60,6 +85,24 @@ class ContentService {
       contentId,
       update: toUpdate,
     });
+
+    const isEmpty = (val: any) => {
+      if (
+        val === '' ||
+        val === null ||
+        val === undefined ||
+        (val !== null && typeof val === 'object' && !Object.keys(val).length)
+      ) {
+        return true;
+      }
+    };
+
+    updatedContent.checkOption.TODO_LIST = !isEmpty(updatedContent.todo);
+    updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna);
+    updatedContent.checkOption.DIARY = !isEmpty(updatedContent.diary);
+    updatedContent.checkOption.EMOTION = !isEmpty(updatedContent.emotion);
+    updatedContent.checkOption.ACCOUNT_BOOK = !isEmpty(updatedContent.account);
+    //console.log('checkoption ', updatedContent.checkOption);
 
     return updatedContent;
   }
@@ -142,10 +185,11 @@ class ContentService {
     //const result = this.getCalendar(dateArr[1]);
     const result = [];
     for (let i = 0; i < dateArr.length; i++) {
-      result.push(await this.getCalendar(dateArr[i]));
+      result.push(this.getCalendar(dateArr[i]));
     }
-    console.log('result2 ', result);
-    return result;
+    //result.push(await this.getCalendar(dateArr[i]));
+    console.log('result2 ', Promise.all(result));
+    return Promise.all(result);
   }
 
   // 감정 통계
