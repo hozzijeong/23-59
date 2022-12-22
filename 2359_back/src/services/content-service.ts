@@ -129,10 +129,20 @@ class ContentService {
     //   }
     //   emotionsArr.push(filtered[i].emotion);
     // }
+    const emotionArr = ['very sad', 'sad', 'soso', 'happy', 'very happy'];
+    const diff = emotionArr.filter((x: string) => !filtered.includes(x));
+    console.log('diff  ', diff);
+    // function checkAvailability(arr: any, val: any) {
+    //   return arr.some((arrVal: any) => val === arrVal);
+    // }
+    //const arr: any = [];
     const filteredEmotions = filtered.reduce((a: any, i: number) => {
+      console.log(`a`, a);
       return (a[i] = (a[i] || 0) + 1), a;
     }, {});
-    //console.log('emotionsArr: ', emotionsArr);
+    for (let x = 0; x < diff.length; x++) {
+      filteredEmotions[diff[x]] = 0;
+    }
     console.log('filteredEmotions: ', filteredEmotions);
     return filteredEmotions;
   }
