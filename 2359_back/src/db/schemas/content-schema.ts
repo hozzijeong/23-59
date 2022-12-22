@@ -11,6 +11,7 @@ interface IContent {
   todo: object;
   account: object;
   qna: object;
+  checkOption: object;
 }
 
 interface IDiary {
@@ -37,6 +38,14 @@ interface IQnA {
   tag: string;
 }
 
+interface ICheckOption {
+  TODO_LIST: boolean;
+  TODAY_QUESTION: boolean;
+  DIARY: boolean;
+  EMOTION: boolean;
+  ACCOUNT_BOOK: boolean;
+}
+
 const diarySchema = new Schema<IDiary>(
   {
     title: String,
@@ -61,7 +70,7 @@ const todoSchema = new Schema<ITodo>(
 const accountSchema = new Schema<IAccount>({
   cls: {
     type: String,
-    enum: ['수입', '지출'],
+    enum: ['EXPENSE', 'INCOME'],
   },
   category: {
     type: String,
@@ -122,6 +131,27 @@ const ContentSchema = new Schema<IContent>(
     },
     qna: {
       type: qnaSchema,
+    },
+    checkOption: {
+      type: new Schema(
+        {
+          TODO_LIST: Boolean,
+          TODAY_QUESTION: Boolean,
+          DIARY: Boolean,
+          EMOTION: Boolean,
+          ACCOUNT_BOOK: Boolean,
+        },
+        {
+          _id: false,
+        }
+      ),
+      default: {
+        TODO_LIST: false,
+        TODAY_QUESTION: false,
+        DIARY: false,
+        EMOTION: false,
+        ACCOUNT_BOOK: false,
+      },
     },
   },
   {
