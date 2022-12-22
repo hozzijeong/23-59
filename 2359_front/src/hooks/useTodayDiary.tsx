@@ -11,7 +11,7 @@ interface TodayDiaryProps {
 const END_POINT = 'api/contents/date';
 const initialDiary = {
   diaryInfo: null,
-  diaryMode: DiaryMode.CREATE,
+  diaryMode: DiaryMode.READ,
 };
 function useTodayDiary(date: string) {
   const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);
@@ -21,7 +21,8 @@ function useTodayDiary(date: string) {
     () => baseAxios.get(`${END_POINT}/${date}`).then((res) => res.data),
     {
       onSuccess: (data) => {
-        setTodayDiary((prev) => ({ ...prev, diaryInfo: data[0] }));
+        const diaryInfo = data[0];
+        setTodayDiary((prev) => ({ ...prev, diaryInfo }));
       },
     }
   );

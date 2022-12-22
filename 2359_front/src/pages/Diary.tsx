@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useMemo, useState, ReactNode, useEffect } from 'react';
 import { AccountBook } from 'components/diary/AccountBook';
 import { DiaryComponentsLayout } from 'components/diary/Layout/DiaryComponentsLayout';
@@ -66,8 +67,12 @@ function Diary() {
         </EmptyContainer>
       );
 
-    if (everyUnChecked) {
+    if (diaryMode === DiaryMode.UPDATE && everyUnChecked) {
       return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
+    }
+
+    if (diaryMode === DiaryMode.READ && everyUnChecked) {
+      return <EmptyContainer>작성된 내용이 없습니다.</EmptyContainer>;
     }
 
     // 기본적으로 값
@@ -107,15 +112,40 @@ function Diary() {
       todo: todayTodoState,
       account: accountTableAtomState,
     };
-    const sendRequest = baseAxios.post(`/api/contents`, body);
-    console.log(body);
-    mutate('/api/contents', sendRequest).then((res) => console.log(res?.data));
+
+    if (diaryInfo?._id === undefined) {
+      const sendRequest = baseAxios.post(`/api/contents`, body);
+      mutate('/api/contents', sendRequest).then((res) => console.log(res?.data));
+      return;
+    }
+
+    if (diaryInfo?._id) {
+      const sendRequest = baseAxios.patch(`/api/contents/${diaryInfo?._id}`, { ...body, contentId: diaryInfo?._id });
+      mutate(`/api/contents/${diaryInfo?._id}`, sendRequest).then((res) => console.log(res?.data));
+    }
   };
 
   const cancelHandler = () => {
     // eslint-disable-next-line no-restricted-globals
     if (confirm('정말 취소하시겠습니까?\n작성하신 내용은 저장되지 않습니다.')) {
       navigation('/');
+    }
+  };
+
+  const deleteHandler = () => {
+    // eslint-disable-next-line no-restricted-globals
+    if (confirm('정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.')) {
+      const ENDPOINT = `/api/contents/${diaryInfo?._id}`;
+      const body = {
+        contentId: diaryInfo?._id ?? '',
+      };
+
+      mutate(
+        ENDPOINT,
+        baseAxios.delete(ENDPOINT, {
+          data: body,
+        })
+      );
     }
   };
 
@@ -137,7 +167,11 @@ function Diary() {
               수정하기
             </UpdateButton>
           )}
-          {diaryMode !== DiaryMode.CREATE && <UpdateButton type="button">삭제하기</UpdateButton>}
+          {diaryMode !== DiaryMode.CREATE && diaryInfo?._id && (
+            <UpdateButton onClick={deleteHandler} type="button">
+              삭제하기
+            </UpdateButton>
+          )}
         </UpdateDiv>
         <ContentOptions state={contentOptions} setState={setContentOptions} diaryMode={diaryMode} />
       </HeadContent>
