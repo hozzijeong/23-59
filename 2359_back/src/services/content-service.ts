@@ -17,10 +17,29 @@ class ContentService {
   // 컨텐츠 생성
   async addContent(contentData: any, answerData: any) {
     const { selectedDate, emotion, diary, todo, account } = contentData;
+    // let questionOid = '';
+    // let answer = '';
+    // let questionData = '';
+    const isEmpty = (val: any) => {
+      if (
+        val === '' ||
+        val === null ||
+        val === undefined ||
+        (val !== null && typeof val === 'object' && !Object.keys(val).length)
+      ) {
+        return true;
+      }
+    };
+    if (isEmpty(answerData)) {
+      answerData = '';
+    }
     const questionOid = answerData.questionId;
     const answer = answerData.answer;
     const questionData = await questionService.getQuestionById(questionOid);
-    console.log('serviceFindQESTION ', questionData[0].item);
+    //console.log('serviceFindQESTION ', questionData[0].item);
+    if (isEmpty(questionData)) {
+      questionData[0] = '';
+    }
     const { item, tag } = questionData[0];
     const question = item;
     const qna = { question, tag, answer };
@@ -36,19 +55,8 @@ class ContentService {
     console.log('result ', result);
     const newContent = await this.contentModel.createContent(result);
 
-    const isEmpty = (val: any) => {
-      if (
-        val === '' ||
-        val === null ||
-        val === undefined ||
-        (val !== null && typeof val === 'object' && !Object.keys(val).length)
-      ) {
-        return true;
-      }
-    };
-
     newContent.checkOption.TODO_LIST = !isEmpty(newContent.todo);
-    newContent.checkOption.TODAY_QUESTION = !isEmpty(newContent.qna);
+    newContent.checkOption.TODAY_QUESTION = !isEmpty(newContent.qna.answer);
     newContent.checkOption.DIARY = !isEmpty(newContent.diary);
     newContent.checkOption.EMOTION = !isEmpty(newContent.emotion);
     newContent.checkOption.ACCOUNT_BOOK = !isEmpty(newContent.account);
@@ -91,7 +99,7 @@ class ContentService {
     };
 
     content.checkOption.TODO_LIST = !isEmpty(content.todo);
-    content.checkOption.TODAY_QUESTION = !isEmpty(content.qna);
+    content.checkOption.TODAY_QUESTION = !isEmpty(content.qna.answer);
     content.checkOption.DIARY = !isEmpty(content.diary);
     content.checkOption.EMOTION = !isEmpty(content.emotion);
     content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
@@ -118,7 +126,7 @@ class ContentService {
     };
 
     updatedContent.checkOption.TODO_LIST = !isEmpty(updatedContent.todo);
-    updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna);
+    updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna.answer);
     updatedContent.checkOption.DIARY = !isEmpty(updatedContent.diary);
     updatedContent.checkOption.EMOTION = !isEmpty(updatedContent.emotion);
     updatedContent.checkOption.ACCOUNT_BOOK = !isEmpty(updatedContent.account);
@@ -294,52 +302,42 @@ class ContentService {
 
     return result;
   }
+
+  // 작성된 질문 모아보기
+  async filterQna() {
+    const qnas = await this.contentModel.findAllQna();
+    const filteredQna = qnas.map((obj: any) => obj.qna);
+    const filteredDate = qnas.map((obj: any) => obj.selectedDate);
+    console.log('filteredQna ', filteredQna);
+    console.log('filteredDate ', filteredDate);
+    // 두 배열 키값 객체로 변환
+    const obj: any = {};
+    for (let i = 0; i < filteredDate.length; i++) {
+      obj[filteredDate[i]] = filteredQna[i];
+    }
+    console.log('obj ', obj);
+    return obj;
+  }
+
+  // 태그별 질문 모아보기
+  async filterTag() {
+    const tags = await this.contentModel.filterByTag();
+    const filtered = tags.map((obj: any) => obj.qna);
+    // const tagArr = [];
+    // for (let i = 0; i < filtered.length; i++) {
+    //   if (filtered[i] === undefined) {
+    //     continue;
+    //   }
+    //   tagArr.push(filtered.map((obj: any) => obj.tag));
+    // }
+    const filteredTag = filtered.map((obj: any) => obj.tag);
+    //console.log('length ', filtered.length);
+    console.log('filtered ', filtered);
+    console.log('filteredTag ', filteredTag);
+    return filtered;
+  }
 }
 
 const contentService = new ContentService(contentModel);
 
 export { contentService };
-
-// // 컨텐츠 생성
-// const addContent = async (contentData: any) => {
-//   const newContent = await contentModel.createContent(contentData);
-//   return newContent;
-// };
-
-// // 전체 컨텐츠 조회
-// const getContents = async () => {
-//   const contents = await contentModel.findAll();
-//   return contents;
-// };
-
-// // 날짜 클릭으로 컨텐츠 조회
-// const getContent = async (selectedDate: string) => {
-//   const content = await contentModel.findBySelectedDate(selectedDate);
-//   if (!content) {
-//     console.log('해당 날짜의 컨텐츠가 없습니다.');
-//   }
-//   return content;
-// };
-
-// // 컨텐츠 변경
-// const setContent = async (contentId: string, toUpdate: any) => {
-//   const updatedContent = await contentModel.updateContent({
-//     contentId,
-//     update: toUpdate,
-//   });
-
-//   return updatedContent;
-// };
-
-// // 컨텐츠 삭제
-// const deleteContent = async (contentId: string) => {
-//   const { deletedContent }: any | null = await contentModel.deleteById(contentId);
-
-//   if (deletedContent === 0) {
-//     throw new Error(`${contentId} 컨텐츠 삭제에 실패했습니다.`);
-//   }
-
-//   return { result: 'success' };
-// };
-
-// export default { addContent, getContents, getContent, setContent, deleteContent };

@@ -129,9 +129,17 @@ const filterByCategory = async (prevDate: string, nextDate: string) => {
   return cateogries;
 };
 // 모든 질문 전체보기
-const findAllQuestions = async () => {};
+const findAllQna = async () => {
+  const qnas = await Content.find({ 'qna.answer': { $exists: true } });
+  //console.log('qnas ', qnas);
+  return qnas;
+};
 // 질문 태그별 통계
-const filterByTag = async () => {};
+const filterByTag = async () => {
+  const tags = await Content.find({ 'qna.tag': { $exists: true } });
+  console.log('tags ', tags);
+  return tags;
+};
 // 질문 날짜별 통계
 //const filterByDate = async () => {};
 
@@ -147,4 +155,6 @@ export default {
   filterByEmotion,
   filterByCls,
   filterByCategory,
+  findAllQna,
+  filterByTag,
 };

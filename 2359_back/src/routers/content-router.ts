@@ -176,7 +176,7 @@ contentRouter.get('/filterCls/:date', async (req, res, next) => {
   }
 });
 
-// api/filterCategory/20221201-20221231
+// api/contents/filterCategory/20221201-20221231
 contentRouter.get('/filterCategory/:date', async (req, res, next) => {
   try {
     const { date } = req.params;
@@ -186,6 +186,25 @@ contentRouter.get('/filterCategory/:date', async (req, res, next) => {
     console.log('router-content: ', content);
     //console.log('json-content: ', res.json(content));
     res.status(200).json(content);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// api/contents/qna
+contentRouter.get('/filter/qna', async (req, res, next) => {
+  try {
+    const qnas = await contentService.filterQna();
+    res.status(200).json(qnas);
+  } catch (error) {
+    next(error);
+  }
+});
+
+contentRouter.get('/filter/tag', async (req, res, next) => {
+  try {
+    const tags = await contentService.filterTag();
+    res.status(200).json(tags);
   } catch (error) {
     next(error);
   }

@@ -87,15 +87,12 @@ const accountSchema = new Schema<IAccount>({
 const qnaSchema = new Schema<IQnA>({
   question: {
     type: String,
-    required: true,
   },
   answer: {
     type: String,
-    required: true,
   },
   tag: {
     type: String,
-    required: true,
   },
 });
 
