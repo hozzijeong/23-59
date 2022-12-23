@@ -29,6 +29,7 @@ function Calendar() {
   const MonthDate = getMonthDate(currentDate);
 
   const userToken = localStorage.getItem('token');
+
   const fetcher = async (url: string) => {
     const res = await baseAxios.get(url, {
       headers: {
@@ -37,8 +38,8 @@ function Calendar() {
     });
     return res.data;
   };
+  const { data } = useSWR(userToken ? `/api/contents/monthCalendar/${MonthDate}` : null, fetcher);
 
-  const { data } = useSWR(`/api/contents/monthCalendar/${MonthDate}`, fetcher, { revalidateOnFocus: false });
   useEffect(() => {
     setDiaryData(data);
   });
