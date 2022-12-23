@@ -308,15 +308,26 @@ class ContentService {
     const qnas = await this.contentModel.findAllQna();
     const filteredQna = qnas.map((obj: any) => obj.qna);
     const filteredDate = qnas.map((obj: any) => obj.selectedDate);
-    console.log('filteredQna ', filteredQna);
+    console.log('filteredQna ', filteredQna[4]);
     console.log('filteredDate ', filteredDate);
-    // 두 배열 키값 객체로 변환
-    const obj: any = {};
+
+    let result: any = [];
     for (let i = 0; i < filteredDate.length; i++) {
-      obj[filteredDate[i]] = filteredQna[i];
+      //filteredQna[i].selectedDate = filteredDate[i];
+      //console.log('s ', filteredQna[i].selectedDate);
+      result.push({
+        selectedDate: filteredDate[i],
+        qna: {
+          question: filteredQna[i].question,
+          answer: filteredQna[i].answer,
+          tag: filteredQna[i].tag,
+          _id: filteredQna[i]._id,
+        },
+      });
     }
-    console.log('obj ', obj);
-    return obj;
+    //console.log('q ', filteredQna[4].question);
+    console.log('result ', result);
+    return result;
   }
 
   // 태그별 질문 모아보기
