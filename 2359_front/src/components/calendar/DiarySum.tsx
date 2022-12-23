@@ -3,6 +3,7 @@ import tw from 'tailwind-styled-components';
 import useSWR from 'swr';
 import axios from 'axios';
 import uuid from 'react-uuid';
+import { baseAxios } from 'api';
 
 interface DiarySumProps {
   date: string;
@@ -20,45 +21,44 @@ interface SumObject {
   account: AccountObject;
 }
 
-// const fetcher = async (url: string) => {
-//   const res = await axios.get(url);
-//   return res.data;
-// };
-
 function DiarySum({ date, day }: DiarySumProps) {
-  //   const { data } = useSWR(`/api/contents/calendar/${day}`, fetcher);
-  //   console.log(data);
-  const data = [
-    {
-      selectedDate: '20221225',
-      emotion: 'sad',
-      etc: true,
-      account: {
-        지출: 20000,
-        수입: 2000000,
-      },
-    },
-    {
-      selectedDate: '20221231',
-      emotion: 'good',
-      etc: true,
-      account: {
-        지출: 30000,
-      },
-    },
-    {
-      selectedDate: '20221205',
-      emotion: 'bad',
-      etc: false,
-      account: {
-        지출: 65000,
-      },
-    },
-  ];
+  const fetcher = async (url: string) => {
+    const res = await baseAxios.get(url);
+    return res.data;
+  };
+  const { data } = useSWR(`/api/contents/monthCalendar/${date}`, fetcher);
+  console.log(data);
+  // const data = [
+  //   {
+  //     selectedDate: '20221225',
+  //     emotion: 'sad',
+  //     etc: true,
+  //     account: {
+  //       지출: 20000,
+  //       수입: 2000000,
+  //     },
+  //   },
+  //   {
+  //     selectedDate: '20221231',
+  //     emotion: 'good',
+  //     etc: true,
+  //     account: {
+  //       지출: 30000,
+  //     },
+  //   },
+  //   {
+  //     selectedDate: '20221205',
+  //     emotion: 'bad',
+  //     etc: false,
+  //     account: {
+  //       지출: 65000,
+  //     },
+  //   },
+  // ];
 
   return (
     <SummaryBox>
-      {data.map((item) =>
+      {/* {data.map((item) =>
         item.selectedDate === day ? (
           <div>
             <span className="text-xs absolute -top-7 right-0">{item.etc ? '🟢' : null}</span>
@@ -73,7 +73,7 @@ function DiarySum({ date, day }: DiarySumProps) {
             </div>
           </div>
         ) : null
-      )}
+      )} */}
     </SummaryBox>
   );
 }
