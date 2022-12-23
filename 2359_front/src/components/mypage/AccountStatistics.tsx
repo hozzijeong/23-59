@@ -10,6 +10,12 @@ const currentYear = date.getFullYear();
 const currentMonth = date.getMonth() + 1;
 const monthLastDate = lastDay.getDate();
 
+interface Idata {
+  id: string;
+  label: string;
+  value: number;
+}
+
 function AccountStatistics() {
   const initialData: Record<string, string | number>[] = [];
   const [data, setData] = useState(initialData);
@@ -33,10 +39,14 @@ function AccountStatistics() {
       const payResponse = await axios.get(
         `/api/contents/filterCategory/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`
       );
-      const tmpPayResult = await payResponse.data;
+
+      const tmpPayResult = payResponse.data;
+      console.log(tmpPayResult);
+
       const categories = Object.keys(tmpPayResult); // Object 형태
       const price = Object.values(tmpPayResult);
-
+      console.log('tmp', tmpPayResult);
+      console.log('cate', categories, '가격', price);
       // Record<string, string | number>[]
       const tmpData: any = [];
       for (let i = 0; i < categories.length; i += 1) {
