@@ -17,11 +17,11 @@ import { DiaryMode, OptionEnums as OPTION } from 'types/enums';
 import { useUserOptions } from 'hooks/useUserOptions';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
-import useSWRMutation from 'swr/mutation';
-import { baseAxios, createDiary, deleteDiary, updateDiary } from 'api';
+import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
 import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
+import { checkArrayAllFalse } from 'utilities/utils';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -55,10 +55,13 @@ function Diary() {
   const todayDiaryState = useRecoilValue(todayDiaryAtom);
   const accountTableAtomState = useRecoilValue(accountTableAtom);
 
-  const everyUnChecked = useMemo(
-    () => contentOptions.every((options) => options.isChecked === false),
-    [contentOptions]
-  );
+  const everyUnChecked = useMemo(() => {
+    if (diaryMode === DiaryMode.CREATE) {
+      return contentOptions.every((options) => options.isChecked === false);
+    }
+
+    return checkArrayAllFalse(Object.values(diaryInfo.contentOptions));
+  }, [contentOptions, diaryInfo.contentOptions, diaryMode]);
 
   const diaryContents = useMemo(() => {
     // 처음 페이지 & isRead 라면 작성하기 보여줄 것.
@@ -107,7 +110,7 @@ function Diary() {
     );
     const { _id, qna, diary, emotion, todo, account, selectedDate } = diaryInfo;
     const body = {
-      selectedDate,
+      selectedDate: selectedDate === '' ? id ?? '' : selectedDate,
       emotion,
       diary,
       qna,
@@ -118,6 +121,7 @@ function Diary() {
 
     if (_id === '') {
       // create 일 때
+      console.log(body, '@@@');
       mutate('/api/contents', createDiary(body)).then((res) => {
         setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
       });
@@ -139,6 +143,7 @@ function Diary() {
     // eslint-disable-next-line no-restricted-globals
     if (confirm('정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.')) {
       mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id));
+      navigation('/');
     }
   };
 
@@ -156,7 +161,7 @@ function Diary() {
               수정하기
             </UpdateButton>
           )}
-          {diaryMode !== DiaryMode.CREATE && diaryInfo?._id && (
+          {diaryMode === DiaryMode.READ && (
             <UpdateButton onClick={deleteHandler} type="button">
               삭제하기
             </UpdateButton>
