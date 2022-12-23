@@ -33,7 +33,6 @@ function Userform() {
             required: '필수 응답 항목입니다.',
             pattern: { value: emailCheck, message: '이메일 형식이 아닙니다.' },
           })}
-          name="email"
           type="email"
           placeholder="이메일을 입력해주세요"
         />
@@ -42,7 +41,6 @@ function Userform() {
         <SC.FormLabel>닉네임</SC.FormLabel>
         <SC.FormInput
           {...register('nickname', { required: true, maxLength: 10 })}
-          name="nickname"
           type="text"
           placeholder="닉네임을 입력해주세요"
         />
@@ -55,8 +53,8 @@ function Userform() {
         )}
         <SC.FormLabel>비밀번호</SC.FormLabel>
         <SC.FormInput
+          autoComplete="new-password"
           {...register('password', { required: true, minLength: 6 })}
-          name="password"
           type="password"
           placeholder="비밀번호를 입력해주세요"
         />
@@ -68,11 +66,11 @@ function Userform() {
         )}
         <SC.FormLabel>비밀번호 확인</SC.FormLabel>
         <SC.FormInput
+          autoComplete="new-password"
           {...register('passwordConfirm', {
             required: true,
             validate: (value) => value === watch('password'),
           })}
-          name="passwordConfirm"
           type="password"
           placeholder="비밀번호를 다시 입력해주세요"
         />

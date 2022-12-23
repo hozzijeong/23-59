@@ -34,7 +34,6 @@ function Calendar() {
 
   const { data, error } = useSWR(`/api/contents/monthCalendar/${MonthDate}`, fetcher, { revalidateOnFocus: false });
   setDiaryData(data);
-  console.log(error);
   console.log('diaryData', diaryData);
 
   const Monthdate = takeMonth(currentDate)();

@@ -94,16 +94,13 @@ interface LoginFormValue {
 }
 
 interface DiaryBodyProps {
+  selectedDate: string;
   emotion: EMOTION;
   diary: DiaryProps;
   qna: QuestionAnswerProps;
   todo: TodoListProps[];
   account: AccountTableRow[];
   checkOption: OptionCheckedProps;
-}
-
-interface UpdateDiaryBodyProps extends DiaryBodyProps {
-  selectedDate: string;
 }
 
 export type {
@@ -123,5 +120,4 @@ export type {
   DiaryContentOptionsProps,
   DiaryComponentPrpos,
   DiaryBodyProps,
-  UpdateDiaryBodyProps,
 };
