@@ -32,6 +32,8 @@ border-none
 rounded-lg 
 hover:shadow-lg
 ease-linear 
+ml-1
+mr-1
 transition-all 
 duration-150
 ${(props) => props.btntype === 'basic' && `bg-primary`}

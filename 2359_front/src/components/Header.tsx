@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import tw from 'tailwind-styled-components';
 import { useNavigate, Link } from 'react-router-dom';
 
@@ -30,6 +30,11 @@ const HeaderRightContainer = tw.div`
 
 function Header() {
   const nav = useNavigate();
+  const [loginState, setLoginState] = useState<boolean>(false);
+  const handleLogout = () => {
+    localStorage.clear();
+    setLoginState(false);
+  };
 
   const logoClickHandler = () => {
     nav('/user/main');
@@ -41,6 +46,7 @@ function Header() {
         <Logo onClick={logoClickHandler}>Logo</Logo>
         <HeaderRightContainer>
           <Link to="/mypage/user">myPage</Link>
+          {/* {loginState ===true ?:} */}
           <button type="button">logout</button>
         </HeaderRightContainer>
       </HeaderContent>

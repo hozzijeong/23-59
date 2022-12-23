@@ -23,7 +23,7 @@ export { DiaryCheckOptionLayout };
 
 const AbsoluteDiv = tw.div<AbsoluteDivProps>`
   absolute
-  ${(props) => (props.left ? 'left-[-7.5rem]' : 'right-0')}
+  ${(props) => (props.left ? 'left-[-7.5rem]' : 'right-[-1rem]')}
   mt-12
 
 `;

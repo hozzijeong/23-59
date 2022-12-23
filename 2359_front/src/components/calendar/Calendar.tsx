@@ -1,43 +1,66 @@
 import React, { useState } from 'react';
-import { format, subMonths, addMonths } from 'date-fns';
+import { format, subMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
 import Button from 'components/Button';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import calendarPage from 'recoil/calendarAtom';
 import { CalendarWeeks, dayColor, takeMonth, todayColor } from './Utils';
+import DiarySum from './DiarySum';
 
 function Calendar() {
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  console.log(selectedDate);
+  const [currentDate, setCurrentDate] = useRecoilState(calendarPage);
+  const navigate = useNavigate();
+  console.log('currentDate', currentDate);
+  const MonthStart = format(startOfMonth(currentDate), 'yyyyMMdd');
+  const MonthEnd = format(endOfMonth(currentDate), 'yyyyMMdd');
+  const MonthDate = `${MonthStart}-${MonthEnd}`;
+  console.log(MonthDate);
 
   const data = takeMonth(currentDate)();
+  const curMonth = () => {
+    setCurrentDate(new Date());
+  };
   const prevMonth = () => {
     setCurrentDate(subMonths(currentDate, 1));
   };
   const nextMonth = () => {
     setCurrentDate(addMonths(currentDate, 1));
   };
+  const onDateClick = (day: Date) => {
+    const diaryId = format(day, 'yyyyMMdd');
+
+    setCurrentDate(day);
+    navigate(`/diary/${diaryId}`);
+  };
 
   return (
     <CalendarContainer>
       <HeaderContainer>
-        <Button btntype="basic" onClick={prevMonth}>
-          이전
-        </Button>
         <div>
           <CalendarYear>{format(currentDate, 'yyyy')}년</CalendarYear>
           <CalendarMonth>{format(currentDate, 'M')}월</CalendarMonth>
         </div>
-        <Button btntype="basic" onClick={nextMonth}>
-          다음
-        </Button>
+        <div className="flex">
+          <Button btntype="basic" onClick={curMonth}>
+            오늘
+          </Button>
+          <Button btntype="save" onClick={prevMonth}>
+            이전
+          </Button>
+          <Button btntype="save" onClick={nextMonth}>
+            다음
+          </Button>
+        </div>
       </HeaderContainer>
       <CalendarWeeks />
-      {data.map((week) => (
+      {data.map((week: Date[]) => (
         <DaysContainer key={uuid()}>
-          {week.map((day) => (
-            <CalendarDays key={day.toString()} className={`${todayColor(day)}`} onClick={() => setSelectedDate(day)}>
+          {week.map((day: Date) => (
+            <CalendarDays key={day.toString()} className={`${todayColor(day)}`} onClick={() => onDateClick(day)}>
               <CalendarDay className={`${dayColor(day, currentDate)}`}>{format(day, 'dd')}</CalendarDay>
+              <DiarySum date={MonthDate} day={format(day, 'yyyyMMdd')} />
             </CalendarDays>
           ))}
         </DaysContainer>
@@ -82,17 +105,19 @@ border-b
 border-r 
 px-2 
 pt-2
+relative
 
 hover:bg-primaryDark
 active:bg-primary
 transition-colors ease-in-out duration-300
 `;
+
 const CalendarDay = tw.div`
 flex 
 font-bold 
 inline-flex 
-w-6 
-h-6 
+w-5
+h-5
 items-center 
 justify-center
 text-center

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import tw from 'tailwind-styled-components';
-import Button from './Button';
-import Tooltip from './Tooltip';
+import Button from '../Button';
+import useUserDelete from '../../hooks/useUserDelete';
 
 interface ModalProps<T> {
   title?: string;
@@ -11,8 +11,9 @@ interface ModalProps<T> {
   state?: T;
 }
 
-function Modal<T>({ title, children, btnclose, btnsave, state }: ModalProps<T>) {
+function FormModal<T>({ title, children, btnclose, btnsave, state }: ModalProps<T>) {
   const [showModal, setShowModal] = useState(true);
+  const { userDelete } = useUserDelete();
 
   const saveHandler = () => {
     setShowModal(false);
@@ -28,14 +29,13 @@ function Modal<T>({ title, children, btnclose, btnsave, state }: ModalProps<T>) 
               <ModalBox>
                 <ModalHeader>
                   <ModalTitle>{title}</ModalTitle>
-                  <Tooltip text="매일 작성하는 옵션을 설정하고,   마이페이지에서 수정할 수 있어요" />
                 </ModalHeader>
                 <ModalContent>{children}</ModalContent>
                 <ModalFooter>
                   <Button btntype="cancel" onClick={() => setShowModal(false)}>
                     {btnclose}
                   </Button>
-                  <Button btntype="save" onClick={saveHandler}>
+                  <Button btntype="save" onClick={() => userDelete()}>
                     {btnsave}
                   </Button>
                 </ModalFooter>
@@ -49,13 +49,13 @@ function Modal<T>({ title, children, btnclose, btnsave, state }: ModalProps<T>) 
   );
 }
 
-export default Modal;
+export default FormModal;
 
-Modal.defaultProps = {
-  title: '제목',
+FormModal.defaultProps = {
+  title: '회원 탈퇴',
   children: null,
   btnclose: '닫기',
-  btnsave: '저장',
+  btnsave: '탈퇴',
   state: null,
 };
 

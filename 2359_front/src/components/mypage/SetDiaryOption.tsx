@@ -1,5 +1,19 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
+// import axios from 'axios';
+import { baseAxios } from 'api';
+// import { OptionEnums } from 'types/enums';
+
+async function getOptionsData() {
+  const data = await baseAxios.get('/api/user/option', {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+  console.log(data);
+}
+
+getOptionsData();
 
 function SetDiaryOption() {
   return (
@@ -12,8 +26,8 @@ function SetDiaryOption() {
       <CheckboxArea>
         <div>
           <CheckLabel htmlFor="todoCheck">
-            <CheckInput type="checkbox" id="todoCheck" checked />
-            Todo 리스트 작성 <span style={{ fontSize: '15px' }}> (기본 설정)</span>
+            <CheckInput type="checkbox" id="todoCheck" />
+            Todo 리스트 작성
           </CheckLabel>
           <p>👉 TodoList를 쓰고 관리할 수 있어요!</p>
         </div>

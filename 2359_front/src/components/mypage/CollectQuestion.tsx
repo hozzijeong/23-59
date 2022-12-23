@@ -1,55 +1,106 @@
-import React, { useState } from 'react';
+import axios from 'axios';
+import e from 'express';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 
-const tagData: string[] = [
-  '#슬픔',
-  '#기쁨',
-  '#행복',
-  '#죽음',
-  '#공부',
-  '#연애',
-  '#사랑',
-  '#고민',
-  '#걱정',
-  '#배고파',
-  '#음식',
-  '#취업',
-  '#워라벨',
-];
+import data from './mock/questionData.json';
 
 interface IData {
   [key: string]: boolean;
 }
 
+// tagData에 태그만 넣어주는 함수
+let tagData: string[] = [];
+function pushTagData() {
+  const tmp = data.map((item) => item.question.tag);
+  tagData = tmp.filter((value, idx) => tmp.indexOf(value) === idx);
+}
+
+// 질문만 걸러내는 함수
+let result: string[] = [];
+function filterQuestionList() {
+  result = [];
+  for (let i = 0; i < data.length; i += 1) {
+    if (tagData.includes(data[i].question.tag)) {
+      result.push(data[i].question.item);
+    }
+  }
+}
+
+// 태그를 선택했을때 질문을 해당 태그만 보여주는 함수
+
+// 질문을 클릭했을 때 모달창으로 보여줄 answer item 필터링 함수
+// TODO: 배열안에 객체 interface 설정
+let filterdAnswerItem: any[] = [];
+function filterAnswerList(str: string) {
+  filterdAnswerItem = data.filter((ele) => ele.question.item === str);
+}
+
+// tagData를 Key: boolean 값으로 만들어주는 함수
 const newData: IData = {};
 const setData = (): void => {
   tagData.forEach((item) => {
     newData[item] = true;
   });
 };
-setData();
-// console.log('newData', newData);
 
+pushTagData();
+setData();
+filterQuestionList();
+
+// 컴포넌트
 function CollectQuestion() {
   const [isSelect, setIsSelect] = useState(newData);
   const [showModal, setShowModal] = React.useState(false);
+  const [currentList, setCurrentList] = useState({
+    selectedDate: '',
+    question: {
+      item: '',
+      tag: '',
+    },
+    answer: '',
+  });
 
-  const selectedTag = () => {
-    return Object.keys(isSelect).filter((key) => isSelect[key] === true);
-  };
+  useEffect(() => {
+    filterQuestionList();
+  }, [isSelect]);
 
-  const handleTagName = (item: string): void => {
-    const newSelect = { ...isSelect };
-    newSelect[item] = !newSelect[item];
-    setIsSelect(newSelect);
-    selectedTag();
-  };
-
+  // 해당 태그가 참 or 거짓에 따라 클래스이름 부여 하는 함수
   const tagBtnClassName = (ele: string): string => {
     if (isSelect[ele]) {
       return selectBtnClass;
     }
     return nonSelectBtnClass;
+  };
+
+  let tagSelectedAnswer: object[] = [];
+  const selectedTag = () => {
+    const trueKey = Object.keys(isSelect).filter((key) => isSelect[key] === true);
+
+    // TODO: 배열안에 배열안에 객체안에 객체... interface 설정 하...
+    /*
+    [
+      {
+        answer: "마라탕^^"
+        question: {item: '오늘 먹은 최고의 음식은?', tag: '#음식'}
+        selectedDate : "20221201"
+      }
+    ],
+    */
+    const tmpArr: any = [];
+    for (let i = 0; i < trueKey.length; i += 1) {
+      tmpArr.push(data.filter((ele) => trueKey[i] === ele.question.tag));
+    }
+    tagSelectedAnswer = tmpArr.reduce((acc: any, cur: any) => {
+      return [...acc, ...cur];
+    });
+  };
+  selectedTag();
+
+  const handleTag = (item: string): void => {
+    const newSelect = { ...isSelect };
+    newSelect[item] = !newSelect[item];
+    setIsSelect(newSelect);
   };
 
   return (
@@ -62,7 +113,7 @@ function CollectQuestion() {
               className={tagBtnClassName(tagItem)}
               key={tagItem}
               type="button"
-              onClick={() => handleTagName(tagItem)}
+              onClick={() => handleTag(tagItem)}
             >
               {tagItem}
             </TagButtons>
@@ -71,35 +122,40 @@ function CollectQuestion() {
       </ButtonContainer>
       <div>
         <AnswerUl>
-          <AnswerList onClick={() => setShowModal(true)}>
-            태그를 선택하면 해당하는 질문에 대한 질문 1이 보여질거에여
-          </AnswerList>
-          <AnswerList onClick={() => setShowModal(true)}>이건 질문 2임</AnswerList>
-          <AnswerList onClick={() => setShowModal(true)}>요거슨 3번째 알맞는 질문임</AnswerList>
+          {tagSelectedAnswer.map((ele: any) => (
+            // TODO: 배열안에 객체 interface 설정
+            <AnswerList
+              key={ele.selectedDate}
+              onClick={() => {
+                filterAnswerList(ele);
+                setCurrentList(ele);
+                setShowModal(true);
+              }}
+            >
+              {ele.question.item}
+            </AnswerList>
+          ))}
         </AnswerUl>
       </div>
       {showModal ? (
         <>
           <ModalLayout>
-            <div className="relative w-auto my-6 mx-auto max-w-3xl">
+            <div className="relative w-1/3 my-6 mx-auto max-w-3xl">
               <ModalContainer>
                 <ModalHeader>
-                  <ModalTitleH3>Modal Title</ModalTitleH3>
-                  <ModalCloseBtn type="button" onClick={() => setShowModal(false)}>
-                    <Close>×</Close>
-                  </ModalCloseBtn>
+                  <ModalTitleH3>{currentList.question.item}</ModalTitleH3>
                 </ModalHeader>
 
                 <ModalMain>
-                  <ModalScript>여기에 이제 질문 답변이 들어갈거임</ModalScript>
+                  <ModalScript>
+                    <div>답변: {currentList.answer}</div>
+                    <div>날짜: {currentList.selectedDate}</div>
+                  </ModalScript>
                 </ModalMain>
 
                 <ModalFooter>
-                  <ModalCancleBtn type="button" onClick={() => setShowModal(false)}>
-                    Close
-                  </ModalCancleBtn>
                   <ModalConfirmBtn type="button" onClick={() => setShowModal(false)}>
-                    Save Changes
+                    닫기
                   </ModalConfirmBtn>
                 </ModalFooter>
               </ModalContainer>
@@ -197,7 +253,7 @@ const ModalMain = tw.div`
   relative p-6 flex-auto
 `;
 
-const ModalScript = tw.p`
+const ModalScript = tw.div`
   my-4 text-slate-500 text-lg leading-relaxed
 `;
 // 모달 푸터
@@ -216,3 +272,22 @@ const ModalCancleBtn = tw.button`
 // BtnClass 참고 사항
 // focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg
 // active:bg-blue-800 active:shadow-lg
+
+// const getQuestion = async () => {
+//   const data = await fetch('./questionData.json', {
+//     headers: {
+//       // Accept: 'application / json',
+//     },
+//     method: 'GET',
+//   });
+//   const res = data.json();
+//   console.log(res);
+// };
+
+// const getQuestion = async () => {
+//   // const data = await axios.get('./questionData.json');
+//   console.log({ data });
+// };
+// useEffect(() => {
+//   getQuestion();
+// }, []);
