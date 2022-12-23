@@ -5,6 +5,7 @@ import {
   expenseEnums as EXPENSES,
   clsEnums as CLS,
 } from '../../../2359_front/src/types/enums';
+import { questionService } from './question-service';
 
 class ContentService {
   contentModel;
@@ -14,8 +15,26 @@ class ContentService {
   }
 
   // 컨텐츠 생성
-  async addContent(contentData: any) {
-    const newContent = await this.contentModel.createContent(contentData);
+  async addContent(contentData: any, answerData: any) {
+    const { selectedDate, emotion, diary, todo, account } = contentData;
+    const questionOid = answerData.questionId;
+    const answer = answerData.answer;
+    const questionData = await questionService.getQuestionById(questionOid);
+    console.log('serviceFindQESTION ', questionData[0].item);
+    const { item, tag } = questionData[0];
+    const question = item;
+    const qna = { question, tag, answer };
+
+    const result = {
+      selectedDate,
+      emotion,
+      diary,
+      todo,
+      account,
+      qna,
+    };
+    console.log('result ', result);
+    const newContent = await this.contentModel.createContent(result);
 
     const isEmpty = (val: any) => {
       if (

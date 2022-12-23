@@ -23,10 +23,13 @@ class QuestionService {
 
   // id로 질문 조회
   async getQuestionById(id: string) {
-    const question = await this.questionModel.findById(id);
+    const question = await this.questionModel.findQuestionById(id);
     if (!question) {
       console.log('해당 id의 질문이 없습니다.');
     }
+    //const filtered = question.map((obj: any) => obj.item);
+    //console.log('filtered ', filtered[0]);
+    //return question[0].item;
     return question;
   }
 
@@ -56,6 +59,17 @@ class QuestionService {
     const questions = await this.questionModel.findQuestions();
     //console.log('item ', questions);
     const questionArr = questions.map((obj: any) => obj.item);
+    console.log('questionArr: ', questionArr);
+    const random = questionArr[Math.floor(Math.random() * questionArr.length)];
+    console.log('random ', random);
+    return random;
+  }
+
+  // 랜덤 질문
+  async randomQuestionId() {
+    const questions = await this.questionModel.findQuestions();
+    //console.log('item ', questions);
+    const questionArr = questions.map((obj: any) => obj);
     console.log('questionArr: ', questionArr);
     const random = questionArr[Math.floor(Math.random() * questionArr.length)];
     console.log('random ', random);

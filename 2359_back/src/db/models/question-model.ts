@@ -13,6 +13,11 @@ const findQuestions = async () => {
   return questions;
 };
 
+const findQuestionById = async (id: string) => {
+  const questions = await Question.find({ _id: id });
+  return questions;
+};
+
 // update 타입 아직 모름
 const updateQuestion = async ({ questionId, update }: { questionId: string; update: any }) => {
   const filter = { _id: questionId };
@@ -32,4 +37,4 @@ const findById = async (id: string) => {
   return question;
 };
 
-export default { createQuestion, findQuestions, updateQuestion, deleteById, findById };
+export default { createQuestion, findQuestions, findQuestionById, updateQuestion, deleteById, findById };
