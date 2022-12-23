@@ -10,11 +10,11 @@ function TodayQuestion() {
     const { value } = event.target;
     setAnswer({ answer: value });
   };
-
+  const readMode = false;
   return (
     <div>
       <Question>오늘 하루 어떠셨나요?</Question>
-      <AnswerArea defaultValue={answer} onChange={answerChangeHandler} />
+      {readMode ? null : <AnswerArea defaultValue={answer} onChange={answerChangeHandler} />}
     </div>
   );
 }

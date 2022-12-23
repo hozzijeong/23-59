@@ -3,10 +3,11 @@ import React, { useMemo, useCallback } from 'react';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
 import { CONTENT_OPTION } from 'types/enumConverter';
-import { ContentOptionsProps } from 'types/interfaces';
+import { DiaryMode } from 'types/enums';
+import { DiaryContentOptionsProps } from 'types/interfaces';
 import { DiaryCheckOptionLayout } from './Layout/DiaryCheckOptionLayout';
 
-function ContentOptions({ state, setState }: ContentOptionsProps) {
+function ContentOptions({ state, setState, diaryMode }: DiaryContentOptionsProps) {
   // option Handler 추가로 구현하기.
   const optionHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +37,7 @@ function ContentOptions({ state, setState }: ContentOptionsProps) {
 
   return (
     <RelativeDiv>
-      <DiaryCheckOptionLayout isleft component={contentCheckBox} />
+      {diaryMode === DiaryMode.UPDATE && <DiaryCheckOptionLayout isleft component={contentCheckBox} />}
       <DiaryCheckOptionLayout isleft={false} component={tableContents} />
     </RelativeDiv>
   );

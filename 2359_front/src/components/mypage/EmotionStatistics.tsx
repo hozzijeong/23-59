@@ -3,23 +3,16 @@ import tw from 'tailwind-styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
 
-const data = [
-  {
-    name: '개수',
-    행복: 50,
-    기쁨: 60,
-    좌절: 12,
-    슬픔: 2,
-    분노: 20,
-  },
-];
-
+let data: object[] = [];
 function EmotionStatistics() {
   async function getFilterEmotion() {
     try {
       const result = await axios.get('/api/contents/filter/20221222-20221227');
       const res = await result.data;
-      console.log(res);
+      data = [res];
+      console.log('res', res);
+      console.log('data', data);
+      // data 값 가공해야됨
     } catch (e) {
       console.log('err는', e);
     }
@@ -35,13 +28,12 @@ function EmotionStatistics() {
   return (
     <Container>
       <div>여기도 차트를 보여줄거에여~</div>
-      <BarChartContainer>
+      {/* <BarChartContainer>
         <StatisticsScript>감정 통계 - 12월😘</StatisticsScript>
         <ResponsiveBar
           data={data}
-          keys={['행복', '기쁨', '좌절', '슬픔', '분노']}
+          keys={['very sad', 'sad', 'soso', 'happy', 'very happy']}
           margin={{ top: 30, right: 130, bottom: 60, left: 60 }}
-          indexBy="name"
           padding={0.1}
           groupMode="grouped"
           innerPadding={30}
@@ -104,7 +96,7 @@ function EmotionStatistics() {
           role="application"
           ariaLabel="Nivo bar chart demo"
         />
-      </BarChartContainer>
+      </BarChartContainer> */}
     </Container>
   );
 }

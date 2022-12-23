@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import tw from 'tailwind-styled-components';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { emailCheck } from '../../utilities/regex';
@@ -11,7 +10,7 @@ import { RegisterFormValue } from '../../types/interfaces';
 
 function Userform() {
   const { registerRequest } = useRegister();
-  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,

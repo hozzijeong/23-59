@@ -41,11 +41,12 @@ function Emotion() {
       }),
     [emotion, emotionChangeHandler]
   );
+  const readMode = false;
 
   return (
     <div>
       <Question>오늘 하루 어떠셨는지 감정으로 남겨주세요.</Question>
-      <EmotionUl>{emotionRadio}</EmotionUl>
+      {readMode ? null : <EmotionUl>{emotionRadio}</EmotionUl>}
     </div>
   );
 }
