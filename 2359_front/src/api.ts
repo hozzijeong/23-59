@@ -6,15 +6,6 @@ const baseAxios = axios.create({
   withCredentials: true,
 });
 
-// const headerAxios = axios.create({
-//   baseURL: 'http://localhost:8000',
-//   withCredentials: true,
-//   headers: {
-//     Authorization: `Bearer` + localStorage.getItem('user'),
-//   },
-// });
-// 헤더에 보내는게 왜 안되는지 모르겠음 .
-
 const updateDiary = ({ _id, body }: { _id: string; body: DiaryBodyProps }) =>
   baseAxios.patch(`/api/contents/${_id}`, { ...body, contentId: _id });
 

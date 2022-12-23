@@ -18,10 +18,10 @@ const useUserDelete = () => {
       .then((res) => {
         localStorage.removeItem('token');
         alert('이용해주셔서 감사합니다.');
-        navigate('/');
+        navigate('/login');
       })
       .catch((err) => {
-        console.log(err);
+        alert(err);
       });
   }, []);
   return { userDelete };
