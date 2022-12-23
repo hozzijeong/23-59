@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 import { OptionEnums } from 'types/enums';
 import { ContentOptionProps, OptionCheckedProps } from 'types/interfaces';
+import { converUserOptionToContent } from 'utilities/utils';
 
 interface UserOptionsProps {
   createOption: OptionCheckedProps;
@@ -30,9 +31,7 @@ function useUserOptions() {
     {
       onSuccess: (data) => {
         const { createOption } = data;
-        console.log(createOption, 'CreateOption');
-        const options = Object.keys(data.createOption).map((key) => ({ title: key as OptionEnums }));
-        const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
+        const mixedData = converUserOptionToContent(createOption);
         setContentOptions(mixedData);
       },
       errorRetryInterval: 1000,
