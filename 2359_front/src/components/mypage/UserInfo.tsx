@@ -1,6 +1,9 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import ModalBasic from 'components/ModalBasic';
+import { useRecoilState } from 'recoil';
+import { showModalPage } from 'recoil/modalAtom';
 import { useNavigate } from 'react-router-dom';
-import FormModal from 'components/signup/FormModal';
+import useUserDelete from 'hooks/useUserDelete';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { UpdateFormValue } from '../../types/interfaces';
 import * as SC from '../signup/FormStyled';
@@ -10,9 +13,11 @@ import { emailCheck } from '../../utilities/regex';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function UserInfo() {
+  const [showModal, setShowModal] = useRecoilState(showModalPage);
   const navigation = useNavigate();
   const { userUpdateRequest } = useUserUpdate();
-  const [isModal, setIsModal] = useState(false);
+  const { userDelete } = useUserDelete();
+
   const {
     register,
     handleSubmit,
@@ -49,12 +54,7 @@ function UserInfo() {
       nickname: data.nickname,
       password: data.password,
     };
-    if (!isModal) {
-      userUpdateRequest(formdata);
-      setIsModal(false);
-    } else {
-      setIsModal(true);
-    }
+    userUpdateRequest(formdata);
     setValue('password', '');
     setValue('currentPassword', '');
   };
@@ -110,7 +110,7 @@ function UserInfo() {
           placeholder="새로운 비밀번호를 입력해주세요"
         />
         {errors.password && errors.password.type === 'validate' && (
-          <SC.ErrorMesg>현재 비밀번호와 같습니다.</SC.ErrorMesg>
+          <SC.ErrorMesg>다른 비밀번호를 입력해주세요.</SC.ErrorMesg>
         )}
         {errors.password && errors.password.type === 'minLength' && (
           <SC.ErrorMesg>6자 이상으로 설정해주세요.</SC.ErrorMesg>
@@ -121,13 +121,17 @@ function UserInfo() {
         <SC.SubmitButton type="submit">회원수정</SC.SubmitButton>
         <SC.DeleteTag
           onClick={() => {
-            setIsModal(true);
+            setShowModal(true);
           }}
         >
           회원탈퇴
         </SC.DeleteTag>
       </SC.Form>
-      {isModal && <FormModal>정말 탈퇴 하시겠습니까..?</FormModal>}
+      {showModal && (
+        <ModalBasic title="회원 탈퇴" btnclose="취소" btnsave="탈퇴" saveHandler={userDelete}>
+          정말 탈퇴 하시겠습니까..?
+        </ModalBasic>
+      )}
     </SC.Container>
   );
 }
