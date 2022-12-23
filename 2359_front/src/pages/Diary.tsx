@@ -20,6 +20,7 @@ import { useSWRConfig } from 'swr';
 import { baseAxios } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
+import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -45,6 +46,7 @@ function Diary() {
   const { todayDiary, setTodayDiary } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
   const { diaryInfo, diaryMode } = todayDiary;
+  console.log(diaryInfo, diaryMode, contentOptions, 'options');
 
   const todayTodoState = useRecoilValue(todayTodo);
   const questionAnswerState = useRecoilValue(questionAnswer);
@@ -82,11 +84,11 @@ function Diary() {
       if (!isChecked) return null;
 
       const diaryContentMap: DiaryContentsPrpos = {
-        [OPTION.TODO_LIST]: <TodoList />,
-        [OPTION.TODAY_QUESTION]: <TodayQuestion />,
-        [OPTION.EMOTION]: <Emotion />,
-        [OPTION.DIARY]: <TodayDiary />,
-        [OPTION.ACCOUNT_BOOK]: <AccountBook />,
+        [OPTION.TODO_LIST]: <TodoList todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.TODAY_QUESTION]: <TodayQuestion todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.EMOTION]: <Emotion todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.DIARY]: <TodayDiary todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.ACCOUNT_BOOK]: <AccountBook todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
       };
 
       return (
@@ -95,38 +97,26 @@ function Diary() {
         </DiaryComponentsLayout>
       );
     });
-  }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary]);
+  }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary, todayDiary]);
 
   const submitHandler = () => {
     const checkOption: OptionCheckedProps = contentOptions.reduce(
       (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
-      {
-        TODO_LIST: false,
-        TODAY_QUESTION: false,
-        EMOTION: false,
-        DIARY: false,
-        ACCOUNT_BOOK: false,
-      }
+      INITIAL_CONTENT_OPTIONS
     );
-
+    const { _id, answer, diary, emotion, todo, account } = diaryInfo;
     const body = {
       selectedDate: id,
-      emotion: emotionState.emotion,
-      diary: {
-        title: todayDiaryState.title,
-        diaryContent: todayDiaryState.content,
-      },
-      answer: {
-        question: '',
-        tag: '',
-        answer: questionAnswerState.answer,
-      },
-      todo: todayTodoState,
-      account: accountTableAtomState,
+      emotion,
+      diary,
+      answer,
+      todo,
+      account,
       checkOption,
     };
 
-    if (diaryInfo?._id === undefined) {
+    if (_id === '') {
+      // create 일 때
       const sendRequest = baseAxios.post(`/api/contents`, body);
       mutate('/api/contents', sendRequest).then((res) => {
         setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
@@ -134,10 +124,9 @@ function Diary() {
       return;
     }
 
-    if (diaryInfo?._id) {
-      const sendRequest = baseAxios.patch(`/api/contents/${diaryInfo?._id}`, { ...body, contentId: diaryInfo?._id });
-      mutate(`/api/contents/${diaryInfo?._id}`, sendRequest).then((res) => console.log(res?.data));
-    }
+    // update 일 때
+    const sendRequest = baseAxios.patch(`/api/contents/${diaryInfo?._id}`, { ...body, contentId: _id });
+    mutate(`/api/contents/${diaryInfo?._id}`, sendRequest).then((res) => console.log(res?.data));
   };
 
   const cancelHandler = () => {

@@ -21,13 +21,13 @@ function useTodayDiary(date: string) {
     {
       onSuccess: (data) => {
         const diaryInfo = data[0] ?? null;
-        if (!diaryInfo?._id) {
+        if (!diaryInfo) {
           setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
         } else {
           setTodayDiary({ diaryInfo, diaryMode: DiaryMode.READ });
         }
       },
-      revalidateOnMount: false,
+      // revalidateOnMount: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }

@@ -1,7 +1,7 @@
 import uuid from 'react-uuid';
 import { atom } from 'recoil';
 import { emotionEnums as EMOTION } from 'types/enums';
-import { AccountTableRow, TodayDiaryProps, TodoListProps } from 'types/interfaces';
+import { AccountTableRow, DiaryProps, TodayDiaryProps, TodoListProps } from 'types/interfaces';
 
 const todayTodo = atom<TodoListProps[]>({
   key: `todayTodoState/${uuid()}`,
@@ -18,11 +18,11 @@ const emotionAtom = atom<{ emotion: EMOTION }>({
   default: { emotion: EMOTION.SO_SO },
 });
 
-const todayDiaryAtom = atom<TodayDiaryProps>({
+const todayDiaryAtom = atom<DiaryProps>({
   key: `todayDiaryState/${uuid()}`,
   default: {
     title: '',
-    content: '',
+    diaryContent: '',
   },
 });
 

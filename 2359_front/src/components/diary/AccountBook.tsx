@@ -5,28 +5,23 @@ import { accountTableAtom } from 'recoil/diaryAtom';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 import { EXPENSE_CATEGORY, INCOME_CATEGORY, CLS } from 'types/enumConverter';
-import { expenseEnums as EXPENSE, incomeEnums as INCOME, clsEnums as MONEY } from 'types/enums';
-import { AccountTableRow } from 'types/interfaces';
+import { expenseEnums as EXPENSE, incomeEnums as INCOME, clsEnums as MONEY, DiaryMode } from 'types/enums';
+import { AccountTableRow, DiaryComponentPrpos } from 'types/interfaces';
 import { getCurrentDate } from 'utilities/getCurrentDate';
+import { INITIAL_ACCOUNT_INFO } from 'utilities/initialValues';
 import { Question } from './TodayQuestion';
 import { Button } from './ToDoList';
 
 const EXPENSE_STATE = Object.values(EXPENSE);
 const INCOME_STATE = Object.values(INCOME);
-
 const MONEY_STATE = Object.values(MONEY);
 
-const initialAccountInfo: AccountTableRow = {
-  id: getCurrentDate(),
-  cls: MONEY.EXPENSE,
-  category: EXPENSE.FOOD,
-  amount: 0,
-  memo: '',
-};
-
-function AccountBook() {
-  const [todayAccountInfo, setTodatAccountInfo] = useState<AccountTableRow>(initialAccountInfo);
+function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
+  const [todayAccountInfo, setTodatAccountInfo] = useState<AccountTableRow>(INITIAL_ACCOUNT_INFO);
   const [accountTable, setAccountTable] = useRecoilState<AccountTableRow[]>(accountTableAtom);
+  const { diaryInfo, diaryMode } = todayDiary;
+
+  const readMode = diaryMode === DiaryMode.READ;
 
   const todayAccountInfoChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,16 +37,29 @@ function AccountBook() {
   };
 
   const appendAccountInfoHandler = () => {
-    console.log(todayAccountInfo);
-    setAccountTable((prev) => [...prev, { ...todayAccountInfo, id: getCurrentDate() }]);
-    setTodatAccountInfo(initialAccountInfo);
+    // setAccountTable((prev) => [...prev, { ...todayAccountInfo, id: getCurrentDate() }]);
+    setTodayDiary((prev) => ({
+      ...prev,
+      diaryInfo: {
+        ...prev.diaryInfo,
+        account: [...prev.diaryInfo.account, { ...todayAccountInfo, id: getCurrentDate() }],
+      },
+    }));
+    setTodatAccountInfo(INITIAL_ACCOUNT_INFO);
   };
 
   const deleteTableInfoHandler = useCallback(
     (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
-      setAccountTable((cur) => [...cur].filter((row) => row.id !== id));
+      setTodayDiary((prev) => ({
+        ...prev,
+        diaryInfo: {
+          ...prev.diaryInfo,
+          account: [...prev.diaryInfo.account].filter((row) => row.id !== id),
+        },
+      }));
+      // setAccountTable((cur) => [...cur].filter((row) => row.id !== id));
     },
-    [setAccountTable]
+    [setTodayDiary]
   );
 
   const moneyFlowOptions = useMemo(
@@ -87,7 +95,7 @@ function AccountBook() {
 
   const tableInfo = useMemo(
     () =>
-      accountTable.map(({ id, cls, category, amount, memo }) => (
+      diaryInfo.account.map(({ id, cls, category, amount, memo }) => (
         <TableRow key={uuid()}>
           <Td scope="row">{CLS[cls]}</Td>
           <Td scope="row">
@@ -102,19 +110,17 @@ function AccountBook() {
           </Td>
         </TableRow>
       )),
-    [accountTable, deleteTableInfoHandler]
+    [deleteTableInfoHandler, diaryInfo.account]
   );
 
   const totalAmount = useMemo(
     () =>
-      accountTable.reduce(
+      diaryInfo.account.reduce(
         (acc, { amount, cls }) => (cls === MONEY.EXPENSE ? acc - Number(amount) : acc + Number(amount)),
         0
       ),
-    [accountTable]
+    [diaryInfo.account]
   );
-
-  const readMode = false;
 
   return (
     // 수입/이체 카테고리 설정하기

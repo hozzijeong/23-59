@@ -21,20 +21,26 @@ interface TodoListProps {
   item: string;
 }
 
-interface TodayDiaryProps {
+interface DiaryProps {
   title: string;
-  content: string;
+  diaryContent: string;
+}
+
+interface QuestionAnswerProps {
+  question: string;
+  tag: string;
+  answer: string;
 }
 
 interface DiaryStateProps {
-  _id?: string;
-  selectedDate?: string;
-  todos?: TodoListProps[];
-  questionAnswer?: string;
-  emotion?: EMOTION;
-  todayDiary?: TodayDiaryProps;
-  accountTable?: AccountTableRow[];
-  contentOptions?: OptionCheckedProps;
+  _id: string;
+  selectedDate: string;
+  todo: TodoListProps[];
+  answer: QuestionAnswerProps;
+  emotion: EMOTION;
+  diary: DiaryProps;
+  account: AccountTableRow[];
+  contentOptions: OptionCheckedProps;
 }
 
 interface OptionProps {
@@ -47,6 +53,16 @@ type OptionCheckedProps = {
 
 interface ContentOptionProps extends OptionProps {
   isChecked: boolean;
+}
+
+interface TodayDiaryProps {
+  diaryInfo: DiaryStateProps;
+  diaryMode: DiaryMode;
+}
+
+interface DiaryComponentPrpos {
+  todayDiary: TodayDiaryProps;
+  setTodayDiary: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
 }
 
 interface ContentOptionsProps {
@@ -81,7 +97,9 @@ export type {
   OptionProps,
   ContentOptionProps,
   AccountTableRow,
+  QuestionAnswerProps,
   TodoListProps,
+  DiaryProps,
   DiaryStateProps,
   TodayDiaryProps,
   ContentOptionsProps,
@@ -90,4 +108,5 @@ export type {
   UpdateFormValue,
   OptionCheckedProps,
   DiaryContentOptionsProps,
+  DiaryComponentPrpos,
 };

@@ -30,6 +30,7 @@ function useUserOptions() {
     {
       onSuccess: (data) => {
         const { createOption } = data;
+        console.log(createOption);
         const options = Object.keys(data.createOption).map((key) => ({ title: key as OptionEnums }));
         const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
         setContentOptions(mixedData);
@@ -37,9 +38,8 @@ function useUserOptions() {
       onError: () => {
         navigation('/login');
       },
-      revalidateOnMount: false,
+      // revalidateOnMount: false,
       revalidateOnFocus: false,
-      revalidateOnReconnect: false,
     }
   );
 
