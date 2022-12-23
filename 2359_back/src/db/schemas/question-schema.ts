@@ -6,13 +6,21 @@ interface IQuestion {
   tag: string;
 }
 
-const questionSchema = new Schema<IQuestion>({
-  item: {
-    type: String,
-    required: true,
+const QuestionSchema = new Schema<IQuestion>(
+  {
+    item: {
+      type: String,
+      required: true,
+    },
+    tag: {
+      type: String,
+      required: true,
+    },
   },
-  tag: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    collection: 'questions',
+    timestamps: true,
+  }
+);
+
+export { QuestionSchema };
