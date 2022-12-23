@@ -1,24 +1,43 @@
 import React, { useState } from 'react';
-import { format, subMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
+import { format, subMonths, addMonths } from 'date-fns';
 import uuid from 'react-uuid';
+import useSWR from 'swr';
 import tw from 'tailwind-styled-components';
 import Button from 'components/Button';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import calendarPage from 'recoil/calendarAtom';
+import { calendarPage, calendarSummary } from 'recoil/calendarAtom';
+import { getMonthDate } from 'utilities/getMonthDate';
+import { baseAxios } from 'api';
 import { CalendarWeeks, dayColor, takeMonth, todayColor } from './Utils';
-import DiarySum from './DiarySum';
+
+interface AccountObject {
+  지출: number;
+  수입: number;
+}
+interface SumObject {
+  date: string;
+  emotion: string;
+  etc: boolean;
+  account: AccountObject;
+}
+const fetcher = async (url: string) => {
+  const res = await baseAxios.get(url);
+  return res.data;
+};
 
 function Calendar() {
   const [currentDate, setCurrentDate] = useRecoilState(calendarPage);
+  const [diaryData, setDiaryData] = useRecoilState(calendarSummary);
   const navigate = useNavigate();
-  console.log('currentDate', currentDate);
-  const MonthStart = format(startOfMonth(currentDate), 'yyyyMMdd');
-  const MonthEnd = format(endOfMonth(currentDate), 'yyyyMMdd');
-  const MonthDate = `${MonthStart}-${MonthEnd}`;
-  console.log(MonthDate);
+  const MonthDate = getMonthDate(currentDate);
 
-  const data = takeMonth(currentDate)();
+  const { data, error } = useSWR(`/api/contents/monthCalendar/${MonthDate}`, fetcher, { revalidateOnFocus: false });
+  setDiaryData(data);
+  console.log(error);
+  console.log('diaryData', diaryData);
+
+  const Monthdate = takeMonth(currentDate)();
   const curMonth = () => {
     setCurrentDate(new Date());
   };
@@ -55,12 +74,30 @@ function Calendar() {
         </div>
       </HeaderContainer>
       <CalendarWeeks />
-      {data.map((week: Date[]) => (
+      {Monthdate.map((week: Date[]) => (
         <DaysContainer key={uuid()}>
           {week.map((day: Date) => (
             <CalendarDays key={day.toString()} className={`${todayColor(day)}`} onClick={() => onDateClick(day)}>
               <CalendarDay className={`${dayColor(day, currentDate)}`}>{format(day, 'dd')}</CalendarDay>
-              <DiarySum date={MonthDate} day={format(day, 'yyyyMMdd')} />
+              <SummaryBox>
+                {diaryData?.map(
+                  (item: SumObject) =>
+                    item.date === format(day, 'yyyyMMdd') && (
+                      <div>
+                        <span className="text-xs absolute -top-7 right-0">{item.etc ? '🟢' : null}</span>
+                        <div className="flex justify-center">
+                          <span>{item.emotion}</span>
+                        </div>
+                        <div className="flex justify-end mt-2">
+                          <span>{item.account.수입 ? `+${Number(item.account.수입).toLocaleString()}원` : null}</span>
+                        </div>
+                        <div className="flex justify-end">
+                          <span>{item.account.지출 ? `-${Number(item.account.지출).toLocaleString()}원` : null}</span>
+                        </div>
+                      </div>
+                    )
+                )}
+              </SummaryBox>
             </CalendarDays>
           ))}
         </DaysContainer>
@@ -121,4 +158,13 @@ h-5
 items-center 
 justify-center
 text-center
+`;
+
+const SummaryBox = tw.div`
+  relative
+  flex
+  flex-col
+  mt-2
+  text-gray-500
+  text-sm
 `;
