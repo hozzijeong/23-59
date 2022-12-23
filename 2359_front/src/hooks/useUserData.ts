@@ -1,28 +1,26 @@
-import { baseAxios } from 'api';
-import axios from 'axios';
+import { RegisterFormValue } from 'types/interfaces';
 import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { UpdateFormValue } from 'types/interfaces';
+import { baseAxios } from 'api';
 
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-const useUserUpdate = () => {
-  const userUpdateRequest = useCallback((data: UpdateFormValue) => {
+const useUserData = () => {
+  const userDataRequest = useCallback(() => {
     baseAxios
-      .patch(`/api/user/info`, data, {
+      .get(`/api/user/info`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       })
       .then((res) => {
-        alert('수정 되었습니다');
+        // em..
       })
       .catch((err) => {
         alert(err);
       });
   }, []);
-  return { userUpdateRequest };
+  return { userDataRequest };
 };
 
-export default useUserUpdate;
+export default useUserData;

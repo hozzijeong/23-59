@@ -75,10 +75,10 @@ interface DiaryContentOptionsProps extends ContentOptionsProps {
 }
 
 interface UpdateFormValue {
-  email: string;
+  email?: string;
   nickname: string;
   password: string;
-  newPassword: string;
+  currentPassword: string;
 }
 
 interface RegisterFormValue {
