@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { format, subMonths, addMonths } from 'date-fns';
 import uuid from 'react-uuid';
 import useSWR from 'swr';
@@ -21,10 +21,6 @@ interface SumObject {
   etc: boolean;
   account: AccountObject;
 }
-const fetcher = async (url: string) => {
-  const res = await baseAxios.get(url);
-  return res.data;
-};
 
 function Calendar() {
   const [currentDate, setCurrentDate] = useRecoilState(calendarPage);
@@ -32,8 +28,20 @@ function Calendar() {
   const navigate = useNavigate();
   const MonthDate = getMonthDate(currentDate);
 
-  const { data, error } = useSWR(`/api/contents/monthCalendar/${MonthDate}`, fetcher, { revalidateOnFocus: false });
-  setDiaryData(data);
+  const userToken = localStorage.getItem('token');
+  const fetcher = async (url: string) => {
+    const res = await baseAxios.get(url, {
+      headers: {
+        authorization: `Bearer ${userToken}`,
+      },
+    });
+    return res.data;
+  };
+
+  const { data } = useSWR(`/api/contents/monthCalendar/${MonthDate}`, fetcher, { revalidateOnFocus: false });
+  useEffect(() => {
+    setDiaryData(data);
+  });
   console.log('diaryData', diaryData);
 
   const Monthdate = takeMonth(currentDate)();
