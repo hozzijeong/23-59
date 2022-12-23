@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 
 const showModalPage = atom({
   key: 'showModal',
-  default: true,
+  default: false,
 });
 
 export { showModalPage };
