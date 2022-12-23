@@ -48,4 +48,10 @@ enum OptionEnums {
   ACCOUNT_BOOK = 'ACCOUNT_BOOK',
 }
 
-export { incomeEnums, emotionEnums, expenseEnums, clsEnums, OptionEnums };
+enum DiaryMode {
+  READ = 'READ',
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+}
+
+export { incomeEnums, emotionEnums, expenseEnums, clsEnums, OptionEnums, DiaryMode };

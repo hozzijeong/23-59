@@ -6,7 +6,6 @@ import Button from 'components/Button';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import calendarPage from 'recoil/calendarAtom';
-import DiarySummary from './DiarySummary';
 import { CalendarWeeks, dayColor, takeMonth, todayColor } from './Utils';
 import DiarySum from './DiarySum';
 

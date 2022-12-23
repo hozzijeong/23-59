@@ -114,36 +114,40 @@ function AccountBook() {
     [accountTable]
   );
 
+  const readMode = false;
+
   return (
     // 수입/이체 카테고리 설정하기
     <div>
       <HeadContainer>
         <Question>오늘 수입/지출을 알려주세요</Question>
-        <InputContainer onChange={todayAccountInfoChangeHandler}>
-          <select name="cls" value={todayAccountInfo.cls}>
-            {moneyFlowOptions}
-          </select>
-          <select name="category" value={todayAccountInfo.category}>
-            {categoryOptions}
-          </select>
-          <div style={{ backgroundColor: 'white', width: '100%' }}>
-            <label htmlFor="amount">
-              <input
-                type="number"
-                min={0}
-                placeholder="금액을 입력해주세요"
-                name="amount"
-                value={todayAccountInfo.amount}
-                style={{ width: '85%' }}
-              />
-              <span>원</span>
-            </label>
-          </div>
-          <input type="text" placeholder="메모를 입력해주세요" name="memo" value={todayAccountInfo.memo} />
-          <AppendButton type="button" onClick={appendAccountInfoHandler}>
-            추가하기
-          </AppendButton>
-        </InputContainer>
+        {readMode ? null : (
+          <InputContainer onChange={todayAccountInfoChangeHandler}>
+            <select name="cls" value={todayAccountInfo.cls}>
+              {moneyFlowOptions}
+            </select>
+            <select name="category" value={todayAccountInfo.category}>
+              {categoryOptions}
+            </select>
+            <div style={{ backgroundColor: 'white', width: '100%' }}>
+              <label htmlFor="amount">
+                <input
+                  type="number"
+                  min={0}
+                  placeholder="금액을 입력해주세요"
+                  name="amount"
+                  value={todayAccountInfo.amount}
+                  style={{ width: '85%' }}
+                />
+                <span>원</span>
+              </label>
+            </div>
+            <input type="text" placeholder="메모를 입력해주세요" name="memo" value={todayAccountInfo.memo} />
+            <AppendButton type="button" onClick={appendAccountInfoHandler}>
+              추가하기
+            </AppendButton>
+          </InputContainer>
+        )}
       </HeadContainer>
       <AccountTable>
         <TableHead>
