@@ -1,3 +1,5 @@
+/* eslint-disable react/default-props-match-prop-types */
+/* eslint-disable react/require-default-props */
 import Button from 'components/Button';
 import { ContentOptions } from 'components/diary/ContentOptions';
 import Tooltip from 'components/Tooltip';
@@ -6,22 +8,24 @@ import React from 'react';
 import { useSetRecoilState } from 'recoil';
 import { showModalPage } from 'recoil/modalAtom';
 import tw from 'tailwind-styled-components';
+import { ContentOptionProps } from 'types/interfaces';
 import { TutorialOption } from './TutorialOption';
 
-interface TutorialModalProps<T> {
+interface TutorialModalProps {
   title?: string;
   btnclose?: string;
   btnsave?: string;
-  state?: T;
+  state: ContentOptionProps[];
+  setState: React.Dispatch<React.SetStateAction<ContentOptionProps[]>>;
 }
 
-function TutorialModal<T>({ title, btnclose, btnsave, state }: TutorialModalProps<T>) {
+function TutorialModal({ title, btnclose, btnsave, state, setState }: TutorialModalProps) {
   const setShowModal = useSetRecoilState(showModalPage);
-  const { contentOptions, setContentOptions } = useUserOptions();
-
+  // const { contentOptions, setContentOptions, data } = useUserOptions();
+  // console.log(contentOptions, data, 'tutorial modal');
   const saveHandler = () => {
     setShowModal(false);
-    console.log(state, 'state');
+    // console.log(contentOptions, 'state');
   };
 
   return (
@@ -31,7 +35,7 @@ function TutorialModal<T>({ title, btnclose, btnsave, state }: TutorialModalProp
         <Tooltip text="매일 작성하는 옵션을 설정하고,   마이페이지에서 수정할 수 있어요" />
       </ModalHeader>
       <ModalContent>
-        <TutorialOption state={contentOptions} setState={setContentOptions} />
+        <TutorialOption state={state} setState={setState} />
       </ModalContent>
       <ModalFooter>
         <Button btntype="cancel" onClick={() => setShowModal(false)}>
@@ -51,7 +55,7 @@ TutorialModal.defaultProps = {
   title: '제목',
   btnclose: '닫기',
   btnsave: '저장',
-  state: null,
+  state: [],
 };
 
 const ModalHeader = tw.div`

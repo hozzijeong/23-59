@@ -10,7 +10,7 @@ const END_POINT = 'api/contents/date';
 
 const initialDiary = {
   diaryInfo: INITIAL_DIARY_INFO,
-  diaryMode: DiaryMode.READ,
+  diaryMode: DiaryMode.CREATE,
 };
 function useTodayDiary(date: string) {
   const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);

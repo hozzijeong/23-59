@@ -44,7 +44,7 @@ function useUserOptions() {
       // revalidateOnMount: false,
       // revalidateOnFocus: false,
       // 데이터의 불변성을 보장하는 값들.
-      revalidateIfStale: false,
+      // revalidateIfStale: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
     }
