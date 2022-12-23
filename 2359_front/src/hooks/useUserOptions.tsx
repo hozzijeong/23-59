@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 import { OptionEnums } from 'types/enums';
 import { ContentOptionProps, OptionCheckedProps } from 'types/interfaces';
+import { converUserOptionToContent } from 'utilities/utils';
 
 interface UserOptionsProps {
   createOption: OptionCheckedProps;
@@ -16,7 +17,7 @@ function useUserOptions() {
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>([]);
 
   // onSuccess 사용해서 성공시 데이터 맞추기.
-  const { data } = useSWR<UserOptionsProps>(
+  const { data, isLoading } = useSWR<UserOptionsProps>(
     '/api/user/option',
     () =>
       baseAxios
@@ -30,18 +31,25 @@ function useUserOptions() {
     {
       onSuccess: (data) => {
         const { createOption } = data;
-        const options = Object.keys(data.createOption).map((key) => ({ title: key as OptionEnums }));
-        const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
+        const mixedData = converUserOptionToContent(createOption);
         setContentOptions(mixedData);
-        return { contentOptions: mixedData };
       },
-      onError: () => {
-        navigation('/login');
+      errorRetryInterval: 1000,
+      errorRetryCount: 5,
+      onError: (error) => {
+        alert(`${error}가 발생했습니다.`);
+        // navigation('/login');
       },
+      // revalidateOnMount: false,
+      // revalidateOnFocus: false,
+      // 데이터의 불변성을 보장하는 값들.
+      // revalidateIfStale: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
 
-  return { contentOptions, setContentOptions, firstLogin: data?.firstLogin };
+  return { contentOptions, setContentOptions, firstLogin: data?.firstLogin, isLoading };
 }
 
 export { useUserOptions };

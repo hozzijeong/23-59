@@ -2,19 +2,37 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { questionAnswer } from 'recoil/diaryAtom';
 import tw from 'tailwind-styled-components';
+import { DiaryMode } from 'types/enums';
+import { DiaryComponentPrpos } from 'types/interfaces';
 
-function TodayQuestion() {
-  const [{ answer }, setAnswer] = useRecoilState(questionAnswer);
+function TodayQuestion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
+  // const [{ answer }, setAnswer] = useRecoilState(questionAnswer);
+  const { diaryInfo, diaryMode } = todayDiary;
 
   const answerChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { value } = event.target;
-    setAnswer({ answer: value });
+    setTodayDiary({
+      diaryMode,
+      diaryInfo: {
+        ...diaryInfo,
+        qna: {
+          question: '',
+          tag: '',
+          answer: value,
+        },
+      },
+    });
+    // setAnswer({ answer: value });
   };
-  const readMode = false;
+
   return (
     <div>
-      <Question>오늘 하루 어떠셨나요?</Question>
-      {readMode ? null : <AnswerArea defaultValue={answer} onChange={answerChangeHandler} />}
+      <Question>{diaryMode === DiaryMode.READ ? diaryInfo.qna.question : '오늘 하루 어떠셨나요?'}</Question>
+      {diaryMode === DiaryMode.READ ? (
+        <div>{diaryInfo.qna.answer}</div>
+      ) : (
+        <AnswerArea defaultValue={diaryInfo.qna.answer} onChange={answerChangeHandler} />
+      )}
     </div>
   );
 }
