@@ -3,6 +3,7 @@ import { Router } from 'express';
 import { check, validationResult } from 'express-validator';
 
 import { contentService, questionService } from '../services';
+import { loginRequired } from '../middlewares/login-required';
 
 const contentRouter = Router();
 
@@ -27,7 +28,7 @@ contentRouter.get('/calendar/:selectedDate', async (req, res, next) => {
   }
 });
 // api/contents/monthCalendar/:date
-contentRouter.get('/month/calendar/:month', async (req, res, next) => {
+contentRouter.get('/monthCalendar/:month', loginRequired, async (req, res, next) => {
   try {
     const { month } = req.params;
     const splitDate = month.split('-');
@@ -73,8 +74,8 @@ contentRouter.get('/filterDate/:date', async (req, res, next) => {
     next(error);
   }
 });
-
-contentRouter.post('/', async (req, res, next) => {
+// contents create
+contentRouter.post('/', loginRequired, async (req, res, next) => {
   try {
     // content-type 을 application/json 로 프론트에서
     // 설정 안 하고 요청하면, body가 비어 있게 됨.
@@ -106,8 +107,8 @@ contentRouter.post('/', async (req, res, next) => {
     next(error);
   }
 });
-
-contentRouter.patch('/:contentId', async (req, res, next) => {
+// contents update
+contentRouter.patch('/:contentId', loginRequired, async (req, res, next) => {
   try {
     // content-type 을 application/json 로 프론트에서
     // 설정 안 하고 요청하면, body가 비어 있게 됨.
@@ -138,8 +139,8 @@ contentRouter.patch('/:contentId', async (req, res, next) => {
     next(error);
   }
 });
-
-contentRouter.delete('/:contentId', async (req, res, next) => {
+// contents delete
+contentRouter.delete('/:contentId', loginRequired, async (req, res, next) => {
   try {
     const { contentId } = req.params;
     const deletedContent = await contentService.deleteContent(contentId);
@@ -151,7 +152,7 @@ contentRouter.delete('/:contentId', async (req, res, next) => {
 });
 
 // api/filterEmotion/20221201-20221231
-contentRouter.get('/filterEmotion/:date', async (req, res, next) => {
+contentRouter.get('/filterEmotion/:date', loginRequired, async (req, res, next) => {
   try {
     const { date } = req.params;
     const splitDate = date.split('-');
@@ -164,7 +165,7 @@ contentRouter.get('/filterEmotion/:date', async (req, res, next) => {
 });
 
 // api/filterCls/20221201-20221231
-contentRouter.get('/filterCls/:date', async (req, res, next) => {
+contentRouter.get('/filterCls/:date', loginRequired, async (req, res, next) => {
   try {
     const { date } = req.params;
     const splitDate = date.split('-');
@@ -177,7 +178,7 @@ contentRouter.get('/filterCls/:date', async (req, res, next) => {
 });
 
 // api/contents/filterCategory/20221201-20221231
-contentRouter.get('/filterCategory/:date', async (req, res, next) => {
+contentRouter.get('/filterCategory/:date', loginRequired, async (req, res, next) => {
   try {
     const { date } = req.params;
     const splitDate = date.split('-');
