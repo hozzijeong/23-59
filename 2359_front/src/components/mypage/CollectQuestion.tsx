@@ -30,12 +30,11 @@ function filterQuestionList() {
 // 태그를 선택했을때 질문을 해당 태그만 보여주는 함수
 
 // 질문을 클릭했을 때 모달창으로 보여줄 answer item 필터링 함수
-let filterdAnswerItem: any[] = []; // array안에 object가 들어가는데 이럴땐 어떤 type을 줘야하는지..?
+// TODO: 배열안에 객체 interface 설정
+let filterdAnswerItem: any[] = [];
 function filterAnswerList(str: string) {
   filterdAnswerItem = data.filter((ele) => ele.question.item === str);
-  console.log('각 item', filterdAnswerItem);
 }
-// filterAnswerList('오늘 먹은 최고의 음식은?');
 
 // tagData를 Key: boolean 값으로 만들어주는 함수
 const newData: IData = {};
@@ -74,33 +73,34 @@ function CollectQuestion() {
     return nonSelectBtnClass;
   };
 
-  // 태그를 선택할 때마다 값이 true 인것만 반환해줌
-  // 하 이거 배열 안에 객체로 못넣어?????????
   let tagSelectedAnswer: object[] = [];
   const selectedTag = () => {
     const trueKey = Object.keys(isSelect).filter((key) => isSelect[key] === true);
-    console.log('tureTag들', trueKey);
-    // 태그의 true 값만 선택받으면... 그 key만 주르륵 배열로 받아서,
-    // i번째 요소랑 data랑 같은 태그를 찾아...
-    // array안에 object가 들어가는데 이럴땐 어떤 type을 줘야하는지..?
+
+    // TODO: 배열안에 배열안에 객체안에 객체... interface 설정 하...
+    /*
+    [
+      {
+        answer: "마라탕^^"
+        question: {item: '오늘 먹은 최고의 음식은?', tag: '#음식'}
+        selectedDate : "20221201"
+      }
+    ],
+    */
     const tmpArr: any = [];
     for (let i = 0; i < trueKey.length; i += 1) {
       tmpArr.push(data.filter((ele) => trueKey[i] === ele.question.tag));
     }
-    tagSelectedAnswer = tmpArr.reduce(function (acc: any, cur: any) {
+    tagSelectedAnswer = tmpArr.reduce((acc: any, cur: any) => {
       return [...acc, ...cur];
     });
-    // 질문리스트를 반환하는 함수를 만들면됨!
   };
   selectedTag();
 
-  // 태그를 선택할 때마다 값이 변경되고, state를 변경해줌
   const handleTag = (item: string): void => {
     const newSelect = { ...isSelect };
     newSelect[item] = !newSelect[item];
     setIsSelect(newSelect);
-    // selectedTag();
-    console.log('변경된 state', newSelect);
   };
 
   return (
@@ -123,7 +123,7 @@ function CollectQuestion() {
       <div>
         <AnswerUl>
           {tagSelectedAnswer.map((ele: any) => (
-            // array안에 object가 들어가는데 이럴땐 어떤 type을 줘야하는지..?
+            // TODO: 배열안에 객체 interface 설정
             <AnswerList
               key={ele.selectedDate}
               onClick={() => {

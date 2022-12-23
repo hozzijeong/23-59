@@ -1,5 +1,19 @@
 import React from 'react';
 import tw from 'tailwind-styled-components';
+// import axios from 'axios';
+import { baseAxios } from 'api';
+// import { OptionEnums } from 'types/enums';
+
+async function getOptionsData() {
+  const data = await baseAxios.get('/api/user/option', {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+  });
+  console.log(data);
+}
+
+getOptionsData();
 
 function SetDiaryOption() {
   return (
