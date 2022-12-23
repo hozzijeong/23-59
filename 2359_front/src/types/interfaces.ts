@@ -4,6 +4,7 @@ import {
   emotionEnums as EMOTION,
   clsEnums,
   OptionEnums as OPTIONS,
+  DiaryMode,
 } from 'types/enums';
 
 interface AccountTableRow {
@@ -26,6 +27,8 @@ interface TodayDiaryProps {
 }
 
 interface DiaryStateProps {
+  _id?: string;
+  selectedDate?: string;
   todos?: TodoListProps[];
   questionAnswer?: string;
   emotion?: EMOTION;
@@ -34,9 +37,12 @@ interface DiaryStateProps {
 }
 
 interface OptionProps {
-  id: string;
   title: OPTIONS;
 }
+
+type OptionCheckedProps = {
+  [key in OPTIONS]: boolean;
+};
 
 interface ContentOptionProps extends OptionProps {
   isChecked: boolean;
@@ -47,6 +53,29 @@ interface ContentOptionsProps {
   setState: React.Dispatch<React.SetStateAction<ContentOptionProps[]>>;
 }
 
+interface DiaryContentOptionsProps extends ContentOptionsProps {
+  diaryMode: DiaryMode;
+}
+
+interface UpdateFormValue {
+  email?: string;
+  nickname: string;
+  password: string;
+  currentPassword: string;
+}
+
+interface RegisterFormValue {
+  email: string;
+  nickname: string;
+  password: string;
+  passwordConfirm: string;
+}
+
+interface LoginFormValue {
+  email: string;
+  password: string;
+}
+
 export type {
   OptionProps,
   ContentOptionProps,
@@ -55,4 +84,9 @@ export type {
   DiaryStateProps,
   TodayDiaryProps,
   ContentOptionsProps,
+  LoginFormValue,
+  RegisterFormValue,
+  UpdateFormValue,
+  OptionCheckedProps,
+  DiaryContentOptionsProps,
 };

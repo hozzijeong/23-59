@@ -23,9 +23,12 @@ class QuestionService {
 
   // id로 질문 조회
   async getQuestionById(id: string) {
-    const question = await this.questionModel.findQuestionById(id);
+    let question = await this.questionModel.findQuestionById(id);
     if (!question) {
       console.log('해당 id의 질문이 없습니다.');
+    }
+    if (id === '') {
+      return 0;
     }
     //const filtered = question.map((obj: any) => obj.item);
     //console.log('filtered ', filtered[0]);

@@ -17,11 +17,12 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": ["src", "@types"],
   "paths": {
     "pages/*": ["pages/*"],
     "components/*": ["components/*"],
     "utilities/*": ["utilities/*"],
-    "hooks/*": ["hooks/*"]
+    "hooks/*": ["hooks/*"],
+    "images/*": ["images/*"]
   }
 }

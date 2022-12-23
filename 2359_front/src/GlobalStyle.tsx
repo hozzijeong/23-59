@@ -12,7 +12,7 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
   }
   
-  input, textarea{
+  input, textarea,select{
     outline:none;
   }
 

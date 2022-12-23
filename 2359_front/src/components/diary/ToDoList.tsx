@@ -5,6 +5,7 @@ import { getCurrentDate } from 'utilities/getCurrentDate';
 import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
 import styled from 'styled-components';
+import { CustomCheckInput } from 'components/ContentOptions';
 
 function TodoList() {
   const [todoInput, setTodoInput] = useState<string>('');
@@ -26,7 +27,6 @@ function TodoList() {
 
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
-    console.log(id, curTodo, 123);
     const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : { ...todo }));
 
     setCurTodo(updateTodos);
@@ -35,37 +35,41 @@ function TodoList() {
   const todoDeleteHandler = (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
     setCurTodo((cur) => cur.filter((todo) => todo.id !== id));
   };
-
+  const readMode = false;
   return (
     <div>
-      <ToDoHeader>
-        <ToDoInput placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
-        <Button type="button" onClick={addTodoHandler}>
-          추가하기
-        </Button>
-      </ToDoHeader>
-      <div>
-        <ul>
-          {curTodo.map(({ id, done, item }) => {
-            return (
-              <LiContainer key={uuid()}>
-                <TodoLabel htmlFor={id}>
-                  <input id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
-                  <ToDoSpan isChecked={done}>{item}</ToDoSpan>
-                </TodoLabel>
-                <Button onClick={(event) => todoDeleteHandler(event, id)} type="button" marginRight="mr-2.5">
-                  삭제하기
-                </Button>
-              </LiContainer>
-            );
-          })}
-        </ul>
-      </div>
+      {readMode ? null : (
+        <>
+          <ToDoHeader>
+            <ToDoInput placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
+            <Button type="button" onClick={addTodoHandler}>
+              추가하기
+            </Button>
+          </ToDoHeader>
+          <div>
+            <ul>
+              {curTodo.map(({ id, done, item }) => {
+                return (
+                  <LiContainer key={uuid()}>
+                    <TodoLabel htmlFor={id}>
+                      <CheckBox id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
+                      <ToDoSpan isChecked={done}>{item}</ToDoSpan>
+                    </TodoLabel>
+                    <Button onClick={(event) => todoDeleteHandler(event, id)} type="button">
+                      삭제하기
+                    </Button>
+                  </LiContainer>
+                );
+              })}
+            </ul>
+          </div>
+        </>
+      )}
     </div>
   );
 }
 
-export { TodoList };
+export { TodoList, Button };
 
 const ToDoHeader = tw.div`
   mb-3  
@@ -83,14 +87,13 @@ const ToDoInput = tw.input`
   text-grey-darker
 `;
 
-const Button = tw.button<{ marginRight?: 'mr-2.5' }>`
+const Button = tw.button`
  flex-no-shrink 
- p-2 
+ p-1 
  border-2 
  rounded 
  bg-primaryDark
  text-white 
- ${(props) => props.marginRight ?? ''}
  hover:bg-primaryDeepDark
 `;
 
@@ -98,7 +101,6 @@ const LiContainer = tw.li`
   flex 
   mb-1
   items-center
-  justify-between
 `;
 
 const Label = styled.label`
@@ -110,7 +112,14 @@ const Label = styled.label`
 const TodoLabel = tw(Label)`
   py-2 
   px-3 
-  mr-4 
+  mr-4
+  w-10/12
+  text-lg
+`;
+
+const CheckBox = tw(CustomCheckInput)`
+  w-4
+  h-4  
 `;
 
 const Span = styled.span<{ isChecked: boolean }>`
@@ -119,5 +128,7 @@ const Span = styled.span<{ isChecked: boolean }>`
 
 const ToDoSpan = tw(Span)`
   w-full
-  text-grey-darkest  
+  text-grey-darkest
+  ml-[0.5rem]
+  hover:font-semibold	 
 `;

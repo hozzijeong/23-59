@@ -1,34 +1,46 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
 
-const data = [
-  {
-    name: '개수',
-    행복: 50,
-    기쁨: 60,
-    좌절: 12,
-    슬픔: 2,
-    분노: 20,
-  },
-];
-
-// async function getFilterEmotion() {
-//   const res = await axios.get('/api/contents/filter/20221222-20221226');
-//   console.log(res);
-// }
-// getFilterEmotion();
+const date = new Date();
+const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+const currentYear = date.getFullYear();
+const currentMonth = date.getMonth() + 1;
+const monthLastDate = lastDay.getDate();
 
 function EmotionStatistics() {
+  // 객체를 typing할 때는 Record!!!
+  const initialData: Record<string, string | number>[] = [];
+  const [data, setData] = useState(initialData);
+
+  async function getFilterEmotion() {
+    try {
+      const result = await axios.get(
+        `/api/contents/filterEmotion/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`
+      );
+      const res = await result.data;
+      res.name = '감정';
+
+      let tmpData = [...data];
+      tmpData = [res];
+      setData(tmpData);
+    } catch (e) {
+      throw new Error();
+    }
+  }
+  useEffect(() => {
+    getFilterEmotion();
+  }, []);
+
   return (
     <Container>
       <div>여기도 차트를 보여줄거에여~</div>
       <BarChartContainer>
-        <StatisticsScript>감정 통계 - 12월😘</StatisticsScript>
+        <StatisticsScript>감정 통계 - {currentMonth}월😘</StatisticsScript>
         <ResponsiveBar
           data={data}
-          keys={['행복', '기쁨', '좌절', '슬픔', '분노']}
+          keys={['very sad', 'sad', 'soso', 'happy', 'very happy']}
           margin={{ top: 30, right: 130, bottom: 60, left: 60 }}
           indexBy="name"
           padding={0.1}
@@ -43,16 +55,16 @@ function EmotionStatistics() {
             from: 'color',
             modifiers: [['darker', 1.1]],
           }}
-          // axisTop={null}
-          // axisRight={null}
-          // axisBottom={{
-          //   tickSize: 5,
-          //   tickPadding: 5,
-          //   tickRotation: 0,
-          //   legend: '개수',
-          //   legendPosition: 'middle',
-          //   legendOffset: 35,
-          // }}
+          axisTop={null}
+          axisRight={null}
+          axisBottom={{
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: '개수',
+            legendPosition: 'middle',
+            legendOffset: 50,
+          }}
           // axisLeft={{
           //   tickSize: 6,
           //   tickPadding: 5,
@@ -145,44 +157,5 @@ export const StatisticsScript = tw.div`
 //     kebabColor: 'hsl(138, 70%, 50%)',
 //     fries: 188,
 //     friesColor: 'hsl(336, 70%, 50%)',
-//   },
-//   {
-//     emotion: '분노',
-//     'hot dog': 65,
-//     'hot dogColor': 'hsl(306, 70%, 50%)',
-//     burger: 102,
-//     burgerColor: 'hsl(208, 70%, 50%)',
-//     sandwich: 181,
-//     sandwichColor: 'hsl(255, 70%, 50%)',
-//     kebab: 158,
-//     kebabColor: 'hsl(359, 70%, 50%)',
-//     fries: 6,
-//     friesColor: 'hsl(315, 70%, 50%)',
-//   },
-//   {
-//     emotion: '보통',
-//     'hot dog': 118,
-//     'hot dogColor': 'hsl(126, 70%, 50%)',
-//     burger: 59,
-//     burgerColor: 'hsl(70, 70%, 50%)',
-//     sandwich: 147,
-//     sandwichColor: 'hsl(70, 70%, 50%)',
-//     kebab: 187,
-//     kebabColor: 'hsl(258, 70%, 50%)',
-//     fries: 13,
-//     friesColor: 'hsl(109, 70%, 50%)',
-//   },
-//   {
-//     emotion: '몰?루',
-//     'hot dog': 20,
-//     'hot dogColor': 'hsl(280, 70%, 50%)',
-//     burger: 27,
-//     burgerColor: 'hsl(112, 70%, 50%)',
-//     sandwich: 161,
-//     sandwichColor: 'hsl(311, 70%, 50%)',
-//     kebab: 190,
-//     kebabColor: 'hsl(37, 70%, 50%)',
-//     fries: 7,
-//     friesColor: 'hsl(76, 70%, 50%)',
 //   },
 // ];

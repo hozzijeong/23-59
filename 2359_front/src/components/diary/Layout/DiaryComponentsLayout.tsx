@@ -26,7 +26,8 @@ const ContentContainer = tw.div`
   rounded 
   shadow 
   p-6 
-  m-4 
+  mx-auto
+  my-4
   w-full 
   lg:w-11/12
 `;
