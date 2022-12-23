@@ -2,16 +2,14 @@
 import { useState } from 'react';
 import { baseAxios } from 'api';
 import useSWR from 'swr';
-import { DiaryStateProps } from 'types/interfaces';
-import { DiaryMode } from 'types/enums';
+import { DiaryStateProps, TodayDiaryProps } from 'types/interfaces';
+import { DiaryMode, emotionEnums } from 'types/enums';
+import { INITIAL_DIARY_INFO } from 'utilities/initialValues';
 
-interface TodayDiaryProps {
-  diaryInfo: DiaryStateProps | null;
-  diaryMode: DiaryMode;
-}
 const END_POINT = 'api/contents/date';
+
 const initialDiary = {
-  diaryInfo: null,
+  diaryInfo: INITIAL_DIARY_INFO,
   diaryMode: DiaryMode.CREATE,
 };
 function useTodayDiary(date: string) {
