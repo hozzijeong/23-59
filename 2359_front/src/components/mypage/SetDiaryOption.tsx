@@ -14,7 +14,8 @@ import { baseAxios } from 'api';
 // }
 
 function SetDiaryOption() {
-  const initialData: Record<string, boolean>[] = [];
+  // Record<OptionEnums, boolean>[]
+  const initialData: any = [];
   const [data, setData] = useState(initialData);
   const [isChecked, setIsChecked] = useState({
     ACCOUNT_BOOK: false,
@@ -34,36 +35,34 @@ function SetDiaryOption() {
     optionData = await res.data.createOption;
     setData(optionData);
   }
+
   useEffect(() => {
     getOptionsData();
   }, []);
+  console.log('여기임', data);
+  console.log('hey!', data.TODO_LIST);
 
   async function patchCheckData(obj: Record<string, boolean>) {
     const data = {
       firstLogin: false,
       createOption: obj,
     };
-    console.log('전송되는 데이터', data);
     try {
-      // 왜 403 에러? 토큰을 정상적으로 보내주는데 토큰이 없다고 뜸..!
-      const res = await axios.patch('/api/user/option', {
+      await baseAxios.patch('/api/user/option', data, {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
+          authorization: `Bearer ${localStorage.getItem('token')}`,
         },
-        body: data,
       });
-      console.log('patch에 대한 응답', res);
+      setData(obj);
     } catch (e) {
       throw new Error();
     }
   }
 
   const checkedHandler = (e: OptionEnums) => {
-    const newData = { ...isChecked };
+    const newData = { ...data };
     newData[e] = !newData[e];
-    console.log('set 해주기 전(보낼데이터)', newData);
     setIsChecked(newData);
-    console.log('여기서 바뀜', isChecked); // 근데 왜 한박자 또 느릴까?
     patchCheckData(newData);
   };
 
@@ -80,7 +79,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="todoCheck"
-              checked={isChecked.TODO_LIST}
+              checked={data.TODO_LIST}
               onChange={() => {
                 checkedHandler(OptionEnums.TODO_LIST);
               }}
@@ -94,7 +93,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="questionCheck"
-              checked={isChecked.TODAY_QUESTION}
+              checked={data.TODAY_QUESTION}
               onChange={() => {
                 checkedHandler(OptionEnums.TODAY_QUESTION);
               }}
@@ -108,7 +107,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="diaryCheck"
-              checked={isChecked.DIARY}
+              checked={data.DIARY}
               onChange={() => {
                 checkedHandler(OptionEnums.DIARY);
               }}
@@ -118,11 +117,11 @@ function SetDiaryOption() {
           <p>👉 일기를 쓰고 오늘 하루를 마무리 해보세요!</p>
         </div>
         <div>
-          <CheckLabel htmlFor="diaryCheck">
+          <CheckLabel htmlFor="emotionCheck">
             <CheckInput
               type="checkbox"
-              id="diaryCheck"
-              checked={isChecked.EMOTION}
+              id="emotionCheck"
+              checked={data.EMOTION}
               onChange={() => {
                 checkedHandler(OptionEnums.EMOTION);
               }}
@@ -132,11 +131,11 @@ function SetDiaryOption() {
           <p>👉 오늘 하루 느꼈던 감정을 기록할 수 있어요!</p>
         </div>
         <div>
-          <CheckLabel htmlFor="diaryCheck">
+          <CheckLabel htmlFor="accountCheck">
             <CheckInput
               type="checkbox"
-              id="diaryCheck"
-              checked={isChecked.ACCOUNT_BOOK}
+              id="accountCheck"
+              checked={data.ACCOUNT_BOOK}
               onChange={() => {
                 checkedHandler(OptionEnums.ACCOUNT_BOOK);
               }}
