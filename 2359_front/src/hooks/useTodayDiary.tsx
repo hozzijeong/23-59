@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { baseAxios } from 'api';
 import useSWR from 'swr';
 import { DiaryStateProps, TodayDiaryProps } from 'types/interfaces';
-import { DiaryMode, emotionEnums } from 'types/enums';
+import { DiaryMode } from 'types/enums';
 import { INITIAL_DIARY_INFO } from 'utilities/initialValues';
 
 const END_POINT = 'api/contents/date';
 
 const initialDiary = {
   diaryInfo: INITIAL_DIARY_INFO,
-  diaryMode: DiaryMode.CREATE,
+  diaryMode: DiaryMode.READ,
 };
 function useTodayDiary(date: string) {
   const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);
@@ -21,6 +21,7 @@ function useTodayDiary(date: string) {
     {
       onSuccess: (data) => {
         const diaryInfo = data[0] ?? null;
+        console.log(diaryInfo, 'DiaryInfo in useTodayInfo');
         if (!diaryInfo) {
           setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
         } else {
@@ -30,6 +31,7 @@ function useTodayDiary(date: string) {
       // revalidateOnMount: false,
       revalidateOnFocus: false,
       revalidateOnReconnect: false,
+      revalidateIfStale: false,
     }
   );
 

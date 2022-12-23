@@ -17,7 +17,8 @@ import { DiaryMode, OptionEnums as OPTION } from 'types/enums';
 import { useUserOptions } from 'hooks/useUserOptions';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
-import { baseAxios } from 'api';
+import useSWRMutation from 'swr/mutation';
+import { baseAxios, createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
 import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
@@ -104,9 +105,9 @@ function Diary() {
       (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
       INITIAL_CONTENT_OPTIONS
     );
-    const { _id, qna, diary, emotion, todo, account } = diaryInfo;
+    const { _id, qna, diary, emotion, todo, account, selectedDate } = diaryInfo;
     const body = {
-      selectedDate: id,
+      selectedDate,
       emotion,
       diary,
       qna,
@@ -117,16 +118,14 @@ function Diary() {
 
     if (_id === '') {
       // create 일 때
-      const sendRequest = baseAxios.post(`/api/contents`, body);
-      mutate('/api/contents', sendRequest).then((res) => {
+      mutate('/api/contents', createDiary(body)).then((res) => {
         setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
       });
       return;
     }
 
     // update 일 때
-    const sendRequest = baseAxios.patch(`/api/contents/${diaryInfo?._id}`, { ...body, contentId: _id });
-    mutate(`/api/contents/${diaryInfo?._id}`, sendRequest).then((res) => console.log(res?.data));
+    mutate(`/api/contents/${diaryInfo?._id}`, updateDiary({ _id, body })).then((res) => console.log(res?.data));
   };
 
   const cancelHandler = () => {
@@ -139,17 +138,7 @@ function Diary() {
   const deleteHandler = () => {
     // eslint-disable-next-line no-restricted-globals
     if (confirm('정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.')) {
-      const ENDPOINT = `/api/contents/${diaryInfo?._id}`;
-      const body = {
-        contentId: diaryInfo?._id ?? '',
-      };
-
-      mutate(
-        ENDPOINT,
-        baseAxios.delete(ENDPOINT, {
-          data: body,
-        })
-      );
+      mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id));
     }
   };
 

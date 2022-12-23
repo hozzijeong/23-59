@@ -30,16 +30,23 @@ function useUserOptions() {
     {
       onSuccess: (data) => {
         const { createOption } = data;
-        console.log(createOption);
+        console.log(createOption, 'CreateOption');
         const options = Object.keys(data.createOption).map((key) => ({ title: key as OptionEnums }));
         const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
         setContentOptions(mixedData);
       },
-      onError: () => {
-        navigation('/login');
+      errorRetryInterval: 1000,
+      errorRetryCount: 5,
+      onError: (error) => {
+        alert(`${error}가 발생했습니다.`);
+        // navigation('/login');
       },
       // revalidateOnMount: false,
+      // revalidateOnFocus: false,
+      // 데이터의 불변성을 보장하는 값들.
+      revalidateIfStale: false,
       revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
 
