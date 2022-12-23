@@ -49,7 +49,7 @@ const findById = async (id: string) => {
 
 const findBySelectedDate = async (selectedDate: string) => {
   const content = await Content.find({ selectedDate });
-  console.log('content: ', content);
+  //console.log('content: ', content);
   return content;
 };
 
@@ -64,8 +64,8 @@ const filterByDate = async (prevDate: string, nextDate: string) => {
   const next = parseInt(nextDate, 10);
 
   const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev } });
-  console.log('filteredContents: ', filteredContents);
-  console.log('length ', filteredContents.length);
+  //console.log('filteredContents: ', filteredContents);
+  //console.log('length ', filteredContents.length);
   return filteredContents;
 };
 

@@ -33,7 +33,8 @@ interface IAccount {
 }
 
 interface IQnA {
-  question: object;
+  //questionId: object;
+  question: string;
   answer: string;
   tag: string;
 }
@@ -84,18 +85,17 @@ const accountSchema = new Schema<IAccount>({
 });
 
 const qnaSchema = new Schema<IQnA>({
-  // question: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'questions',
-  // },
   question: {
     type: String,
+    required: true,
   },
   answer: {
     type: String,
+    required: true,
   },
   tag: {
     type: String,
+    required: true,
   },
 });
 
