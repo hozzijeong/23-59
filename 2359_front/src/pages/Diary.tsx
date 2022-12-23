@@ -44,7 +44,7 @@ function Diary() {
   const { todayDiary, setTodayDiary } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
   const { diaryInfo, diaryMode } = todayDiary;
-
+  console.log(todayDiary, contentOptions);
   const todayTodoState = useRecoilValue(todayTodo);
   const questionAnswerState = useRecoilValue(questionAnswer);
   const emotionState = useRecoilValue(emotionAtom);
@@ -96,7 +96,7 @@ function Diary() {
     });
   }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary]);
 
-  const submitHandler = async () => {
+  const submitHandler = () => {
     const body = {
       selectedDate: id,
       emotion: emotionState.emotion,
@@ -149,10 +149,6 @@ function Diary() {
     }
   };
 
-  // Read 페이지를 어떠헥 만들 것인지 생각해보기
-  // 처음에 작성 여부에 따라 Empty페이지 보여줄 것.
-  // 제일 처음에는 Read 페이지 보여줄 것.
-  // 그 다음에 수정하기 누른다면 작성 페이지로 이동할 것.
   return (
     <DiarySection>
       <HeadContent>

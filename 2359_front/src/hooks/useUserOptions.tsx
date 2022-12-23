@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { baseAxios } from 'api';
 import { useNavigate } from 'react-router';
 import useSWR from 'swr';
@@ -28,14 +28,12 @@ function useUserOptions() {
         })
         .then((res) => res.data),
     {
-      onSuccess: (data, key, config) => {
+      onSuccess: (data) => {
         const { createOption } = data;
         const options = Object.keys(data.createOption).map((key) => ({ title: key as OptionEnums }));
-
-        if (options && contentOptions.length === 0) {
-          const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
-          setContentOptions(mixedData);
-        }
+        const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
+        setContentOptions(mixedData);
+        return { contentOptions: mixedData };
       },
       onError: () => {
         navigation('/login');
