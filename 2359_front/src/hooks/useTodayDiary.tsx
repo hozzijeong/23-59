@@ -29,6 +29,9 @@ function useTodayDiary(date: string) {
           setTodayDiary({ diaryInfo, diaryMode: DiaryMode.READ });
         }
       },
+      revalidateOnMount: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
 

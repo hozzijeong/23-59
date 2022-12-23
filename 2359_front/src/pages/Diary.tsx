@@ -19,6 +19,7 @@ import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
 import { baseAxios } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
+import { OptionCheckedProps } from 'types/interfaces';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -44,7 +45,7 @@ function Diary() {
   const { todayDiary, setTodayDiary } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
   const { diaryInfo, diaryMode } = todayDiary;
-  console.log(todayDiary, contentOptions);
+
   const todayTodoState = useRecoilValue(todayTodo);
   const questionAnswerState = useRecoilValue(questionAnswer);
   const emotionState = useRecoilValue(emotionAtom);
@@ -97,6 +98,17 @@ function Diary() {
   }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary]);
 
   const submitHandler = () => {
+    const checkOption: OptionCheckedProps = contentOptions.reduce(
+      (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
+      {
+        TODO_LIST: false,
+        TODAY_QUESTION: false,
+        EMOTION: false,
+        DIARY: false,
+        ACCOUNT_BOOK: false,
+      }
+    );
+
     const body = {
       selectedDate: id,
       emotion: emotionState.emotion,
@@ -111,11 +123,14 @@ function Diary() {
       },
       todo: todayTodoState,
       account: accountTableAtomState,
+      checkOption,
     };
 
     if (diaryInfo?._id === undefined) {
       const sendRequest = baseAxios.post(`/api/contents`, body);
-      mutate('/api/contents', sendRequest).then((res) => console.log(res?.data));
+      mutate('/api/contents', sendRequest).then((res) => {
+        setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+      });
       return;
     }
 

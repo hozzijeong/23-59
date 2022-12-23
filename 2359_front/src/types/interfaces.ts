@@ -34,6 +34,7 @@ interface DiaryStateProps {
   emotion?: EMOTION;
   todayDiary?: TodayDiaryProps;
   accountTable?: AccountTableRow[];
+  contentOptions?: OptionCheckedProps;
 }
 
 interface OptionProps {

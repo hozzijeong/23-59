@@ -16,7 +16,7 @@ function useUserOptions() {
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>([]);
 
   // onSuccess 사용해서 성공시 데이터 맞추기.
-  const { data } = useSWR<UserOptionsProps>(
+  const { data, isLoading } = useSWR<UserOptionsProps>(
     '/api/user/option/',
     () =>
       baseAxios
@@ -33,15 +33,17 @@ function useUserOptions() {
         const options = Object.keys(data.createOption).map((key) => ({ title: key as OptionEnums }));
         const mixedData = options.map((data) => ({ ...data, isChecked: createOption[data.title] }));
         setContentOptions(mixedData);
-        return { contentOptions: mixedData };
       },
       onError: () => {
         navigation('/login');
       },
+      revalidateOnMount: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
     }
   );
 
-  return { contentOptions, setContentOptions, firstLogin: data?.firstLogin };
+  return { contentOptions, setContentOptions, firstLogin: data?.firstLogin, isLoading };
 }
 
 export { useUserOptions };
