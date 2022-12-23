@@ -1,38 +1,59 @@
-import React, { useEffect, useState } from 'react';
-import tw from 'tailwind-styled-components';
+import React, { useCallback, useEffect, useState } from 'react';
+import FormModal from 'components/signup/FormModal';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import { UpdateFormValue } from '../../types/interfaces';
 import { emailCheck } from '../../utilities/regex';
+import { UpdateFormValue } from '../../types/interfaces';
 import * as SC from '../signup/FormStyled';
+import useUserUpdate from '../../hooks/useUserUpdate';
+import { baseAxios } from '../../api';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function UserInfo() {
-  const [state, setState] = useState('ghd@nav.com');
-  const [nickname, setNickname] = useState('');
-  const navigate = useNavigate();
+  const { userUpdateRequest } = useUserUpdate();
+  const [isModal, setIsModal] = useState(false);
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors },
   } = useForm<UpdateFormValue>();
 
+  // 유저 정보 가져오기
+  const userDataRequest = useCallback(() => {
+    baseAxios
+      .get(`/api/user/info`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      })
+      .then((res) => {
+        setValue('email', res.data.email);
+        setValue('nickname', res.data.nickname);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  }, []);
+
   useEffect(() => {
-    // axios.get('')
-    // 만약 유저가 회원 수정 페이지로 들어오면
-    // axios.get으로 유저 정보를 불러오고, 그 정보를 setValue로 넣어준다.?
-    setValue('email', state);
-    setValue('nickname', state);
+    userDataRequest();
   }, []);
 
   const OnSubmit: SubmitHandler<UpdateFormValue> = (data) => {
     const formdata = {
-      currentPassword: data.newPassword,
+      currentPassword: data.currentPassword,
       nickname: data.nickname,
       password: data.password,
     };
-    console.log(formdata);
+    if (!isModal) {
+      userUpdateRequest(formdata);
+      setIsModal(false);
+    } else {
+      setIsModal(true);
+    }
+    setValue('password', '');
+    setValue('currentPassword', '');
   };
 
   return (
@@ -68,43 +89,44 @@ function UserInfo() {
         )}
         <SC.FormLabel>현재 비밀번호</SC.FormLabel>
         <SC.FormInput
-          {...register('password', { required: true, minLength: 6 })}
-          name="password"
+          {...register('currentPassword', { required: true, minLength: 6 })}
+          name="currentPassword"
           type="password"
           placeholder="비밀번호를 입력해주세요"
         />
-        {errors.password && errors.password.type === 'required' && (
+        {errors.currentPassword && errors.currentPassword.type === 'required' && (
           <SC.ErrorMesg>비밀번호를 입력해주세요.</SC.ErrorMesg>
         )}
-        {/* 데이터로 받아온 비밀번호가 일치하지 않을 때 ? {errors.password && errors.password.type === 'minLength' && (
-          <SC.ErrorMesg>비밀번호가 일치하지 않습니다.</SC.ErrorMesg>
-        )} */}
         <SC.FormLabel>새로운 비밀 번호</SC.FormLabel>
         <SC.FormInput
-          {...register('newPassword', {
+          {...register('password', {
             required: true,
             minLength: 6,
+            validate: (value) => value !== watch('currentPassword'),
           })}
-          name="newPassword"
+          name="password"
           type="password"
           placeholder="새로운 비밀번호를 입력해주세요"
         />
-        {errors.newPassword && errors.newPassword.type === 'minLength' && (
+        {errors.password && errors.password.type === 'validate' && (
+          <SC.ErrorMesg>현재 비밀번호와 같습니다.</SC.ErrorMesg>
+        )}
+        {errors.password && errors.password.type === 'minLength' && (
           <SC.ErrorMesg>6자 이상으로 설정해주세요.</SC.ErrorMesg>
         )}
-        {errors.newPassword && errors.newPassword.type === 'required' && (
+        {errors.password && errors.password.type === 'required' && (
           <SC.ErrorMesg>비밀번호를 입력해주세요.</SC.ErrorMesg>
         )}
         <SC.SubmitButton type="submit">회원수정</SC.SubmitButton>
-        <SC.SubmitButton
-          delete
+        <SC.DeleteTag
           onClick={() => {
-            console.log('삭제버튼 클릭');
+            setIsModal(true);
           }}
         >
           회원탈퇴
-        </SC.SubmitButton>
+        </SC.DeleteTag>
       </SC.Form>
+      {isModal && <FormModal>정말 탈퇴 하시겠습니까..?</FormModal>}
     </SC.Container>
   );
 }
