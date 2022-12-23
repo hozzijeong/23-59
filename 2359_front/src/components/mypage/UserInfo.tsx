@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import ModalBasic from 'components/ModalBasic';
 import { useRecoilState } from 'recoil';
 import { showModalPage } from 'recoil/modalAtom';
@@ -17,7 +17,7 @@ function UserInfo() {
   const navigation = useNavigate();
   const { userUpdateRequest } = useUserUpdate();
   const { userDelete } = useUserDelete();
-  const [isModal, setIsModal] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -54,12 +54,7 @@ function UserInfo() {
       nickname: data.nickname,
       password: data.password,
     };
-    if (!isModal) {
-      userUpdateRequest(formdata);
-      setIsModal(false);
-    } else {
-      setIsModal(true);
-    }
+    userUpdateRequest(formdata);
     setValue('password', '');
     setValue('currentPassword', '');
   };
@@ -115,7 +110,7 @@ function UserInfo() {
           placeholder="새로운 비밀번호를 입력해주세요"
         />
         {errors.password && errors.password.type === 'validate' && (
-          <SC.ErrorMesg>현재 비밀번호와 같습니다.</SC.ErrorMesg>
+          <SC.ErrorMesg>다른 비밀번호를 입력해주세요.</SC.ErrorMesg>
         )}
         {errors.password && errors.password.type === 'minLength' && (
           <SC.ErrorMesg>6자 이상으로 설정해주세요.</SC.ErrorMesg>
