@@ -17,12 +17,12 @@ function useUserOptions() {
 
   // onSuccess 사용해서 성공시 데이터 맞추기.
   const { data } = useSWR<UserOptionsProps>(
-    '/api/user/option/',
+    '/api/user/option',
     () =>
       baseAxios
-        .get('/api/user/option/', {
+        .get('/api/user/option', {
           headers: {
-            authorization: accessToken,
+            authorization: `Bearer ${accessToken}`,
             Accept: 'application/json',
           },
         })

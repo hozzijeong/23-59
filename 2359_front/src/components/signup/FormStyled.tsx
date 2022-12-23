@@ -59,10 +59,21 @@ duration-150
 bg-primaryDark
 px-3 py-1 text-base
 
+
 ${(props) => props.delete && `bg-[primary]`}
 `;
 
-const SignUpLink = tw.a`
+const DeleteTag = tw.p`
+mx-auto
+mt-[5px]
+cursor-pointer
+hover:text-primaryDark
+ease-linear 
+transition-all 
+duration-150
+`;
+
+const SignUpLink = tw.p`
   mx-auto
   mt-3 
   hover:text-primaryDark
@@ -75,4 +86,4 @@ const ErrorMesg = tw.span`
 text-[red]
 `;
 
-export { ErrorMesg, SubmitButton, FormInput, FormLabel, FormTitle, Form, Container, SignUpLink };
+export { ErrorMesg, SubmitButton, FormInput, FormLabel, FormTitle, Form, Container, SignUpLink, DeleteTag };
