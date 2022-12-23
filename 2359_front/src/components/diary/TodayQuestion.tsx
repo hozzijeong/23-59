@@ -6,7 +6,7 @@ import { DiaryMode } from 'types/enums';
 import { DiaryComponentPrpos } from 'types/interfaces';
 
 function TodayQuestion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
-  const [{ answer }, setAnswer] = useRecoilState(questionAnswer);
+  // const [{ answer }, setAnswer] = useRecoilState(questionAnswer);
   const { diaryInfo, diaryMode } = todayDiary;
 
   const answerChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -15,23 +15,23 @@ function TodayQuestion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
       diaryMode,
       diaryInfo: {
         ...diaryInfo,
-        answer: {
+        qna: {
           question: '',
           tag: '',
           answer: value,
         },
       },
     });
-    setAnswer({ answer: value });
+    // setAnswer({ answer: value });
   };
 
   return (
     <div>
-      <Question>{diaryMode === DiaryMode.READ ? diaryInfo.answer.question : '오늘 하루 어떠셨나요?'}</Question>
+      <Question>{diaryMode === DiaryMode.READ ? diaryInfo.qna.question : '오늘 하루 어떠셨나요?'}</Question>
       {diaryMode === DiaryMode.READ ? (
-        <div>{diaryInfo.answer.answer}</div>
+        <div>{diaryInfo.qna.answer}</div>
       ) : (
-        <AnswerArea defaultValue={answer} onChange={answerChangeHandler} />
+        <AnswerArea defaultValue={diaryInfo.qna.answer} onChange={answerChangeHandler} />
       )}
     </div>
   );

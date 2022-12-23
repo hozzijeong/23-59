@@ -104,12 +104,12 @@ function Diary() {
       (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
       INITIAL_CONTENT_OPTIONS
     );
-    const { _id, answer, diary, emotion, todo, account } = diaryInfo;
+    const { _id, qna, diary, emotion, todo, account } = diaryInfo;
     const body = {
       selectedDate: id,
       emotion,
       diary,
-      answer,
+      qna,
       todo,
       account,
       checkOption,

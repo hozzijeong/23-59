@@ -36,7 +36,7 @@ interface DiaryStateProps {
   _id: string;
   selectedDate: string;
   todo: TodoListProps[];
-  answer: QuestionAnswerProps;
+  qna: QuestionAnswerProps;
   emotion: EMOTION;
   diary: DiaryProps;
   account: AccountTableRow[];

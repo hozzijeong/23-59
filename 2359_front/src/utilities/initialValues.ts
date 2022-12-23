@@ -19,7 +19,7 @@ const INITIAL_DIARY_INFO = {
   _id: '',
   selectedDate: '',
   todo: [],
-  answer: {
+  qna: {
     question: '',
     tag: '',
     answer: '',
