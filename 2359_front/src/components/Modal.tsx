@@ -1,50 +1,27 @@
 import React, { useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { showModalPage } from 'recoil/modalAtom';
 import tw from 'tailwind-styled-components';
-import Button from './Button';
-import Tooltip from './Tooltip';
 
-interface ModalProps<T> {
-  title?: string;
+interface ModalProps {
   children?: React.ReactNode;
-  btnclose?: string;
-  btnsave?: string;
-  state?: T;
 }
 
-function Modal<T>({ title, children, btnclose, btnsave, state }: ModalProps<T>) {
-  const [showModal, setShowModal] = useState(true);
-
-  const saveHandler = () => {
-    setShowModal(false);
-    console.log(state);
-  };
+function Modal({ children }: ModalProps) {
+  const showModal = useRecoilValue(showModalPage);
 
   return (
     <div>
-      {showModal ? (
+      {showModal && (
         <>
           <ModalScreen>
             <ModalContainer>
-              <ModalBox>
-                <ModalHeader>
-                  <ModalTitle>{title}</ModalTitle>
-                  <Tooltip text="매일 작성하는 옵션을 설정하고,   마이페이지에서 수정할 수 있어요" />
-                </ModalHeader>
-                <ModalContent>{children}</ModalContent>
-                <ModalFooter>
-                  <Button btntype="cancel" onClick={() => setShowModal(false)}>
-                    {btnclose}
-                  </Button>
-                  <Button btntype="save" onClick={saveHandler}>
-                    {btnsave}
-                  </Button>
-                </ModalFooter>
-              </ModalBox>
+              <ModalBox>{children}</ModalBox>
             </ModalContainer>
           </ModalScreen>
           <ModalBackScreen />
         </>
-      ) : null}
+      )}
     </div>
   );
 }
@@ -52,11 +29,7 @@ function Modal<T>({ title, children, btnclose, btnsave, state }: ModalProps<T>) 
 export default Modal;
 
 Modal.defaultProps = {
-  title: '제목',
   children: null,
-  btnclose: '닫기',
-  btnsave: '저장',
-  state: null,
 };
 
 const ModalScreen = tw.div`
@@ -95,37 +68,4 @@ w-full
 bg-white 
 outline-none 
 focus:outline-none
-`;
-
-const ModalHeader = tw.div`
-flex 
-items-start 
-justify-between 
-p-5 
-border-b 
-border-solid 
-border-gray-200 
-rounded-t
-`;
-
-const ModalTitle = tw.h3`
-text-xl 
-font-semibold
-`;
-
-const ModalContent = tw.div`
-relative
-p-6 
-flex-auto
-`;
-
-const ModalFooter = tw.div`
-flex
-items-center 
-justify-end
-p-5 
-border-t 
-border-solid 
-border-slate-200 
-rounded-b
 `;

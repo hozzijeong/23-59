@@ -17,8 +17,11 @@ import { DiaryMode, OptionEnums as OPTION } from 'types/enums';
 import { useUserOptions } from 'hooks/useUserOptions';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
-import { baseAxios } from 'api';
+import useSWRMutation from 'swr/mutation';
+import { baseAxios, createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
+import { OptionCheckedProps } from 'types/interfaces';
+import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -44,7 +47,8 @@ function Diary() {
   const { todayDiary, setTodayDiary } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
   const { diaryInfo, diaryMode } = todayDiary;
-  console.log(todayDiary, contentOptions);
+  console.log(diaryInfo, diaryMode, contentOptions, 'options');
+
   const todayTodoState = useRecoilValue(todayTodo);
   const questionAnswerState = useRecoilValue(questionAnswer);
   const emotionState = useRecoilValue(emotionAtom);
@@ -81,11 +85,11 @@ function Diary() {
       if (!isChecked) return null;
 
       const diaryContentMap: DiaryContentsPrpos = {
-        [OPTION.TODO_LIST]: <TodoList />,
-        [OPTION.TODAY_QUESTION]: <TodayQuestion />,
-        [OPTION.EMOTION]: <Emotion />,
-        [OPTION.DIARY]: <TodayDiary />,
-        [OPTION.ACCOUNT_BOOK]: <AccountBook />,
+        [OPTION.TODO_LIST]: <TodoList todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.TODAY_QUESTION]: <TodayQuestion todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.EMOTION]: <Emotion todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.DIARY]: <TodayDiary todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.ACCOUNT_BOOK]: <AccountBook todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
       };
 
       return (
@@ -94,35 +98,34 @@ function Diary() {
         </DiaryComponentsLayout>
       );
     });
-  }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary]);
+  }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary, todayDiary]);
 
   const submitHandler = () => {
+    const checkOption: OptionCheckedProps = contentOptions.reduce(
+      (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
+      INITIAL_CONTENT_OPTIONS
+    );
+    const { _id, qna, diary, emotion, todo, account, selectedDate } = diaryInfo;
     const body = {
-      selectedDate: id,
-      emotion: emotionState.emotion,
-      diary: {
-        title: todayDiaryState.title,
-        diaryContent: todayDiaryState.content,
-      },
-      answer: {
-        question: '',
-        tag: '',
-        answer: questionAnswerState.answer,
-      },
-      todo: todayTodoState,
-      account: accountTableAtomState,
+      selectedDate,
+      emotion,
+      diary,
+      qna,
+      todo,
+      account,
+      checkOption,
     };
 
-    if (diaryInfo?._id === undefined) {
-      const sendRequest = baseAxios.post(`/api/contents`, body);
-      mutate('/api/contents', sendRequest).then((res) => console.log(res?.data));
+    if (_id === '') {
+      // create 일 때
+      mutate('/api/contents', createDiary(body)).then((res) => {
+        setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+      });
       return;
     }
 
-    if (diaryInfo?._id) {
-      const sendRequest = baseAxios.patch(`/api/contents/${diaryInfo?._id}`, { ...body, contentId: diaryInfo?._id });
-      mutate(`/api/contents/${diaryInfo?._id}`, sendRequest).then((res) => console.log(res?.data));
-    }
+    // update 일 때
+    mutate(`/api/contents/${diaryInfo?._id}`, updateDiary({ _id, body })).then((res) => console.log(res?.data));
   };
 
   const cancelHandler = () => {
@@ -135,17 +138,7 @@ function Diary() {
   const deleteHandler = () => {
     // eslint-disable-next-line no-restricted-globals
     if (confirm('정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.')) {
-      const ENDPOINT = `/api/contents/${diaryInfo?._id}`;
-      const body = {
-        contentId: diaryInfo?._id ?? '',
-      };
-
-      mutate(
-        ENDPOINT,
-        baseAxios.delete(ENDPOINT, {
-          data: body,
-        })
-      );
+      mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id));
     }
   };
 

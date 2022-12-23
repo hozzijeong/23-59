@@ -3,17 +3,25 @@ import Calendar from 'components/calendar/Calendar';
 import Modal from 'components/Modal';
 import { TutorialOption } from 'components/tutorial/TutorialOption';
 import { useUserOptions } from 'hooks/useUserOptions';
+import TutorialModal from 'components/tutorial/TutorialModal';
 
 function Home() {
-  const { contentOptions, setContentOptions, firstLogin } = useUserOptions(); // 유저들 옵션 처리
-  console.log(contentOptions, 'HOme options');
+  const { firstLogin, contentOptions, setContentOptions } = useUserOptions();
+  // console.log(contentOptions, 'Home options');
+  // console.log(firstLogin, contentOptions, 'firstLogin');
 
   return (
     <div>
       <Calendar />
       {firstLogin === true && (
-        <Modal title="옵션 설정하기" state={contentOptions}>
-          <TutorialOption state={contentOptions} setState={setContentOptions} />
+        <Modal>
+          <TutorialModal
+            title="옵션 설정하기"
+            btnclose="나중에 하기"
+            btnsave="설정 저장하기"
+            state={contentOptions}
+            setState={setContentOptions}
+          />
         </Modal>
       )}
     </div>
