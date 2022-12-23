@@ -70,7 +70,6 @@ function UserInfo() {
             required: '필수 응답 항목입니다.',
             pattern: { value: emailCheck, message: '이메일 형식이 아닙니다.' },
           })}
-          name="email"
           type="email"
           placeholder="이메일을 입력해주세요"
         />
@@ -79,7 +78,6 @@ function UserInfo() {
         <SC.FormLabel>닉네임</SC.FormLabel>
         <SC.FormInput
           {...register('nickname', { required: true, maxLength: 10 })}
-          name="nickname"
           type="text"
           placeholder="닉네임을 입력해주세요"
         />
@@ -92,8 +90,8 @@ function UserInfo() {
         )}
         <SC.FormLabel>현재 비밀번호</SC.FormLabel>
         <SC.FormInput
+          autoComplete="new-password"
           {...register('currentPassword', { required: true, minLength: 6 })}
-          name="currentPassword"
           type="password"
           placeholder="비밀번호를 입력해주세요"
         />
@@ -107,7 +105,7 @@ function UserInfo() {
             minLength: 6,
             validate: (value) => value !== watch('currentPassword'),
           })}
-          name="password"
+          autoComplete="off"
           type="password"
           placeholder="새로운 비밀번호를 입력해주세요"
         />
