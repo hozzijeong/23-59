@@ -35,7 +35,7 @@ interface IAccount {
 interface IQnA {
   question: object;
   answer: string;
-  tag: string;
+  //tag: string;
 }
 
 interface ICheckOption {
@@ -87,7 +87,7 @@ const qnaSchema = new Schema<IQnA>({
   question: {
     type: Schema.Types.ObjectId,
     ref: 'questions',
-    required: true,
+    //required: true,
   },
   // question: {
   //   type: String,
@@ -95,9 +95,9 @@ const qnaSchema = new Schema<IQnA>({
   answer: {
     type: String,
   },
-  tag: {
-    type: String,
-  },
+  // tag: {
+  //   type: String,
+  // },
 });
 
 const ContentSchema = new Schema<IContent>(

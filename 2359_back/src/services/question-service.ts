@@ -17,6 +17,7 @@ class QuestionService {
   // 전체 질문 조회
   async getQuestions() {
     const questions = await this.questionModel.findQuestions();
+    //const questionArr = questions.map((obj: any) => obj.item);
     return questions;
   }
 

@@ -85,6 +85,8 @@ contentRouter.post('/', async (req, res, next) => {
     // diary, todo, account, answer
     const { selectedDate, emotion, diary, todo, account, qna } = req.body;
 
+    console.log('qna ', qna);
+
     const newContent = await contentService.addContent({
       selectedDate,
       emotion,

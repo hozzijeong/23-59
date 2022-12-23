@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const connectDB = () => {
-  const DB_URL = process.env.MONGODB_URL || 'MongoDB 서버 주소가 설정되지 않았습니다.';
+  const DB_URL = process.env.MONGODB_URL || 'mongodb+srv://team16:1234@cluster0.cei9suq.mongodb.net/test';
   const db = mongoose.connection;
   try {
     mongoose.set('strictQuery', false);
