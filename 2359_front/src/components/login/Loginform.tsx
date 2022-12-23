@@ -1,12 +1,10 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-// import useSWR from 'swr';
 import { LoginFormValue } from '../../types/interfaces';
 import * as SC from '../signup/FormStyled';
 import { emailCheck } from '../../utilities/regex';
 import useLogin from '../../hooks/useUserLogin';
-// import { fetcher } from '../../utilities/fetcher';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function Loginform() {
@@ -16,9 +14,6 @@ function Loginform() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValue>();
-
-  // const { data, error } = useSWR('http://localhost:8000/api/users', fetcher);
-  // console.log('data', data, 'error', error);
 
   const OnSubmit: SubmitHandler<LoginFormValue> = (data) => {
     loginRequest(data);
