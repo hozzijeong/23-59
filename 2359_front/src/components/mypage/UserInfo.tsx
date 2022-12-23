@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import FormModal from 'components/signup/FormModal';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { emailCheck } from '../../utilities/regex';
 import { UpdateFormValue } from '../../types/interfaces';
 import * as SC from '../signup/FormStyled';
 import useUserUpdate from '../../hooks/useUserUpdate';
 import { baseAxios } from '../../api';
+import { emailCheck } from '../../utilities/regex';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function UserInfo() {
+  const navigation = useNavigate();
   const { userUpdateRequest } = useUserUpdate();
   const [isModal, setIsModal] = useState(false);
   const {
@@ -32,7 +34,8 @@ function UserInfo() {
         setValue('nickname', res.data.nickname);
       })
       .catch((err) => {
-        alert(err);
+        alert('로그인 해주세요!');
+        navigation('/login');
       });
   }, []);
 
