@@ -11,7 +11,6 @@ const useRegister = () => {
     baseAxios
       .post(`api/user/register`, Data)
       .then((res) => {
-        console.log(res);
         alert('가입 완료 됐습니다.');
         navigate('/login');
       })
