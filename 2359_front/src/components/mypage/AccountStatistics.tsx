@@ -70,7 +70,7 @@ function AccountStatistics() {
 
       const newData = [...tmpData];
       const paymentAmount = price.reduce((acc: any, curr: any) => {
-        return acc + curr;
+        return Number(acc) + Number(curr);
       });
       setPayment(paymentAmount as number);
       setData(newData);
