@@ -96,7 +96,7 @@ const filterByCls = async (prevDate: string, nextDate: string) => {
   console.log(clsArr[1]);
   const incomes = await Content.find({
     selectedDate: { $lte: next, $gte: prev },
-    'account.cls': '수입',
+    'account.cls': 'INCOME',
   });
 
   const expenses = await Content.find({
@@ -122,7 +122,7 @@ const filterByCategory = async (prevDate: string, nextDate: string) => {
 
   const cateogries = await Content.find({
     selectedDate: { $lte: next, $gte: prev },
-    'account.cls': '지출',
+    'account.cls': 'EXPENSE',
     'account.category': { $exists: true },
   });
   console.log('model-categories: ', cateogries);
