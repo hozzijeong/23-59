@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { baseAxios } from 'api';
 import tw from 'tailwind-styled-components';
 import { ResponsivePie } from '@nivo/pie';
 import { StatisticsScript, Container, BarChartContainer } from './EmotionStatistics';
@@ -25,7 +26,12 @@ function AccountStatistics() {
   async function getFilterIncome() {
     try {
       const incomeResponse = await axios.get(
-        `/api/contents/filterCls/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`
+        `/api/contents/filterCls/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
       );
       const incomeData = await incomeResponse.data;
       setIncome(incomeData);
@@ -36,8 +42,13 @@ function AccountStatistics() {
 
   async function getFilterPayment() {
     try {
-      const payResponse = await axios.get(
-        `/api/contents/filterCategory/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`
+      const payResponse = await baseAxios.get(
+        `/api/contents/filterCategory/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
       );
 
       const tmpPayResult = payResponse.data;
