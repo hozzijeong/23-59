@@ -1,16 +1,23 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import FormModal from 'components/signup/FormModal';
+import React, { useCallback, useEffect } from 'react';
+import ModalBasic from 'components/ModalBasic';
+import { useRecoilState } from 'recoil';
+import { showModalPage } from 'recoil/modalAtom';
+import { useNavigate } from 'react-router-dom';
+import useUserDelete from 'hooks/useUserDelete';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { emailCheck } from '../../utilities/regex';
 import { UpdateFormValue } from '../../types/interfaces';
 import * as SC from '../signup/FormStyled';
 import useUserUpdate from '../../hooks/useUserUpdate';
 import { baseAxios } from '../../api';
+import { emailCheck } from '../../utilities/regex';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function UserInfo() {
+  const [showModal, setShowModal] = useRecoilState(showModalPage);
+  const navigation = useNavigate();
   const { userUpdateRequest } = useUserUpdate();
-  const [isModal, setIsModal] = useState(false);
+  const { userDelete } = useUserDelete();
+
   const {
     register,
     handleSubmit,
@@ -32,7 +39,8 @@ function UserInfo() {
         setValue('nickname', res.data.nickname);
       })
       .catch((err) => {
-        alert(err);
+        alert('로그인 해주세요!');
+        navigation('/login');
       });
   }, []);
 
@@ -46,12 +54,7 @@ function UserInfo() {
       nickname: data.nickname,
       password: data.password,
     };
-    if (!isModal) {
-      userUpdateRequest(formdata);
-      setIsModal(false);
-    } else {
-      setIsModal(true);
-    }
+    userUpdateRequest(formdata);
     setValue('password', '');
     setValue('currentPassword', '');
   };
@@ -67,7 +70,6 @@ function UserInfo() {
             required: '필수 응답 항목입니다.',
             pattern: { value: emailCheck, message: '이메일 형식이 아닙니다.' },
           })}
-          name="email"
           type="email"
           placeholder="이메일을 입력해주세요"
         />
@@ -76,7 +78,6 @@ function UserInfo() {
         <SC.FormLabel>닉네임</SC.FormLabel>
         <SC.FormInput
           {...register('nickname', { required: true, maxLength: 10 })}
-          name="nickname"
           type="text"
           placeholder="닉네임을 입력해주세요"
         />
@@ -89,8 +90,8 @@ function UserInfo() {
         )}
         <SC.FormLabel>현재 비밀번호</SC.FormLabel>
         <SC.FormInput
+          autoComplete="new-password"
           {...register('currentPassword', { required: true, minLength: 6 })}
-          name="currentPassword"
           type="password"
           placeholder="비밀번호를 입력해주세요"
         />
@@ -104,12 +105,12 @@ function UserInfo() {
             minLength: 6,
             validate: (value) => value !== watch('currentPassword'),
           })}
-          name="password"
+          autoComplete="off"
           type="password"
           placeholder="새로운 비밀번호를 입력해주세요"
         />
         {errors.password && errors.password.type === 'validate' && (
-          <SC.ErrorMesg>현재 비밀번호와 같습니다.</SC.ErrorMesg>
+          <SC.ErrorMesg>다른 비밀번호를 입력해주세요.</SC.ErrorMesg>
         )}
         {errors.password && errors.password.type === 'minLength' && (
           <SC.ErrorMesg>6자 이상으로 설정해주세요.</SC.ErrorMesg>
@@ -120,13 +121,17 @@ function UserInfo() {
         <SC.SubmitButton type="submit">회원수정</SC.SubmitButton>
         <SC.DeleteTag
           onClick={() => {
-            setIsModal(true);
+            setShowModal(true);
           }}
         >
           회원탈퇴
         </SC.DeleteTag>
       </SC.Form>
-      {isModal && <FormModal>정말 탈퇴 하시겠습니까..?</FormModal>}
+      {showModal && (
+        <ModalBasic title="회원 탈퇴" btnclose="취소" btnsave="탈퇴" saveHandler={userDelete}>
+          정말 탈퇴 하시겠습니까..?
+        </ModalBasic>
+      )}
     </SC.Container>
   );
 }

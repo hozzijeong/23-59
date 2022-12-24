@@ -33,7 +33,11 @@ function Loginform() {
         {errors.email && errors.email.type === 'required' && <SC.ErrorMesg>이메일을 입력해주세요.</SC.ErrorMesg>}
         {errors.email && errors.email.type === 'pattern' && <SC.ErrorMesg>올바른 이메일을 입력해주세요.</SC.ErrorMesg>}
         <SC.FormLabel>비밀번호</SC.FormLabel>
-        <SC.FormInput type="password" {...register('password', { required: true, minLength: 6 })} />
+        <SC.FormInput
+          autoComplete="new-password"
+          {...register('password', { required: true, minLength: 6 })}
+          type="password"
+        />
         {errors.password && errors.password.type === 'required' && (
           <SC.ErrorMesg>비밀번호를 입력해주세요.</SC.ErrorMesg>
         )}

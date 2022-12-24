@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { baseAxios } from 'api';
 import tw from 'tailwind-styled-components';
 import { ResponsivePie } from '@nivo/pie';
 import { StatisticsScript, Container, BarChartContainer } from './EmotionStatistics';
@@ -10,6 +11,12 @@ const currentYear = date.getFullYear();
 const currentMonth = date.getMonth() + 1;
 const monthLastDate = lastDay.getDate();
 
+interface Idata {
+  id: string;
+  label: string;
+  value: number;
+}
+
 function AccountStatistics() {
   const initialData: Record<string, string | number>[] = [];
   const [data, setData] = useState(initialData);
@@ -19,7 +26,12 @@ function AccountStatistics() {
   async function getFilterIncome() {
     try {
       const incomeResponse = await axios.get(
-        `/api/contents/filterCls/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`
+        `/api/contents/filterCls/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
       );
       const incomeData = await incomeResponse.data;
       setIncome(incomeData);
@@ -30,13 +42,22 @@ function AccountStatistics() {
 
   async function getFilterPayment() {
     try {
-      const payResponse = await axios.get(
-        `/api/contents/filterCategory/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`
+      const payResponse = await baseAxios.get(
+        `/api/contents/filterCategory/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
       );
-      const tmpPayResult = await payResponse.data;
+
+      const tmpPayResult = payResponse.data;
+      console.log(tmpPayResult);
+
       const categories = Object.keys(tmpPayResult); // Object 형태
       const price = Object.values(tmpPayResult);
-
+      console.log('tmp', tmpPayResult);
+      console.log('cate', categories, '가격', price);
       // Record<string, string | number>[]
       const tmpData: any = [];
       for (let i = 0; i < categories.length; i += 1) {
@@ -49,7 +70,7 @@ function AccountStatistics() {
 
       const newData = [...tmpData];
       const paymentAmount = price.reduce((acc: any, curr: any) => {
-        return acc + curr;
+        return Number(acc) + Number(curr);
       });
       setPayment(paymentAmount as number);
       setData(newData);

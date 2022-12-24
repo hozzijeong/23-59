@@ -8,7 +8,7 @@ const calendarPage = atom({
 
 const calendarSummary = atom({
   key: 'calendarSummary',
-  default: null,
+  default: [],
 });
 
-export default calendarPage;
+export { calendarPage, calendarSummary };

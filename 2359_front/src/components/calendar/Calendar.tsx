@@ -1,24 +1,52 @@
-import React, { useState } from 'react';
-import { format, subMonths, addMonths, startOfMonth, endOfMonth } from 'date-fns';
+import React, { useEffect, useState } from 'react';
+import { format, subMonths, addMonths } from 'date-fns';
 import uuid from 'react-uuid';
+import useSWR from 'swr';
 import tw from 'tailwind-styled-components';
 import Button from 'components/Button';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import calendarPage from 'recoil/calendarAtom';
+import { calendarPage, calendarSummary } from 'recoil/calendarAtom';
+import { getMonthDate } from 'utilities/getMonthDate';
+import { baseAxios } from 'api';
+import { clsEnums, emotionEnums } from 'types/enums';
+import { EMOTIONS } from 'types/enumConverter';
 import { CalendarWeeks, dayColor, takeMonth, todayColor } from './Utils';
-import DiarySum from './DiarySum';
+
+type AccountProps = {
+  [key in clsEnums]: number;
+};
+interface SumObject {
+  date: string;
+  emotion: emotionEnums;
+  etc: boolean;
+  account: AccountProps;
+}
 
 function Calendar() {
   const [currentDate, setCurrentDate] = useRecoilState(calendarPage);
+  const [diaryData, setDiaryData] = useRecoilState(calendarSummary);
   const navigate = useNavigate();
-  console.log('currentDate', currentDate);
-  const MonthStart = format(startOfMonth(currentDate), 'yyyyMMdd');
-  const MonthEnd = format(endOfMonth(currentDate), 'yyyyMMdd');
-  const MonthDate = `${MonthStart}-${MonthEnd}`;
-  console.log(MonthDate);
+  const MonthDate = getMonthDate(currentDate);
 
-  const data = takeMonth(currentDate)();
+  const userToken = localStorage.getItem('token');
+
+  const fetcher = async (url: string) => {
+    const res = await baseAxios.get(url, {
+      headers: {
+        authorization: `Bearer ${userToken}`,
+      },
+    });
+    return res.data;
+  };
+  const { data } = useSWR(userToken ? `/api/contents/monthCalendar/${MonthDate}` : null, fetcher);
+
+  useEffect(() => {
+    setDiaryData(data);
+  });
+  console.log('diaryData', diaryData);
+
+  const Monthdate = takeMonth(currentDate)();
   const curMonth = () => {
     setCurrentDate(new Date());
   };
@@ -55,12 +83,34 @@ function Calendar() {
         </div>
       </HeaderContainer>
       <CalendarWeeks />
-      {data.map((week: Date[]) => (
+      {Monthdate.map((week: Date[]) => (
         <DaysContainer key={uuid()}>
           {week.map((day: Date) => (
             <CalendarDays key={day.toString()} className={`${todayColor(day)}`} onClick={() => onDateClick(day)}>
               <CalendarDay className={`${dayColor(day, currentDate)}`}>{format(day, 'dd')}</CalendarDay>
-              <DiarySum date={MonthDate} day={format(day, 'yyyyMMdd')} />
+              <SummaryBox>
+                {diaryData?.map(
+                  (item: SumObject) =>
+                    item.date === format(day, 'yyyyMMdd') && (
+                      <div key={uuid()}>
+                        <span className="text-xs absolute -top-7 right-0">{item.etc ? '🟢' : null}</span>
+                        <div className="flex justify-center">
+                          <span>{EMOTIONS[item.emotion]}</span>
+                        </div>
+                        <div className="flex justify-end mt-2">
+                          <span>
+                            {item.account.INCOME ? `+${Number(item.account.INCOME).toLocaleString()}원` : null}
+                          </span>
+                        </div>
+                        <div className="flex justify-end">
+                          <span>
+                            {item.account.EXPENSE ? `-${Number(item.account.EXPENSE).toLocaleString()}원` : null}
+                          </span>
+                        </div>
+                      </div>
+                    )
+                )}
+              </SummaryBox>
             </CalendarDays>
           ))}
         </DaysContainer>
@@ -121,4 +171,13 @@ h-5
 items-center 
 justify-center
 text-center
+`;
+
+const SummaryBox = tw.div`
+  relative
+  flex
+  flex-col
+  mt-2
+  text-gray-500
+  text-sm
 `;

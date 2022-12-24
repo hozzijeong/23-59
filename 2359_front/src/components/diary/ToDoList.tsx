@@ -6,17 +6,28 @@ import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
 import styled from 'styled-components';
 import { CustomCheckInput } from 'components/ContentOptions';
+import { DiaryComponentPrpos } from 'types/interfaces';
+import { DiaryMode } from 'types/enums';
 
-function TodoList() {
+function TodoList({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
   const [todoInput, setTodoInput] = useState<string>('');
-  const [curTodo, setCurTodo] = useRecoilState(todayTodo);
+  // const [curTodo, setCurTodo] = useRecoilState(todayTodo);
+  const { diaryInfo, diaryMode } = todayDiary;
 
   const addTodoHandler = () => {
     if (!todoInput.length) {
       alert('한 글자 이상 입력해주세요!');
       return;
     }
-    setCurTodo((cur) => [...cur, { id: getCurrentDate(), done: false, item: todoInput }]);
+
+    setTodayDiary({
+      diaryMode,
+      diaryInfo: {
+        ...diaryInfo,
+        todo: [...diaryInfo.todo, { id: getCurrentDate(), done: false, item: todoInput }],
+      },
+    });
+    // setCurTodo((cur) => [...cur, { id: getCurrentDate(), done: false, item: todoInput }]);
     setTodoInput('');
   };
 
@@ -27,18 +38,41 @@ function TodoList() {
 
   const changeTodoCheckHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = event.target;
-    const updateTodos = curTodo.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : { ...todo }));
+    const updateTodos = diaryInfo.todo.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : { ...todo }));
 
-    setCurTodo(updateTodos);
+    // setCurTodo(updateTodos);
+    setTodayDiary((prev) => ({
+      ...prev,
+      diaryInfo: {
+        ...diaryInfo,
+        todo: updateTodos,
+      },
+    }));
   };
 
   const todoDeleteHandler = (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
-    setCurTodo((cur) => cur.filter((todo) => todo.id !== id));
+    // setCurTodo((cur) => cur.filter((todo) => todo.id !== id));
+    setTodayDiary((prev) => ({
+      ...prev,
+      diaryInfo: {
+        ...diaryInfo,
+        todo: diaryInfo.todo.filter((todo) => todo.id !== id),
+      },
+    }));
   };
-  const readMode = false;
   return (
     <div>
-      {readMode ? null : (
+      {diaryMode === DiaryMode.READ ? (
+        <ul>
+          {diaryInfo.todo.map(({ done, item }) => {
+            return (
+              <LiContainer key={uuid()}>
+                <ToDoSpan isChecked={done}>{item}</ToDoSpan>
+              </LiContainer>
+            );
+          })}
+        </ul>
+      ) : (
         <>
           <ToDoHeader>
             <ToDoInput placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
@@ -48,7 +82,7 @@ function TodoList() {
           </ToDoHeader>
           <div>
             <ul>
-              {curTodo.map(({ id, done, item }) => {
+              {diaryInfo.todo.map(({ id, done, item }) => {
                 return (
                   <LiContainer key={uuid()}>
                     <TodoLabel htmlFor={id}>
