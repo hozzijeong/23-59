@@ -34,13 +34,16 @@ function Diary() {
 
   const { mutate } = useSWRConfig();
 
+
+
   useEffect(() => {
     if (id === undefined) {
       navigation('/');
       return;
     }
     setDate(convertDiaryTitleToKor(id));
-  }, [date, id, navigation]);
+    window.scrollTo(0,0);
+  }, []);
 
   const { contentOptions, setContentOptions } = useUserOptions(); // 유저들 옵션 처리
 

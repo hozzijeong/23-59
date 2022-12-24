@@ -6,7 +6,7 @@ import { DiaryStateProps, TodayDiaryProps } from 'types/interfaces';
 import { DiaryMode } from 'types/enums';
 import { INITIAL_DIARY_INFO } from 'utilities/initialValues';
 
-const END_POINT = 'api/contents/date';
+const END_POINT = '/api/contents/date';
 
 const initialDiary = {
   diaryInfo: INITIAL_DIARY_INFO,
@@ -27,6 +27,9 @@ function useTodayDiary(date: string) {
         } else {
           setTodayDiary({ diaryInfo, diaryMode: DiaryMode.READ });
         }
+      },
+      onError: (error) => {
+        console.log(error, 'error ono api/contents/date');
       },
       // revalidateOnMount: false,
       revalidateOnFocus: false,
