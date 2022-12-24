@@ -285,17 +285,24 @@ class ContentService {
       console.log('저장된 가계부가 없습니다.');
     }
     const filtered = category.map((obj: any) => obj.account);
-    console.log('filtered: ', filtered);
-    const categories = filtered.map((obj: any) => obj[0].category);
+    console.log('filtered: ', filtered, filtered[0].length);
+    const categories: any = [];
+    const amounts: any = [];
+    for (let i = 0; i < filtered[0].length; i++) {
+      categories.push(filtered.map((obj: any) => obj[i].category));
+      amounts.push(filtered.map((obj: any) => obj[i].amount));
+    }
+    //const categories = filtered.map((obj: any) => obj[0].category);
     console.log('categories: ', categories);
-    const amounts = filtered.map((obj: any) => obj[0].amount);
+    //const amounts = filtered.map((obj: any) => obj[0].amount);
     console.log('amounts: ', amounts);
 
     const map = new Map();
     console.log('map: ', map);
 
     for (let i = 0; i < categories.length; i++) {
-      map.set(categories[i], (map.get(categories[i]) ?? 0) + amounts[i]);
+      map.set(categories[i], (map.get(categories[i]) ?? '') + amounts[i]);
+      //map.set(categories[i], map.get(categories[i]) + amounts[i]);
     }
     const result = Object.fromEntries(map);
     console.log('result ', result);
