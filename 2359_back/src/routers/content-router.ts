@@ -87,12 +87,16 @@ contentRouter.post('/', async (req, res, next) => {
     }
     // diary, todo, account, answer
     const { selectedDate, emotion, diary, todo, account, qna } = req.body;
-    const answer = qna;
-    //console.log('qna ', qna.questionId);
-    //console.log('qna ', qna);
-    //const q = await questionService.randomQuestionId();
-    //console.log('q ', q._id);
 
+    const dates = await contentService.checkDate();
+
+    if (dates.includes(selectedDate)) {
+      // 날짜 중복
+      res.status(400).json('DB에 생성된 날짜가 있습니다.');
+      return;
+    }
+
+    const answer = qna;
     const newContent = await contentService.addContent(
       {
         selectedDate,
@@ -103,7 +107,7 @@ contentRouter.post('/', async (req, res, next) => {
       },
       answer
     );
-    console.log('qna ', qna);
+    //console.log('qna ', qna);
     res.status(200).json(newContent);
   } catch (error) {
     next(error);
@@ -122,11 +126,6 @@ contentRouter.patch('/:contentId', async (req, res, next) => {
     const { contentId, diary, todo, account, qna } = req.body;
     //const { contentId, selectedDate, answer } = req.body;
     console.log('contentId: ', contentId);
-
-    // const toUpdate = {
-    //   ...(selectedDate && { selectedDate }),
-    //   ...(answer && { answer }),
-    // };
 
     const toUpdate = {
       ...(diary && { diary }),

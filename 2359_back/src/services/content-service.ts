@@ -15,6 +15,19 @@ class ContentService {
     this.contentModel = contentModel;
   }
 
+  // 날짜 중복 체크
+  async checkDate() {
+    const dates = await this.contentModel.findDates();
+    const dateArr = dates.map((obj: any) => obj.selectedDate);
+    console.log('dateArr', dateArr.sort());
+
+    // if (!dateArr.includes(selectedDate)) {
+    //   // 날짜 중복
+    //   return 'DB에 생성된 날짜가 있습니다.';
+    // }
+    return dateArr.sort();
+  }
+
   // 컨텐츠 생성
   async addContent(contentData: any, answerData: any) {
     const { selectedDate, emotion, diary, todo, account } = contentData;
@@ -25,7 +38,7 @@ class ContentService {
     const questionOid = answerData.questionId;
     const answer = answerData.answer;
     const questionData = await questionService.getQuestionById(questionOid);
-    //console.log('serviceFindQESTION ', questionData[0].item);
+
     if (isEmpty(questionData)) {
       questionData[0] = '';
     }
@@ -44,12 +57,16 @@ class ContentService {
     console.log('result ', result);
     const newContent = await this.contentModel.createContent(result);
 
-    newContent.checkOption.TODO_LIST = !isEmpty(newContent.todo);
-    newContent.checkOption.TODAY_QUESTION = !isEmpty(newContent.qna.answer);
-    newContent.checkOption.DIARY = !isEmpty(newContent.diary);
-    newContent.checkOption.EMOTION = !isEmpty(newContent.emotion);
-    newContent.checkOption.ACCOUNT_BOOK = !isEmpty(newContent.account);
-    console.log('checkoption ', newContent.checkOption);
+    let TODO_LIST: boolean | undefined = newContent.checkOption?.TODO_LIST;
+    TODO_LIST = !isEmpty(newContent.todo);
+    let TODAY_QUESTION: boolean | undefined = newContent.checkOption?.TODAY_QUESTION;
+    TODAY_QUESTION = !isEmpty(newContent.qna?.answer);
+    let DIARY: boolean | undefined = newContent.checkOption?.DIARY;
+    DIARY = !isEmpty(newContent.diary);
+    let EMOTION: boolean | undefined = newContent.checkOption?.EMOTION;
+    EMOTION = !isEmpty(newContent.emotion);
+    let ACCOUNT_BOOK: boolean | undefined = newContent.checkOption?.ACCOUNT_BOOK;
+    ACCOUNT_BOOK = !isEmpty(newContent.account);
 
     return newContent;
   }
