@@ -285,25 +285,27 @@ class ContentService {
       console.log('저장된 가계부가 없습니다.');
     }
     const filtered = category.map((obj: any) => obj.account);
-    console.log('filtered: ', filtered, filtered[0].length);
+    console.log('filtered: ', filtered);
+    //console.log('filtered: ', filtered[0]);
     const categories: any = [];
     const amounts: any = [];
-    for (let i = 0; i < filtered[0].length; i++) {
-      categories.push(filtered.map((obj: any) => obj[i].category));
-      amounts.push(filtered.map((obj: any) => obj[i].amount));
+
+    for (let i = 0; i < filtered.length; i++) {
+      for (let j = 0; j < filtered[i].length; j++) {
+        categories.push(filtered[i][j].category);
+        amounts.push(filtered[i][j].amount);
+      }
     }
-    //const categories = filtered.map((obj: any) => obj[0].category);
     console.log('categories: ', categories);
-    //const amounts = filtered.map((obj: any) => obj[0].amount);
     console.log('amounts: ', amounts);
 
     const map = new Map();
-    console.log('map: ', map);
 
     for (let i = 0; i < categories.length; i++) {
-      map.set(categories[i], (map.get(categories[i]) ?? '') + amounts[i]);
+      map.set(categories[i], Number((map.get(categories[i]) ?? 0) + amounts[i]));
       //map.set(categories[i], map.get(categories[i]) + amounts[i]);
     }
+    console.log('map: ', map);
     const result = Object.fromEntries(map);
     console.log('result ', result);
 
