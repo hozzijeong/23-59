@@ -6,9 +6,7 @@ import {
   expenseEnums as EXPENSES,
   clsEnums as CLS,
 } from '../../../../2359_front/src/types/enums';
-// D:\2359\initialization\2359_back\src\db\models\content-model.ts
-// D:\2359\initialization\2359_front\src\types\enums.ts
-// initialization\2359_front\src\types\enums.ts
+
 const Content = model('contents', ContentSchema);
 
 // content CRUD
@@ -26,6 +24,11 @@ const createContent = async (contentData: any) => {
 const findAll = async () => {
   const contents = await Content.find({});
   return contents;
+};
+
+const findDates = async () => {
+  const dates = await Content.find({ selectedDate: { $exists: true } });
+  return dates;
 };
 
 // update 타입 아직 모름
@@ -146,6 +149,7 @@ const filterByTag = async () => {
 export default {
   createContent,
   findAll,
+  findDates,
   updateContent,
   deleteById,
   findById,
