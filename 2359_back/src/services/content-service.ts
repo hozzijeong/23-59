@@ -6,6 +6,7 @@ import {
   clsEnums as CLS,
 } from '../../../2359_front/src/types/enums';
 import { questionService } from './question-service';
+import { isEmpty } from '../middlewares/is-empty';
 
 class ContentService {
   contentModel;
@@ -17,19 +18,7 @@ class ContentService {
   // 컨텐츠 생성
   async addContent(contentData: any, answerData: any) {
     const { selectedDate, emotion, diary, todo, account } = contentData;
-    // let questionOid = '';
-    // let answer = '';
-    // let questionData = '';
-    const isEmpty = (val: any) => {
-      if (
-        val === '' ||
-        val === null ||
-        val === undefined ||
-        (val !== null && typeof val === 'object' && !Object.keys(val).length)
-      ) {
-        return true;
-      }
-    };
+
     if (isEmpty(answerData)) {
       answerData = '';
     }
@@ -87,23 +76,17 @@ class ContentService {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
 
-    const isEmpty = (val: any) => {
-      if (
-        val === '' ||
-        val === null ||
-        val === undefined ||
-        (val !== null && typeof val === 'object' && !Object.keys(val).length)
-      ) {
-        return true;
-      }
-    };
-
-    content.checkOption.TODO_LIST = !isEmpty(content.todo);
-    content.checkOption.TODAY_QUESTION = !isEmpty(content.qna.answer);
-    content.checkOption.DIARY = !isEmpty(content.diary);
-    content.checkOption.EMOTION = !isEmpty(content.emotion);
-    content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
-
+    let todo: boolean | undefined = content.checkOption?.TODO_LIST;
+    todo = !isEmpty(content.todo);
+    let question: boolean | undefined = content.checkOption?.TODAY_QUESTION;
+    question = !isEmpty(content.qna?.answer);
+    let diary: boolean | undefined = content.checkOption?.DIARY;
+    diary = !isEmpty(content.diary);
+    let emotion: boolean | undefined = content.checkOption?.EMOTION;
+    emotion = !isEmpty(content.emotion);
+    let account: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
+    account = !isEmpty(content.account);
+    console.log('content.checkOption ', content.checkOption);
     return content;
   }
 
@@ -113,17 +96,6 @@ class ContentService {
       contentId,
       update: toUpdate,
     });
-
-    const isEmpty = (val: any) => {
-      if (
-        val === '' ||
-        val === null ||
-        val === undefined ||
-        (val !== null && typeof val === 'object' && !Object.keys(val).length)
-      ) {
-        return true;
-      }
-    };
 
     updatedContent.checkOption.TODO_LIST = !isEmpty(updatedContent.todo);
     updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna.answer);
