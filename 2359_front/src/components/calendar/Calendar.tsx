@@ -9,17 +9,18 @@ import { useRecoilState } from 'recoil';
 import { calendarPage, calendarSummary } from 'recoil/calendarAtom';
 import { getMonthDate } from 'utilities/getMonthDate';
 import { baseAxios } from 'api';
+import { clsEnums, emotionEnums } from 'types/enums';
+import { EMOTIONS } from 'types/enumConverter';
 import { CalendarWeeks, dayColor, takeMonth, todayColor } from './Utils';
 
-interface AccountObject {
-  지출: number;
-  수입: number;
-}
+type AccountProps = {
+  [key in clsEnums]: number;
+};
 interface SumObject {
   date: string;
-  emotion: string;
+  emotion: emotionEnums;
   etc: boolean;
-  account: AccountObject;
+  account: AccountProps;
 }
 
 function Calendar() {
@@ -91,16 +92,20 @@ function Calendar() {
                 {diaryData?.map(
                   (item: SumObject) =>
                     item.date === format(day, 'yyyyMMdd') && (
-                      <div>
+                      <div key={uuid()}>
                         <span className="text-xs absolute -top-7 right-0">{item.etc ? '🟢' : null}</span>
                         <div className="flex justify-center">
-                          <span>{item.emotion}</span>
+                          <span>{EMOTIONS[item.emotion]}</span>
                         </div>
                         <div className="flex justify-end mt-2">
-                          <span>{item.account.수입 ? `+${Number(item.account.수입).toLocaleString()}원` : null}</span>
+                          <span>
+                            {item.account.INCOME ? `+${Number(item.account.INCOME).toLocaleString()}원` : null}
+                          </span>
                         </div>
                         <div className="flex justify-end">
-                          <span>{item.account.지출 ? `-${Number(item.account.지출).toLocaleString()}원` : null}</span>
+                          <span>
+                            {item.account.EXPENSE ? `-${Number(item.account.EXPENSE).toLocaleString()}원` : null}
+                          </span>
                         </div>
                       </div>
                     )
