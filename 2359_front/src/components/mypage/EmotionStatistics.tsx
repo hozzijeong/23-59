@@ -17,9 +17,15 @@ function EmotionStatistics() {
   async function getFilterEmotion() {
     try {
       const result = await axios.get(
-        `/api/contents/filterEmotion/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`
+        `/api/contents/filterEmotion/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`,
+        {
+          headers: {
+            authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
       );
       const res = await result.data;
+      console.log(res);
       res.name = '감정';
 
       let tmpData = [...data];
@@ -40,7 +46,7 @@ function EmotionStatistics() {
         <StatisticsScript>감정 통계 - {currentMonth}월😘</StatisticsScript>
         <ResponsiveBar
           data={data}
-          keys={['very sad', 'sad', 'soso', 'happy', 'very happy']}
+          keys={['VERY_BAD', 'BAD', 'SO_SO', 'GOOD', 'VERY_GOOD']}
           margin={{ top: 30, right: 130, bottom: 60, left: 60 }}
           indexBy="name"
           padding={0.1}

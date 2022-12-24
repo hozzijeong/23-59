@@ -142,13 +142,13 @@ const ContentSchema = new Schema<IContent>(
           _id: false,
         }
       ),
-      default: {
-        TODO_LIST: false,
-        TODAY_QUESTION: false,
-        DIARY: false,
-        EMOTION: false,
-        ACCOUNT_BOOK: false,
-      },
+      // default: {
+      //   TODO_LIST: false,
+      //   TODAY_QUESTION: false,
+      //   DIARY: false,
+      //   EMOTION: false,
+      //   ACCOUNT_BOOK: false,
+      // },
     },
   },
   {

@@ -2,16 +2,14 @@
 import { useState } from 'react';
 import { baseAxios } from 'api';
 import useSWR from 'swr';
-import { DiaryStateProps } from 'types/interfaces';
+import { DiaryStateProps, TodayDiaryProps } from 'types/interfaces';
 import { DiaryMode } from 'types/enums';
+import { INITIAL_DIARY_INFO } from 'utilities/initialValues';
 
-interface TodayDiaryProps {
-  diaryInfo: DiaryStateProps | null;
-  diaryMode: DiaryMode;
-}
 const END_POINT = 'api/contents/date';
+
 const initialDiary = {
-  diaryInfo: null,
+  diaryInfo: INITIAL_DIARY_INFO,
   diaryMode: DiaryMode.CREATE,
 };
 function useTodayDiary(date: string) {
@@ -23,12 +21,17 @@ function useTodayDiary(date: string) {
     {
       onSuccess: (data) => {
         const diaryInfo = data[0] ?? null;
-        if (!diaryInfo?._id) {
+        console.log(diaryInfo, 'DiaryInfo in useTodayInfo');
+        if (!diaryInfo) {
           setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
         } else {
           setTodayDiary({ diaryInfo, diaryMode: DiaryMode.READ });
         }
       },
+      // revalidateOnMount: false,
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+      revalidateIfStale: false,
     }
   );
 
