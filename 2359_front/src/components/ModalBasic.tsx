@@ -34,7 +34,6 @@ function ModalBasic({
       <ModalScreen>
         <ModalContainer>
           <ModalBox>
-            {' '}
             <ModalHeader>
               <ModalTitle>{title}</ModalTitle>
               {tooltip && <Tooltip title="?" content={tooltipText} />}
