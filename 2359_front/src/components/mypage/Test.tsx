@@ -7,7 +7,7 @@ import axios from 'axios';
 import e from 'express';
 import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
-
+import Pagination from 'react-js-pagination';
 import data from './mock/questionData.json';
 
 interface IData {
@@ -65,6 +65,35 @@ function CollectQuestion() {
     },
     answer: '',
   });
+  // 여기부터
+  const init: object[] = [];
+  const [page, setPage] = useState(1);
+  const [pageList, setPageList] = useState(init);
+
+  const handlePageChange = (page: number) => {
+    setPage(page);
+    console.log(page);
+  };
+  // 1페이지에서 0부터 6까지
+  // 2페이지에서 6부터 12까지
+  // 3페이지에서 12부터 18까지
+  // 4페이지에서 18부터 24까지
+
+  const showAnswer = () => {
+    if (page === 1) {
+      setPageList(tagSelectedAnswer.slice(0, 6 * page));
+    } else {
+      // if (tagSelectedAnswer.length / 6 < page) {
+      //   setPageList(tagSelectedAnswer.slice(6 * (page - 1)));
+      // }
+      setPageList(tagSelectedAnswer.slice(6 * (page - 1), 6 * page));
+    }
+  };
+  console.log(pageList);
+  useEffect(() => {
+    showAnswer();
+  }, [page]);
+  // 여기까지
 
   useEffect(() => {
     filterQuestionList();
@@ -170,6 +199,15 @@ function CollectQuestion() {
           <div className="opacity-25 fixed inset-0 z-40 bg-black">{null}</div>
         </>
       ) : null}
+      <Pagination
+        activePage={page}
+        itemsCountPerPage={6}
+        totalItemsCount={tagSelectedAnswer.length}
+        pageRangeDisplayed={5}
+        // prevPageText={'이전페이지'}
+        // nextPageText={'다음페이지'}
+        onChange={handlePageChange}
+      />
     </Container>
   );
 }

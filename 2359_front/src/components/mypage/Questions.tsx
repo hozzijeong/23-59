@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import './Paging.css';
 import tw from 'tailwind-styled-components';
 import axios from 'axios';
+import Pagination from 'react-js-pagination';
 
 interface IQnaProps {
   question: string | undefined;
@@ -25,6 +27,8 @@ function Questions() {
   const [isSelect, setIsSelect] = useState(newData);
   const [tagList, setTagList] = useState(tagData);
   const [resultAnswer, setResultAnswer] = useState(tagSelectedAnswer);
+  const [page, setPage] = useState(1);
+  const [pageList, setPageList] = useState(tagSelectedAnswer);
 
   async function getAllQuestionList() {
     const res = await axios.get('/api/contents/filter/qna', {
@@ -77,18 +81,42 @@ function Questions() {
     return nonSelectBtnClass;
   };
 
+  // 여기부터
+  const handlePageChange = (page: number) => {
+    setPage(page);
+    console.log(page);
+  };
+
+  const showAnswer = () => {
+    if (page === 1) {
+      setPageList(resultAnswer.slice(0, 8 * page));
+    } else {
+      // if (tagSelectedAnswer.length / 6 < page) {
+      //   setPageList(tagSelectedAnswer.slice(6 * (page - 1)));
+      // }
+      setPageList(resultAnswer.slice(8 * (page - 1), 8 * page));
+    }
+  };
+  // 여기까지
+
+  // useEffect(() => {
+  //   showAnswer();
+  // }, [page]);
+
   useEffect(() => {
     getAllQuestionList();
   }, []);
 
   useEffect(() => {
     showSelectedAnswers();
+    showAnswer();
   }, [qnaList]);
 
   useEffect(() => {
     showSelectedAnswers();
   }, [isSelect]);
 
+  console.log('요기!', pageList);
   return (
     <Container>
       <div>오늘의 질문 모아보기</div>
@@ -108,16 +136,25 @@ function Questions() {
             })
           : null}
       </ButtonContainer>
-      <div>
+      <AnswerContainer>
         <AnswerUl>
-          {resultAnswer
-            ? resultAnswer.map((ele: any) => (
+          {pageList
+            ? pageList.map((ele: any) => (
                 // TODO: 배열안에 객체 interface 설정
                 <AnswerList key={ele.selectedDate}>{ele.qna.question}</AnswerList>
               ))
             : null}
         </AnswerUl>
-      </div>
+      </AnswerContainer>
+      <Pagination
+        activePage={page}
+        itemsCountPerPage={8}
+        totalItemsCount={resultAnswer.length}
+        pageRangeDisplayed={5}
+        // prevPageText={'이전페이지'}
+        // nextPageText={'다음페이지'}
+        onChange={handlePageChange}
+      />
     </Container>
   );
 }
@@ -161,6 +198,11 @@ const nonSelectBtnClass = `
 `;
 
 // 질문 리스트 영역
+const AnswerContainer = tw.div`
+  w-full
+  min-h-[550px]
+`;
+
 const AnswerUl = tw.ul`
   w-full
   p-4
