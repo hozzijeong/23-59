@@ -8,20 +8,16 @@ import { TodayQuestion } from 'components/diary/TodayQuestion';
 import { TodoList } from 'components/diary/ToDoList';
 import { ContentOptions } from 'components/diary/ContentOptions';
 import tw from 'tailwind-styled-components';
-import { useRecoilValue } from 'recoil';
-import { accountTableAtom, questionAnswer, todayTodo, emotionAtom, todayDiaryAtom } from 'recoil/diaryAtom';
 import uuid from 'react-uuid';
 import Button from 'components/Button';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DiaryMode, OptionEnums as OPTION } from 'types/enums';
-import { useUserOptions } from 'hooks/useUserOptions';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
 import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
-import { checkArrayAllFalse } from 'utilities/utils';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -34,37 +30,22 @@ function Diary() {
 
   const { mutate } = useSWRConfig();
 
-
-
   useEffect(() => {
     if (id === undefined) {
       navigation('/');
       return;
     }
     setDate(convertDiaryTitleToKor(id));
-    window.scrollTo(0,0);
+    window.scrollTo(0, 0);
   }, []);
 
-  const { contentOptions, setContentOptions } = useUserOptions(); // 유저들 옵션 처리
-
-  const { todayDiary, setTodayDiary } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
-  // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
+  const { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate: diaryMutate } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
+
+  // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
   console.log(diaryInfo, diaryMode, contentOptions, 'options');
 
-  const todayTodoState = useRecoilValue(todayTodo);
-  const questionAnswerState = useRecoilValue(questionAnswer);
-  const emotionState = useRecoilValue(emotionAtom);
-  const todayDiaryState = useRecoilValue(todayDiaryAtom);
-  const accountTableAtomState = useRecoilValue(accountTableAtom);
-
-  const everyUnChecked = useMemo(() => {
-    if (diaryMode === DiaryMode.CREATE) {
-      return contentOptions.every((options) => options.isChecked === false);
-    }
-
-    return checkArrayAllFalse(Object.values(diaryInfo.contentOptions));
-  }, [contentOptions, diaryInfo.contentOptions, diaryMode]);
+  const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
 
   const diaryContents = useMemo(() => {
     // 처음 페이지 & isRead 라면 작성하기 보여줄 것.
@@ -106,7 +87,7 @@ function Diary() {
     });
   }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary, todayDiary]);
 
-  const submitHandler = () => {
+  const submitHandler = async () => {
     const checkOption: OptionCheckedProps = contentOptions.reduce(
       (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
       INITIAL_CONTENT_OPTIONS
@@ -122,23 +103,27 @@ function Diary() {
       checkOption,
     };
 
+    console.log(body, 'Body!!');
+
     if (_id === '') {
       // create 일 때
-      console.log(body, '@@@');
-      mutate('/api/contents', createDiary(body)).then((res) => {
-        setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+      await mutate('/api/contents', createDiary(body)).then((res) => {
+        diaryMutate(res?.data);
       });
       return;
     }
 
     // update 일 때
-    mutate(`/api/contents/${diaryInfo?._id}`, updateDiary({ _id, body })).then((res) => console.log(res?.data));
+    await mutate(`/api/contents/${diaryInfo?._id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
+
+    setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
   };
 
   const cancelHandler = () => {
     // eslint-disable-next-line no-restricted-globals
     if (confirm('정말 취소하시겠습니까?\n작성하신 내용은 저장되지 않습니다.')) {
-      navigation('/');
+      setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+      // navigation('/');
     }
   };
 

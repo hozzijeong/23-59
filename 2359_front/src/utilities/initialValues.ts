@@ -27,7 +27,7 @@ const INITIAL_DIARY_INFO = {
   emotion: emotionEnums.SO_SO,
   diary: INITIAL_TODAY_DIARY,
   account: [],
-  contentOptions: INITIAL_CONTENT_OPTIONS,
+  checkOption: INITIAL_CONTENT_OPTIONS,
 };
 
 const INITIAL_ACCOUNT_INFO: AccountTableRow = {
