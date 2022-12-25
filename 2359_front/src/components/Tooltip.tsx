@@ -2,15 +2,18 @@ import React from 'react';
 import tw from 'tailwind-styled-components';
 
 interface TooltipProps {
-  text?: string;
+  title?: string;
+  content?: string;
 }
 
-function Tooltip({ text }: TooltipProps) {
+function Tooltip({ title, content }: TooltipProps) {
   return (
     <div>
       <TooltipButton type="button">
-        <span>?</span>
-        <TooltipContent>{text}</TooltipContent>
+        <span>{title}</span>
+        <TooltipContent>
+          <span>{content}</span>
+        </TooltipContent>
       </TooltipButton>
     </div>
   );
@@ -19,7 +22,8 @@ function Tooltip({ text }: TooltipProps) {
 export default Tooltip;
 
 Tooltip.defaultProps = {
-  text: 'tooltip 내용을 넣어주세요',
+  title: null,
+  content: null,
 };
 
 const TooltipButton = tw.button`
