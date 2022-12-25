@@ -2,7 +2,20 @@ import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import axios from 'axios';
 
+interface IQnaProps {
+  question: string | undefined;
+  answer: string | undefined;
+  tag: string | undefined;
+  _id: string;
+}
+
+interface IData {
+  selectedDate: string;
+  qna: IQnaProps;
+}
+
 function Questions() {
+  // 배열 > 객체 > 객체 ?  Record<string, string | IQna> ?  Record<IData, string | undefined> ?
   const initialData: any = [];
   const newData: any = [];
   const tagData: string[] = [];
