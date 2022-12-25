@@ -1,3 +1,8 @@
+/* 
+박우찬 업로드
+질문 리스트 API 및 구현 안정화 후 삭제 예정!
+*/
+
 import axios from 'axios';
 import e from 'express';
 import React, { useState, useEffect } from 'react';
@@ -47,7 +52,7 @@ const setData = (): void => {
 pushTagData();
 setData();
 filterQuestionList();
-
+console.log(newData);
 // 컴포넌트
 function CollectQuestion() {
   const [isSelect, setIsSelect] = useState(newData);
@@ -94,6 +99,7 @@ function CollectQuestion() {
     tagSelectedAnswer = tmpArr.reduce((acc: any, cur: any) => {
       return [...acc, ...cur];
     });
+    console.log(tagSelectedAnswer);
   };
   selectedTag();
 

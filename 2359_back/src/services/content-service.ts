@@ -6,6 +6,7 @@ import {
   clsEnums as CLS,
 } from '../../../2359_front/src/types/enums';
 import { questionService } from './question-service';
+import { isEmpty } from '../middlewares/is-empty';
 
 class ContentService {
   contentModel;
@@ -14,29 +15,30 @@ class ContentService {
     this.contentModel = contentModel;
   }
 
+  // 날짜 중복 체크
+  async checkDate() {
+    const dates = await this.contentModel.findDates();
+    const dateArr = dates.map((obj: any) => obj.selectedDate);
+    console.log('dateArr', dateArr.sort());
+
+    // if (!dateArr.includes(selectedDate)) {
+    //   // 날짜 중복
+    //   return 'DB에 생성된 날짜가 있습니다.';
+    // }
+    return dateArr.sort();
+  }
+
   // 컨텐츠 생성
   async addContent(contentData: any, answerData: any) {
     const { selectedDate, emotion, diary, todo, account } = contentData;
-    // let questionOid = '';
-    // let answer = '';
-    // let questionData = '';
-    const isEmpty = (val: any) => {
-      if (
-        val === '' ||
-        val === null ||
-        val === undefined ||
-        (val !== null && typeof val === 'object' && !Object.keys(val).length)
-      ) {
-        return true;
-      }
-    };
+
     if (isEmpty(answerData)) {
       answerData = '';
     }
     const questionOid = answerData.questionId;
     const answer = answerData.answer;
     const questionData = await questionService.getQuestionById(questionOid);
-    //console.log('serviceFindQESTION ', questionData[0].item);
+
     if (isEmpty(questionData)) {
       questionData[0] = '';
     }
@@ -55,12 +57,16 @@ class ContentService {
     console.log('result ', result);
     const newContent = await this.contentModel.createContent(result);
 
-    newContent.checkOption.TODO_LIST = !isEmpty(newContent.todo);
-    newContent.checkOption.TODAY_QUESTION = !isEmpty(newContent.qna.answer);
-    newContent.checkOption.DIARY = !isEmpty(newContent.diary);
-    newContent.checkOption.EMOTION = !isEmpty(newContent.emotion);
-    newContent.checkOption.ACCOUNT_BOOK = !isEmpty(newContent.account);
-    console.log('checkoption ', newContent.checkOption);
+    let TODO_LIST: boolean | undefined = newContent.checkOption?.TODO_LIST;
+    TODO_LIST = !isEmpty(newContent.todo);
+    let TODAY_QUESTION: boolean | undefined = newContent.checkOption?.TODAY_QUESTION;
+    TODAY_QUESTION = !isEmpty(newContent.qna?.answer);
+    let DIARY: boolean | undefined = newContent.checkOption?.DIARY;
+    DIARY = !isEmpty(newContent.diary);
+    let EMOTION: boolean | undefined = newContent.checkOption?.EMOTION;
+    EMOTION = !isEmpty(newContent.emotion);
+    let ACCOUNT_BOOK: boolean | undefined = newContent.checkOption?.ACCOUNT_BOOK;
+    ACCOUNT_BOOK = !isEmpty(newContent.account);
 
     return newContent;
   }
@@ -87,23 +93,17 @@ class ContentService {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
 
-    const isEmpty = (val: any) => {
-      if (
-        val === '' ||
-        val === null ||
-        val === undefined ||
-        (val !== null && typeof val === 'object' && !Object.keys(val).length)
-      ) {
-        return true;
-      }
-    };
-
-    content.checkOption.TODO_LIST = !isEmpty(content.todo);
-    content.checkOption.TODAY_QUESTION = !isEmpty(content.qna.answer);
-    content.checkOption.DIARY = !isEmpty(content.diary);
-    content.checkOption.EMOTION = !isEmpty(content.emotion);
-    content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
-
+    let todo: boolean | undefined = content.checkOption?.TODO_LIST;
+    todo = !isEmpty(content.todo);
+    let question: boolean | undefined = content.checkOption?.TODAY_QUESTION;
+    question = !isEmpty(content.qna?.answer);
+    let diary: boolean | undefined = content.checkOption?.DIARY;
+    diary = !isEmpty(content.diary);
+    let emotion: boolean | undefined = content.checkOption?.EMOTION;
+    emotion = !isEmpty(content.emotion);
+    let account: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
+    account = !isEmpty(content.account);
+    console.log('content.checkOption ', content.checkOption);
     return content;
   }
 
@@ -113,17 +113,6 @@ class ContentService {
       contentId,
       update: toUpdate,
     });
-
-    const isEmpty = (val: any) => {
-      if (
-        val === '' ||
-        val === null ||
-        val === undefined ||
-        (val !== null && typeof val === 'object' && !Object.keys(val).length)
-      ) {
-        return true;
-      }
-    };
 
     updatedContent.checkOption.TODO_LIST = !isEmpty(updatedContent.todo);
     updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna.answer);
@@ -286,17 +275,26 @@ class ContentService {
     }
     const filtered = category.map((obj: any) => obj.account);
     console.log('filtered: ', filtered);
-    const categories = filtered.map((obj: any) => obj[0].category);
+    //console.log('filtered: ', filtered[0]);
+    const categories: any = [];
+    const amounts: any = [];
+
+    for (let i = 0; i < filtered.length; i++) {
+      for (let j = 0; j < filtered[i].length; j++) {
+        categories.push(filtered[i][j].category);
+        amounts.push(filtered[i][j].amount);
+      }
+    }
     console.log('categories: ', categories);
-    const amounts = filtered.map((obj: any) => obj[0].amount);
     console.log('amounts: ', amounts);
 
     const map = new Map();
-    console.log('map: ', map);
 
     for (let i = 0; i < categories.length; i++) {
-      map.set(categories[i], (map.get(categories[i]) ?? 0) + amounts[i]);
+      map.set(categories[i], Number((map.get(categories[i]) ?? 0) + amounts[i]));
+      //map.set(categories[i], map.get(categories[i]) + amounts[i]);
     }
+    console.log('map: ', map);
     const result = Object.fromEntries(map);
     console.log('result ', result);
 

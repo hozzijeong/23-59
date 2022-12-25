@@ -9,17 +9,18 @@ import { useRecoilState } from 'recoil';
 import { calendarPage, calendarSummary } from 'recoil/calendarAtom';
 import { getMonthDate } from 'utilities/getMonthDate';
 import { baseAxios } from 'api';
+import { clsEnums, emotionEnums } from 'types/enums';
+import { EMOTIONS } from 'types/enumConverter';
 import { CalendarWeeks, dayColor, takeMonth, todayColor } from './Utils';
 
-interface AccountObject {
-  지출: number;
-  수입: number;
-}
+type AccountProps = {
+  [key in clsEnums]: number;
+};
 interface SumObject {
   date: string;
-  emotion: string;
+  emotion: emotionEnums;
   etc: boolean;
-  account: AccountObject;
+  account: AccountProps;
 }
 
 function Calendar() {
@@ -43,7 +44,6 @@ function Calendar() {
   useEffect(() => {
     setDiaryData(data);
   });
-  console.log('diaryData', diaryData);
 
   const Monthdate = takeMonth(currentDate)();
   const curMonth = () => {
@@ -87,25 +87,27 @@ function Calendar() {
           {week.map((day: Date) => (
             <CalendarDays key={day.toString()} className={`${todayColor(day)}`} onClick={() => onDateClick(day)}>
               <CalendarDay className={`${dayColor(day, currentDate)}`}>{format(day, 'dd')}</CalendarDay>
-              <SummaryBox>
-                {diaryData?.map(
-                  (item: SumObject) =>
-                    item.date === format(day, 'yyyyMMdd') && (
-                      <div>
-                        <span className="text-xs absolute -top-7 right-0">{item.etc ? '🟢' : null}</span>
+              {diaryData?.map(
+                (item: SumObject) =>
+                  item.date === format(day, 'yyyyMMdd') && (
+                    <div key={item.date.toString()} className="relative text-gray-500 text-sm h-full">
+                      <span className="text-xs absolute -top-5 right-0">{item.etc ? '🟢' : null}</span>
+                      <div className="flex flex-col justify-around h-full px-1">
                         <div className="flex justify-center">
-                          <span>{item.emotion}</span>
+                          <span>{EMOTIONS[item.emotion]}</span>
                         </div>
-                        <div className="flex justify-end mt-2">
-                          <span>{item.account.수입 ? `+${Number(item.account.수입).toLocaleString()}원` : null}</span>
-                        </div>
-                        <div className="flex justify-end">
-                          <span>{item.account.지출 ? `-${Number(item.account.지출).toLocaleString()}원` : null}</span>
+                        <div className="flex-col">
+                          <span className="flex justify-end">
+                            {item.account.INCOME && `+${Number(item.account.INCOME).toLocaleString()}원`}
+                          </span>
+                          <span className="flex justify-end">
+                            {item.account.EXPENSE && `-${Number(item.account.EXPENSE).toLocaleString()}원`}
+                          </span>
                         </div>
                       </div>
-                    )
-                )}
-              </SummaryBox>
+                    </div>
+                  )
+              )}
             </CalendarDays>
           ))}
         </DaysContainer>
@@ -166,13 +168,4 @@ h-5
 items-center 
 justify-center
 text-center
-`;
-
-const SummaryBox = tw.div`
-  relative
-  flex
-  flex-col
-  mt-2
-  text-gray-500
-  text-sm
 `;

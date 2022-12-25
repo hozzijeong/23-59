@@ -36,7 +36,7 @@ function useUserOptions() {
     errorRetryInterval: 1000,
     errorRetryCount: 5,
     onError: (error) => {
-      alert(`${error}가 발생했습니다.`);
+      console.log(`${error}가 발생했습니다.`);
       // navigation('/login');
     },
     // revalidateOnMount: false,
