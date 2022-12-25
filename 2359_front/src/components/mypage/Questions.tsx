@@ -80,6 +80,7 @@ function Questions() {
   useEffect(() => {
     getAllQuestionList();
   }, []);
+
   useEffect(() => {
     showSelectedAnswers();
   }, [qnaList]);
