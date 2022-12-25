@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Calendar from 'components/calendar/Calendar';
 import ModalBasic from 'components/ModalBasic';
 import { ContentOptions } from 'components/diary/ContentOptions';
@@ -6,14 +6,19 @@ import { useUserOptions } from 'hooks/useUserOptions';
 import { TutorialOption } from 'components/tutorial/TutorialOption';
 
 function Home() {
-  // const { firstLogin, contentOptions, setContentOptions } = useUserOptions();
+  const { firstLogin, contentOptions, setContentOptions } = useUserOptions();
   // console.log(firstLogin, contentOptions, 'firstLogin');
   const [showModal, setShowModal] = useState(false);
-  // if (firstLogin) {
-  //   setShowModal(true);
-  // }
+
+  useEffect(() => {
+    if (firstLogin) {
+      setShowModal(true);
+    }
+  }, [firstLogin]);
+
   const optionSaveHandler = () => {
     setShowModal(false);
+    setContentOptions(contentOptions);
   };
 
   return (
@@ -29,7 +34,7 @@ function Home() {
           cancelHandler={() => setShowModal(false)}
           submitHandler={optionSaveHandler}
         >
-          체크 옵션..ㅎ
+          <TutorialOption state={contentOptions} setState={setContentOptions} />
         </ModalBasic>
       )}
     </div>
