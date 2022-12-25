@@ -1,33 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Calendar from 'components/calendar/Calendar';
-import Modal from 'components/Modal';
-import { TutorialOption } from 'components/tutorial/TutorialOption';
+import ModalBasic from 'components/ModalBasic';
+import { ContentOptions } from 'components/diary/ContentOptions';
 import { useUserOptions } from 'hooks/useUserOptions';
-import TutorialModal from 'components/tutorial/TutorialModal';
-import { useSetRecoilState } from 'recoil';
-import { showModalPage } from 'recoil/modalAtom';
+import { TutorialOption } from 'components/tutorial/TutorialOption';
 
 function Home() {
-  const { firstLogin, contentOptions, setContentOptions } = useUserOptions();
-  // console.log(contentOptions, 'Home options');
+  // const { firstLogin, contentOptions, setContentOptions } = useUserOptions();
   // console.log(firstLogin, contentOptions, 'firstLogin');
-  const setShowModal = useSetRecoilState(showModalPage);
-  if (firstLogin) {
-    setShowModal(true);
-  }
+  const [showModal, setShowModal] = useState(false);
+  // if (firstLogin) {
+  //   setShowModal(true);
+  // }
+  const optionSaveHandler = () => {
+    setShowModal(false);
+  };
+
   return (
     <div>
       <Calendar />
-      {firstLogin && (
-        <Modal>
-          <TutorialModal
-            title="옵션 설정하기"
-            btnclose="나중에 하기"
-            btnsave="설정 저장하기"
-            state={contentOptions}
-            setState={setContentOptions}
-          />
-        </Modal>
+      {showModal && (
+        <ModalBasic
+          title="옵션 설정하기"
+          tooltip
+          tooltipText="매일 쓰는 일기의 옵션을 설정할 수 있어요. 설정한 옵션은 마이페이지에서 수정할 수 있어요."
+          closeText="나중에 설정하기"
+          submitText="설정 저장하기"
+          cancelHandler={() => setShowModal(false)}
+          submitHandler={optionSaveHandler}
+        >
+          체크 옵션..ㅎ
+        </ModalBasic>
       )}
     </div>
   );
