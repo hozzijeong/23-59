@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Paging.css';
-import tw from 'tailwind-styled-components';
 import axios from 'axios';
+import tw from 'tailwind-styled-components';
+import ModalBasic from 'components/ModalBasic';
 import Pagination from 'react-js-pagination';
 
 interface IQnaProps {
@@ -29,6 +30,15 @@ function Questions() {
   const [resultAnswer, setResultAnswer] = useState(tagSelectedAnswer);
   const [page, setPage] = useState(1);
   const [pageList, setPageList] = useState(tagSelectedAnswer);
+  const [showModal, setShowModal] = useState(false);
+  const [currentList, setCurrentList] = useState({
+    selectedDate: '',
+    qna: {
+      question: '',
+      answer: '',
+      tag: '',
+    },
+  });
 
   async function getAllQuestionList() {
     const res = await axios.get('/api/contents/filter/qna', {
@@ -81,27 +91,17 @@ function Questions() {
     return nonSelectBtnClass;
   };
 
-  // 여기부터
   const handlePageChange = (page: number) => {
     setPage(page);
-    console.log(page);
   };
 
   const showAnswer = () => {
-    if (page === 1) {
-      setPageList(resultAnswer.slice(0, 8 * page));
-    } else {
-      // if (tagSelectedAnswer.length / 6 < page) {
-      //   setPageList(tagSelectedAnswer.slice(6 * (page - 1)));
-      // }
-      setPageList(resultAnswer.slice(8 * (page - 1), 8 * page));
-    }
+    setPageList(resultAnswer.slice(8 * (page - 1), 8 * page));
   };
-  // 여기까지
 
-  // useEffect(() => {
-  //   showAnswer();
-  // }, [page]);
+  useEffect(() => {
+    showAnswer();
+  }, [page, resultAnswer]);
 
   useEffect(() => {
     getAllQuestionList();
@@ -116,7 +116,6 @@ function Questions() {
     showSelectedAnswers();
   }, [isSelect]);
 
-  console.log('요기!', pageList);
   return (
     <Container>
       <div>오늘의 질문 모아보기</div>
@@ -128,7 +127,10 @@ function Questions() {
                   className={tagBtnClassName(tagItem)}
                   key={tagItem}
                   type="button"
-                  onClick={() => handleTag(tagItem)}
+                  onClick={() => {
+                    handleTag(tagItem);
+                    setPage(1);
+                  }}
                 >
                   {tagItem}
                 </TagButtons>
@@ -141,20 +143,32 @@ function Questions() {
           {pageList
             ? pageList.map((ele: any) => (
                 // TODO: 배열안에 객체 interface 설정
-                <AnswerList key={ele.selectedDate}>{ele.qna.question}</AnswerList>
+                <AnswerList
+                  key={ele.selectedDate}
+                  onClick={() => {
+                    setCurrentList(ele);
+                    setShowModal(true);
+                  }}
+                >
+                  {ele.qna.question}
+                </AnswerList>
               ))
             : null}
         </AnswerUl>
       </AnswerContainer>
       <Pagination
         activePage={page}
-        itemsCountPerPage={8}
-        totalItemsCount={resultAnswer.length}
+        itemsCountPerPage={8} // 9
+        totalItemsCount={resultAnswer.length} // all.length
         pageRangeDisplayed={5}
-        // prevPageText={'이전페이지'}
-        // nextPageText={'다음페이지'}
         onChange={handlePageChange}
       />
+      {showModal ? (
+        <ModalBasic title={currentList.qna.question} closeText="닫기" cancelHandler={() => setShowModal(false)}>
+          <div>작성날짜: {currentList.selectedDate}</div>
+          <div>답변: {currentList.qna.answer}</div>
+        </ModalBasic>
+      ) : null}
     </Container>
   );
 }
@@ -200,7 +214,7 @@ const nonSelectBtnClass = `
 // 질문 리스트 영역
 const AnswerContainer = tw.div`
   w-full
-  min-h-[550px]
+  min-h-[525px]
 `;
 
 const AnswerUl = tw.ul`
@@ -220,48 +234,48 @@ const AnswerList = tw.li`
   cursor-pointer
 `;
 
-// 모달 영역
-const ModalLayout = tw.div`
-  justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none
-`;
+// // 모달 영역
+// const ModalLayout = tw.div`
+//   justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none
+// `;
 
-// 모달 내 영역
-const ModalContainer = tw.div`
-  border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none
-`;
-// 모달 헤더
-const ModalHeader = tw.div`
-  flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t
-`;
+// // 모달 내 영역
+// const ModalContainer = tw.div`
+//   border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none
+// `;
+// // 모달 헤더
+// const ModalHeader = tw.div`
+//   flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t
+// `;
 
-const ModalTitleH3 = tw.h3`
-  text-3xl font-semibold
-`;
+// const ModalTitleH3 = tw.h3`
+//   text-3xl font-semibold
+// `;
 
-const ModalCloseBtn = tw.button`
-  p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none
-`;
+// const ModalCloseBtn = tw.button`
+//   p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none
+// `;
 
-const Close = tw.span`
-  bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none
-`;
-// 모달 메인
-const ModalMain = tw.div`
-  relative p-6 flex-auto
-`;
+// const Close = tw.span`
+//   bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none
+// `;
+// // 모달 메인
+// const ModalMain = tw.div`
+//   relative p-6 flex-auto
+// `;
 
-const ModalScript = tw.div`
-  my-4 text-slate-500 text-lg leading-relaxed
-`;
-// 모달 푸터
-const ModalFooter = tw.div`
-  flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b
-`;
+// const ModalScript = tw.div`
+//   my-4 text-slate-500 text-lg leading-relaxed
+// `;
+// // 모달 푸터
+// const ModalFooter = tw.div`
+//   flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b
+// `;
 
-const ModalConfirmBtn = tw.button`
-  bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150
-`;
+// const ModalConfirmBtn = tw.button`
+//   bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150
+// `;
 
-const ModalCancleBtn = tw.button`
-  text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150
-`;
+// const ModalCancleBtn = tw.button`
+//   text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150
+// `;

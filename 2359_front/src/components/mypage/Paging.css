@@ -18,6 +18,8 @@ ul.pagination li {
   justify-content: center;
   align-items: center;
   font-size: 1rem;
+  cursor: pointer;
+  margin: 1px;
 }
 
 ul.pagination li:first-child {
