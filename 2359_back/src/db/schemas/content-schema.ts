@@ -5,7 +5,7 @@ interface IContent {
   selectedDate: string;
   month: string;
   //author: ObjectId;
-  author: string;
+  author: Schema.Types.ObjectId;
   emotion: string;
   diary: object;
   todo: object;
@@ -106,14 +106,14 @@ const ContentSchema = new Schema<IContent>(
     //   type: String,
     //   required: true,
     // },
-    // author: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: 'users',
-    //   required: true,
-    // },
     author: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref: 'users',
+      required: true,
     },
+    // author: {
+    //   type: String,
+    // },
     emotion: {
       type: String,
     },

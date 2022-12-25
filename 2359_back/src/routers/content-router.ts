@@ -1,9 +1,9 @@
 import { Router } from 'express';
 //import is from '@sindresorhus/is';
 import { check, validationResult } from 'express-validator';
-
 import { contentService, questionService } from '../services';
 import { loginRequired } from '../middlewares/login-required';
+import { isEmpty } from '../middlewares/is-empty';
 
 const contentRouter = Router();
 
@@ -86,24 +86,30 @@ contentRouter.post('/', async (req, res, next) => {
       throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
     }
     // diary, todo, account, answer
-    const { selectedDate, emotion, diary, todo, account, qna } = req.body;
-    const answer = qna;
-    //console.log('qna ', qna.questionId);
-    //console.log('qna ', qna);
-    //const q = await questionService.randomQuestionId();
-    //console.log('q ', q._id);
+    const { selectedDate, author, emotion, diary, todo, account, qna, checkOption } = req.body;
 
+    const dates = await contentService.checkDate();
+
+    if (dates.includes(selectedDate)) {
+      // 날짜 중복
+      res.status(400).json('DB에 생성된 날짜가 있습니다.');
+      return;
+    }
+
+    const answer = qna;
     const newContent = await contentService.addContent(
       {
         selectedDate,
+        author,
         emotion,
         diary,
         todo,
         account,
+        checkOption,
       },
       answer
     );
-    console.log('qna ', qna);
+    //console.log('qna ', qna);
     res.status(200).json(newContent);
   } catch (error) {
     next(error);
@@ -119,16 +125,13 @@ contentRouter.patch('/:contentId', async (req, res, next) => {
     if (!errors.isEmpty()) {
       throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
     }
-    const { contentId, diary, todo, account, qna } = req.body;
+    const { contentId, author, emotion, diary, todo, account, qna } = req.body;
     //const { contentId, selectedDate, answer } = req.body;
     console.log('contentId: ', contentId);
 
-    // const toUpdate = {
-    //   ...(selectedDate && { selectedDate }),
-    //   ...(answer && { answer }),
-    // };
-
     const toUpdate = {
+      ...(author && { author }),
+      ...(emotion && { emotion }),
       ...(diary && { diary }),
       ...(todo && { todo }),
       ...(account && { account }),
@@ -177,6 +180,9 @@ contentRouter.get('/filterCls/:date', async (req, res, next) => {
     const splitDate = date.split('-');
     console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
     const content = await contentService.filterCls(splitDate[0], splitDate[1]);
+    if (isEmpty(content)) {
+      res.status(400).json('입력된 가계부 수입이 없습니다.');
+    }
     res.status(200).json(content);
   } catch (error) {
     next(error);
@@ -201,7 +207,8 @@ contentRouter.get('/filterCategory/:date', async (req, res, next) => {
 
 // api/contents/qna
 // 오늘의 질문 모아보기
-contentRouter.get('/filter/qna', loginRequired, async (req, res, next) => {
+//loginRequired
+contentRouter.get('/filter/qna', async (req, res, next) => {
   try {
     const qnas = await contentService.filterQna();
     res.status(200).json(qnas);
