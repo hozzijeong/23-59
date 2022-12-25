@@ -195,8 +195,10 @@ class ContentService {
   }
 
   // 한달용
-  async getCalendarByMonth(prevDate: string, nextDate: string) {
-    const content = await this.contentModel.filterByDate(prevDate, nextDate);
+  async getCalendarByMonth(prevDate: string, nextDate: string, authorId: string) {
+    // const authorContent = await this.contentModel.findByAuthor(author);
+    // console.log('authorContent', authorContent);
+    const content = await this.contentModel.filterByDate(prevDate, nextDate, authorId);
     if (!content) {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }

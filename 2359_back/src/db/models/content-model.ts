@@ -62,11 +62,11 @@ const findByAuthor = async (author: string) => {
 };
 
 // 해당 날짜내의 컨텐츠 조회
-const filterByDate = async (prevDate: string, nextDate: string) => {
+const filterByDate = async (prevDate: string, nextDate: string, authorId: string) => {
   const prev = parseInt(prevDate, 10);
   const next = parseInt(nextDate, 10);
 
-  const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev } });
+  const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev }, author: authorId });
   //console.log('filteredContents: ', filteredContents);
   //console.log('length ', filteredContents.length);
   return filteredContents;
