@@ -73,7 +73,7 @@ const filterByDate = async (prevDate: string, nextDate: string, authorId: string
 };
 
 // 감정 통계
-const filterByEmotion = async (prevDate: string, nextDate: string) => {
+const filterByEmotion = async (prevDate: string, nextDate: string, authorId: string) => {
   const prev = parseInt(prevDate, 10);
   const next = parseInt(nextDate, 10);
 
@@ -81,7 +81,11 @@ const filterByEmotion = async (prevDate: string, nextDate: string) => {
   //const emotions = Object.keys(EMOTION);
   //console.log('EMOTION ', Object.keys(EMOTION));
 
-  const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev }, emotion: { $in: emotions } });
+  const filteredContents = await Content.find({
+    selectedDate: { $lte: next, $gte: prev },
+    emotion: { $in: emotions },
+    author: authorId,
+  });
   //const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev } }, { diary: { emotion: 1 } });
   // const e = filteredContents[1].diary;
   // console.log('model-emotions: ', e);
@@ -90,22 +94,20 @@ const filterByEmotion = async (prevDate: string, nextDate: string) => {
 };
 
 // 가계부 수입/지출별 통계(합산)
-const filterByCls = async (prevDate: string, nextDate: string) => {
+const filterByCls = async (prevDate: string, nextDate: string, authorId: string) => {
   const prev = parseInt(prevDate, 10);
   const next = parseInt(nextDate, 10);
 
-  // const clsArr = Object.keys(CLS);
-  // console.log('clsArr ', clsArr); //  [ 'EXPENSE', 'INCOME' ]
-  // console.log(clsArr[1]);
   const incomes = await Content.find({
     selectedDate: { $lte: next, $gte: prev },
     'account.cls': 'INCOME',
+    author: authorId,
   });
 
-  const expenses = await Content.find({
-    selectedDate: { $lte: next, $gte: prev },
-    'account.cls': 'EXPENSE',
-  });
+  // const expenses = await Content.find({
+  //   selectedDate: { $lte: next, $gte: prev },
+  //   'account.cls': 'EXPENSE',
+  // });
 
   // const accounts = await Content.find({
   //   selectedDate: { $lte: next, $gte: prev },
@@ -113,13 +115,13 @@ const filterByCls = async (prevDate: string, nextDate: string) => {
   // });
 
   console.log('model-incomes: ', incomes);
-  console.log('model-expenses: ', expenses);
-  console.log('models: ', { incomes, expenses });
+  // console.log('model-expenses: ', expenses);
+  // console.log('models: ', { incomes, expenses });
   //console.log('model-accounts: ', accounts);
   return incomes;
 };
 // 가계부 카테고리별 통계
-const filterByCategory = async (prevDate: string, nextDate: string) => {
+const filterByCategory = async (prevDate: string, nextDate: string, authorId: string) => {
   const prev = parseInt(prevDate, 10);
   const next = parseInt(nextDate, 10);
 
@@ -127,13 +129,14 @@ const filterByCategory = async (prevDate: string, nextDate: string) => {
     selectedDate: { $lte: next, $gte: prev },
     'account.cls': 'EXPENSE',
     'account.category': { $exists: true },
+    author: authorId,
   });
   console.log('model-categories: ', cateogries);
   return cateogries;
 };
 // 모든 질문 전체보기
-const findAllQna = async () => {
-  const qnas = await Content.find({ 'qna.answer': { $exists: true } });
+const findAllQna = async (authorId: string) => {
+  const qnas = await Content.find({ 'qna.answer': { $exists: true }, author: authorId });
   //console.log('qnas ', qnas);
   return qnas;
 };
