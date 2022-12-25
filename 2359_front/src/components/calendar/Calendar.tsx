@@ -90,7 +90,7 @@ function Calendar() {
               {diaryData?.map(
                 (item: SumObject) =>
                   item.date === format(day, 'yyyyMMdd') && (
-                    <div key={item.date.toString()} className="relative text-gray-500 text-sm h-full">
+                    <div key={item.date} className="relative text-gray-500 text-sm h-full">
                       <span className="text-xs absolute -top-5 right-0">{item.etc ? '🟢' : null}</span>
                       <div className="flex flex-col justify-around h-full px-1">
                         <div className="flex justify-center">
