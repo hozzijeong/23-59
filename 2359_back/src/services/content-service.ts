@@ -1,10 +1,10 @@
 import contentModel from '../db/models/content-model';
-import {
-  emotionEnums as EMOTION,
-  incomeEnums as INCOMES,
-  expenseEnums as EXPENSES,
-  clsEnums as CLS,
-} from '../../../2359_front/src/types/enums';
+// import {
+//   emotionEnums as EMOTION,
+//   incomeEnums as INCOMES,
+//   expenseEnums as EXPENSES,
+//   clsEnums as CLS,
+// } from '../../../2359_front/src/types/enums';
 import { questionService } from './question-service';
 import { isEmpty } from '../middlewares/is-empty';
 
@@ -21,16 +21,12 @@ class ContentService {
     const dateArr = dates.map((obj: any) => obj.selectedDate);
     console.log('dateArr', dateArr.sort());
 
-    // if (!dateArr.includes(selectedDate)) {
-    //   // 날짜 중복
-    //   return 'DB에 생성된 날짜가 있습니다.';
-    // }
     return dateArr.sort();
   }
 
   // 컨텐츠 생성
   async addContent(contentData: any, answerData: any) {
-    const { selectedDate, emotion, diary, todo, account } = contentData;
+    const { selectedDate, author, emotion, diary, todo, account, checkOption } = contentData;
 
     if (isEmpty(answerData)) {
       answerData = '';
@@ -48,25 +44,22 @@ class ContentService {
 
     const result = {
       selectedDate,
+      author,
       emotion,
       diary,
       todo,
       account,
       qna,
+      checkOption,
     };
     console.log('result ', result);
     const newContent = await this.contentModel.createContent(result);
 
-    let TODO_LIST: boolean | undefined = newContent.checkOption?.TODO_LIST;
-    TODO_LIST = !isEmpty(newContent.todo);
-    let TODAY_QUESTION: boolean | undefined = newContent.checkOption?.TODAY_QUESTION;
-    TODAY_QUESTION = !isEmpty(newContent.qna?.answer);
-    let DIARY: boolean | undefined = newContent.checkOption?.DIARY;
-    DIARY = !isEmpty(newContent.diary);
-    let EMOTION: boolean | undefined = newContent.checkOption?.EMOTION;
-    EMOTION = !isEmpty(newContent.emotion);
-    let ACCOUNT_BOOK: boolean | undefined = newContent.checkOption?.ACCOUNT_BOOK;
-    ACCOUNT_BOOK = !isEmpty(newContent.account);
+    newContent.checkOption.TODO_LIST = !isEmpty(newContent.todo);
+    newContent.checkOption.TODAY_QUESTION = !isEmpty(newContent.qna?.answer);
+    newContent.checkOption.DIARY = !isEmpty(newContent.diary);
+    newContent.checkOption.EMOTION = !isEmpty(newContent.emotion);
+    newContent.checkOption.ACCOUNT_BOOK = !isEmpty(newContent.account);
 
     return newContent;
   }
@@ -93,16 +86,16 @@ class ContentService {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
 
-    let todo: boolean | undefined = content.checkOption?.TODO_LIST;
-    todo = !isEmpty(content.todo);
-    let question: boolean | undefined = content.checkOption?.TODAY_QUESTION;
-    question = !isEmpty(content.qna?.answer);
-    let diary: boolean | undefined = content.checkOption?.DIARY;
-    diary = !isEmpty(content.diary);
-    let emotion: boolean | undefined = content.checkOption?.EMOTION;
-    emotion = !isEmpty(content.emotion);
-    let account: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
-    account = !isEmpty(content.account);
+    let checkTodo: boolean | undefined = content.checkOption?.TODO_LIST;
+    checkTodo = !isEmpty(content.todo);
+    let checkQna: boolean | undefined = content.checkOption?.TODAY_QUESTION;
+    checkQna = !isEmpty(content.qna?.answer);
+    let checkDiary: boolean | undefined = content.checkOption?.DIARY;
+    checkDiary = !isEmpty(content.diary);
+    let checkEmotion: boolean | undefined = content.checkOption?.EMOTION;
+    checkEmotion = !isEmpty(content.emotion);
+    let checkAccount: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
+    checkAccount = !isEmpty(content.account);
     console.log('content.checkOption ', content.checkOption);
     return content;
   }
@@ -113,6 +106,17 @@ class ContentService {
       contentId,
       update: toUpdate,
     });
+
+    // let checkTodo: boolean | undefined = updatedContent.checkOption?.TODO_LIST;
+    // updatedContent.checkOption.TODO_LIST = !isEmpty(updatedContent.todo);
+    // let checkQna: boolean | undefined = updatedContent.checkOption?.TODAY_QUESTION;
+    // updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna?.answer);
+    // let checkDiary: boolean | undefined = updatedContent.checkOption?.DIARY;
+    // updatedContent.checkOption.DIARY = !isEmpty(updatedContent.diary);
+    // let checkEmotion: boolean | undefined = updatedContent.checkOption?.EMOTION;
+    // updatedContent.checkOption.EMOTION = !isEmpty(updatedContent.emotion);
+    // let checkAccount: boolean | undefined = updatedContent.checkOption?.ACCOUNT_BOOK;
+    // updatedContent.checkOption.ACCOUNT_BOOK = !isEmpty(updatedContent.account);
 
     updatedContent.checkOption.TODO_LIST = !isEmpty(updatedContent.todo);
     updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna.answer);
@@ -226,7 +230,8 @@ class ContentService {
     //   }
     //   emotionsArr.push(filtered[i].emotion);
     // }
-    const emotionArr = Object.keys(EMOTION);
+    const emotionArr = ['VERY_BAD', 'BAD', 'SO_SO', 'GOOD', 'VERY_GOOD'];
+    //const emotionArr = Object.keys(EMOTION);
     const diff = emotionArr.filter((x: string) => !filtered.includes(x));
     console.log('diff  ', diff);
     // function checkAvailability(arr: any, val: any) {
