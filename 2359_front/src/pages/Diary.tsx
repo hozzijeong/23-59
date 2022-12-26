@@ -92,7 +92,10 @@ function Diary() {
       selectedDate: selectedDate === '' ? id ?? '' : selectedDate,
       emotion,
       diary,
-      qna,
+      qna: {
+        questionId: qna._id,
+        answer: qna.answer,
+      },
       todo,
       account,
       checkOption,
@@ -106,7 +109,7 @@ function Diary() {
       }
 
       await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate());
-      setTodayDiary({ diaryInfo: { ...diaryInfo, ...body }, diaryMode: DiaryMode.READ });
+      setTodayDiary({ diaryInfo: { ...diaryInfo, ...body, qna }, diaryMode: DiaryMode.READ });
     } catch (e) {
       throw Error(`errorOccure ${e}`);
     }
