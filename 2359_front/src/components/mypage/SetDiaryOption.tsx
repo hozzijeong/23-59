@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import axios from 'axios';
-// import { baseAxios } from 'api';
-import { OptionEnums } from 'types/enums';
 import { baseAxios } from 'api';
-
+// import { CONTENT_OPTION } from 'types/enumConverter';
+import { OptionEnums } from 'types/enums';
 // {
 //   ACCOUNT_BOOK: false,
 //   DIARY: false,
@@ -12,6 +11,10 @@ import { baseAxios } from 'api';
 //   TODAY_QUESTION: false,
 //   TODO_LIST: false,
 // }
+
+type DiaryProps = {
+  [key in OptionEnums]: boolean;
+};
 
 function SetDiaryOption() {
   // Record<OptionEnums, boolean>[]
@@ -79,7 +82,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="todoCheck"
-              checked={data.TODO_LIST}
+              checked={data.TODO_LIST || ''}
               onChange={() => {
                 checkedHandler(OptionEnums.TODO_LIST);
               }}
@@ -93,7 +96,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="questionCheck"
-              checked={data.TODAY_QUESTION}
+              checked={data.TODAY_QUESTION || ''}
               onChange={() => {
                 checkedHandler(OptionEnums.TODAY_QUESTION);
               }}
@@ -107,7 +110,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="diaryCheck"
-              checked={data.DIARY}
+              checked={data.DIARY || ''}
               onChange={() => {
                 checkedHandler(OptionEnums.DIARY);
               }}
@@ -123,7 +126,7 @@ function SetDiaryOption() {
               id="emotionCheck"
               checked={data.EMOTION}
               onChange={() => {
-                checkedHandler(OptionEnums.EMOTION);
+                checkedHandler(OptionEnums.EMOTION || '');
               }}
             />
             하루 감정
@@ -137,7 +140,7 @@ function SetDiaryOption() {
               id="accountCheck"
               checked={data.ACCOUNT_BOOK}
               onChange={() => {
-                checkedHandler(OptionEnums.ACCOUNT_BOOK);
+                checkedHandler(OptionEnums.ACCOUNT_BOOK || '');
               }}
             />
             가계부

@@ -1,5 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
+import { useRecoilState } from 'recoil';
+import { accountTableAtom } from 'recoil/diaryAtom';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 import { EXPENSE_CATEGORY, INCOME_CATEGORY, CLS } from 'types/enumConverter';
@@ -14,9 +16,10 @@ const EXPENSE_STATE = Object.values(EXPENSE);
 const INCOME_STATE = Object.values(INCOME);
 const MONEY_STATE = Object.values(MONEY);
 
-function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
+function AccountBook({ todayDiary }: DiaryComponentPrpos) {
   const [todayAccountInfo, setTodatAccountInfo] = useState<AccountTableRow>(INITIAL_ACCOUNT_INFO);
-  const { diaryInfo, diaryMode } = todayDiary;
+  const [accountTable, setAccountTable] = useRecoilState<AccountTableRow[]>(accountTableAtom);
+  const { diaryMode } = todayDiary;
 
   const readMode = diaryMode === DiaryMode.READ;
 
@@ -34,27 +37,16 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
   };
 
   const appendAccountInfoHandler = () => {
-    setTodayDiary((prev) => ({
-      ...prev,
-      diaryInfo: {
-        ...prev.diaryInfo,
-        account: [...prev.diaryInfo.account, { ...todayAccountInfo, id: getCurrentDate() }],
-      },
-    }));
+    setAccountTable((prev) => [...prev, { ...todayAccountInfo, id: getCurrentDate() }]);
+
     setTodatAccountInfo(INITIAL_ACCOUNT_INFO);
   };
 
   const deleteTableInfoHandler = useCallback(
     (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
-      setTodayDiary((prev) => ({
-        ...prev,
-        diaryInfo: {
-          ...prev.diaryInfo,
-          account: [...prev.diaryInfo.account].filter((row) => row.id !== id),
-        },
-      }));
+      setAccountTable((cur) => [...cur].filter((row) => row.id !== id));
     },
-    [setTodayDiary]
+    [setAccountTable]
   );
 
   const moneyFlowOptions = useMemo(
@@ -90,7 +82,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
 
   const tableInfo = useMemo(
     () =>
-      diaryInfo.account.map(({ id, cls, category, amount, memo }) => (
+      accountTable.map(({ id, cls, category, amount, memo }) => (
         <TableRow key={uuid()}>
           <Td scope="row">{CLS[cls]}</Td>
           <Td scope="row">
@@ -98,7 +90,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
           </Td>
           <Td scope="row">{`${Number(amount).toLocaleString('ko-KR')}`}원</Td>
           <Td scope="row">{memo}</Td>
-          {readMode ? null : (
+          {!readMode && (
             <Td scope="row">
               <button type="button" onClick={(e) => deleteTableInfoHandler(e, id)}>
                 삭제하기
@@ -107,16 +99,16 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
           )}
         </TableRow>
       )),
-    [deleteTableInfoHandler, diaryInfo.account]
+    [deleteTableInfoHandler, accountTable, readMode]
   );
 
   const totalAmount = useMemo(
     () =>
-      diaryInfo.account.reduce(
+      accountTable.reduce(
         (acc, { amount, cls }) => (cls === MONEY.EXPENSE ? acc - Number(amount) : acc + Number(amount)),
         0
       ),
-    [diaryInfo.account]
+    [accountTable]
   );
 
   return (
@@ -124,7 +116,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
     <div>
       <HeadContainer>
         <Question>오늘 수입/지출을 알려주세요</Question>
-        {readMode ? null : (
+        {!readMode && (
           <InputContainer onChange={todayAccountInfoChangeHandler}>
             <select name="cls" value={todayAccountInfo.cls}>
               {moneyFlowOptions}
@@ -159,7 +151,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
             <Th scope="col">카테고리</Th>
             <Th scope="col">금액</Th>
             <Th scope="col">메모</Th>
-            {readMode ? null : <Th scope="col"> </Th>}
+            {!readMode && <Th scope="col"> </Th>}
           </TableRow>
         </TableHead>
         <tbody>{tableInfo}</tbody>

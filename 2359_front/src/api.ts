@@ -6,6 +6,12 @@ const baseAxios = axios.create({
   withCredentials: true,
 });
 
+const headerAxios = axios.create({
+  baseURL: 'http://localhost:8000',
+  withCredentials: true,
+  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+});
+
 const updateDiary = ({ _id, body }: { _id: string; body: DiaryBodyProps }) =>
   baseAxios.patch(`/api/contents/${_id}`, { ...body, contentId: _id });
 
@@ -17,5 +23,5 @@ const deleteDiary = (_id: string) =>
       contentId: _id,
     },
   });
-
-export { baseAxios, updateDiary, createDiary, deleteDiary };
+const getRandomQuestion = () => baseAxios.get('/api/questions/random').then((res) => res.data);
+export { baseAxios, updateDiary, createDiary, deleteDiary, getRandomQuestion };
