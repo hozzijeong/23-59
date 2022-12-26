@@ -103,6 +103,16 @@ interface DiaryBodyProps {
   checkOption: OptionCheckedProps;
 }
 
+interface EmotionStaticProps {
+  [key: string]: number | string;
+}
+
+interface CategoriesStaticProps {
+  id: string;
+  label: string;
+  value: number;
+}
+
 export type {
   OptionProps,
   ContentOptionProps,
@@ -120,4 +130,6 @@ export type {
   DiaryContentOptionsProps,
   DiaryComponentPrpos,
   DiaryBodyProps,
+  EmotionStaticProps,
+  CategoriesStaticProps,
 };
