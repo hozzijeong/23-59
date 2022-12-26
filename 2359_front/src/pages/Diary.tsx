@@ -1,5 +1,7 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-alert */
 /* eslint-disable no-underscore-dangle */
-import React, { useMemo, useState, ReactNode, useEffect } from 'react';
+import React, { useMemo, useState, ReactNode, useEffect, useCallback } from 'react';
 import { AccountBook } from 'components/diary/AccountBook';
 import { DiaryComponentsLayout } from 'components/diary/Layout/DiaryComponentsLayout';
 import { Emotion } from 'components/diary/Emotion';
@@ -11,14 +13,14 @@ import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
 import Button from 'components/Button';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DiaryMode, OptionEnums as OPTION } from 'types/enums';
+import { DiaryMode, emotionEnums, OptionEnums as OPTION } from 'types/enums';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
-import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
-import { useRecoilValue } from 'recoil';
+import { INITIAL_CONTENT_OPTIONS, INITIAL_TODAY_DIARY, QNA_INNITIAL } from 'utilities/initialValues';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 
 type DiaryContentsPrpos = {
@@ -49,20 +51,9 @@ function Diary() {
   const diary = useRecoilValue(todayDiaryAtom);
   const account = useRecoilValue(accountTableAtom);
 
-  console.log(todo, qna, emotion, diary, account, contentOptions, todayDiary.diaryInfo.checkOption);
-
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
 
   const diaryContents = useMemo(() => {
-    // if (diaryMode === DiaryMode.CREATE)
-    //   return (
-    //     <EmptyContainer>
-    //       <button type="button" onClick={() => setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.UPDATE }))}>
-    //         작성하기
-    //       </button>
-    //     </EmptyContainer>
-    //   );
-
     if (diaryMode === (DiaryMode.UPDATE || DiaryMode.CREATE) && everyUnChecked) {
       return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
     }
@@ -106,25 +97,31 @@ function Diary() {
       account,
       checkOption,
     };
+    try {
+      if (diaryMode === DiaryMode.CREATE) {
+        await mutate('/api/contents', createDiary(body)).then((res) => {
+          diaryMutate();
+        });
+        return;
+      }
 
-    console.log(body, 'Body!!');
-
-    if (diaryMode === DiaryMode.CREATE) {
-      await mutate('/api/contents', createDiary(body)).then((res) => {
-        diaryMutate(res?.data);
-      });
-      return;
+      await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate());
+      setTodayDiary({ diaryInfo: { ...diaryInfo, ...body }, diaryMode: DiaryMode.READ });
+    } catch (e) {
+      throw Error(`errorOccure ${e}`);
     }
-
-    await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
-
-    setTodayDiary({ diaryInfo: { ...diaryInfo, ...body }, diaryMode: DiaryMode.READ });
   };
 
   const cancelHandler = () => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm('정말 취소하시겠습니까?\n작성하신 내용은 저장되지 않습니다.')) {
-      setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+    const isCreate = diaryMode === DiaryMode.CREATE;
+    if (
+      confirm(`정말 취소하시겠습니까?\n작성하신 내용은 저장되지 ${isCreate ? '않고 홈으로 이동합니다' : '않습니다'}.`)
+    ) {
+      if (isCreate) {
+        navigation('/');
+      } else {
+        setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+      }
       // navigation('/');
     }
   };

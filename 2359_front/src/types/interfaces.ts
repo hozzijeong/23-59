@@ -30,6 +30,7 @@ interface QuestionAnswerProps {
   question: string;
   tag: string;
   answer: string;
+  _id: string;
 }
 
 interface DiaryStateProps {
