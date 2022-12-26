@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { todayTodo } from 'recoil/diaryAtom';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
@@ -11,7 +9,6 @@ import { DiaryMode } from 'types/enums';
 
 function TodoList({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
   const [todoInput, setTodoInput] = useState<string>('');
-  // const [curTodo, setCurTodo] = useRecoilState(todayTodo);
   const { diaryInfo, diaryMode } = todayDiary;
 
   const addTodoHandler = () => {
@@ -27,7 +24,6 @@ function TodoList({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
         todo: [...diaryInfo.todo, { id: getCurrentDate(), done: false, item: todoInput }],
       },
     });
-    // setCurTodo((cur) => [...cur, { id: getCurrentDate(), done: false, item: todoInput }]);
     setTodoInput('');
   };
 
@@ -40,7 +36,6 @@ function TodoList({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
     const { id } = event.target;
     const updateTodos = diaryInfo.todo.map((todo) => (todo.id === id ? { ...todo, done: !todo.done } : { ...todo }));
 
-    // setCurTodo(updateTodos);
     setTodayDiary((prev) => ({
       ...prev,
       diaryInfo: {
@@ -51,7 +46,6 @@ function TodoList({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
   };
 
   const todoDeleteHandler = (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
-    // setCurTodo((cur) => cur.filter((todo) => todo.id !== id));
     setTodayDiary((prev) => ({
       ...prev,
       diaryInfo: {

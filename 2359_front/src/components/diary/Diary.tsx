@@ -1,13 +1,10 @@
 import React, { useCallback } from 'react';
-// import { useRecoilState } from 'recoil';
-// import { todayDiaryAtom } from 'recoil/diaryAtom';
 import tw from 'tailwind-styled-components';
 import { DiaryMode } from 'types/enums';
 import { DiaryComponentPrpos } from 'types/interfaces';
 import { Question } from './TodayQuestion';
 
 function Diary({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
-  // const [diary, setDiary] = useRecoilState(todayDiaryAtom);
   const { diaryInfo, diaryMode } = todayDiary;
 
   const diaryChangeHandler = useCallback(

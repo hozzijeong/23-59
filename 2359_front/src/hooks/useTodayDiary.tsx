@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { baseAxios } from 'api';
 import useSWR from 'swr';
 import { DiaryStateProps, TodayDiaryProps } from 'types/interfaces';

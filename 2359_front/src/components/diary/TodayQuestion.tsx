@@ -1,12 +1,9 @@
 import React from 'react';
-import { useRecoilState } from 'recoil';
-import { questionAnswer } from 'recoil/diaryAtom';
 import tw from 'tailwind-styled-components';
 import { DiaryMode } from 'types/enums';
 import { DiaryComponentPrpos } from 'types/interfaces';
 
 function TodayQuestion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
-  // const [{ answer }, setAnswer] = useRecoilState(questionAnswer);
   const { diaryInfo, diaryMode } = todayDiary;
 
   const answerChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -22,7 +19,6 @@ function TodayQuestion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
         },
       },
     });
-    // setAnswer({ answer: value });
   };
 
   return (

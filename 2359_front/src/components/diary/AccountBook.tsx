@@ -98,7 +98,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
           </Td>
           <Td scope="row">{`${Number(amount).toLocaleString('ko-KR')}`}원</Td>
           <Td scope="row">{memo}</Td>
-          {readMode ? null : (
+          {!readMode && (
             <Td scope="row">
               <button type="button" onClick={(e) => deleteTableInfoHandler(e, id)}>
                 삭제하기
@@ -107,7 +107,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
           )}
         </TableRow>
       )),
-    [deleteTableInfoHandler, diaryInfo.account]
+    [deleteTableInfoHandler, diaryInfo.account, readMode]
   );
 
   const totalAmount = useMemo(
@@ -124,7 +124,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
     <div>
       <HeadContainer>
         <Question>오늘 수입/지출을 알려주세요</Question>
-        {readMode ? null : (
+        {!readMode && (
           <InputContainer onChange={todayAccountInfoChangeHandler}>
             <select name="cls" value={todayAccountInfo.cls}>
               {moneyFlowOptions}
@@ -159,7 +159,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
             <Th scope="col">카테고리</Th>
             <Th scope="col">금액</Th>
             <Th scope="col">메모</Th>
-            {readMode ? null : <Th scope="col"> </Th>}
+            {!readMode && <Th scope="col"> </Th>}
           </TableRow>
         </TableHead>
         <tbody>{tableInfo}</tbody>

@@ -1,6 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-// import { useRecoilState } from 'recoil';
-// import { emotionAtom } from 'recoil/diaryAtom';
 import { EMOTIONS } from 'types/enumConverter';
 import { DiaryMode, emotionEnums as EMOTION } from 'types/enums';
 import uuid from 'react-uuid';
@@ -11,7 +9,6 @@ import { Question } from './TodayQuestion';
 const EMOTION_STATE = Object.values(EMOTION);
 
 function Emotion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
-  // const [{ emotion }, setEmotion] = useRecoilState(emotionAtom);
   const { diaryInfo, diaryMode } = todayDiary;
 
   const emotionChangeHandler = useCallback(

@@ -41,13 +41,10 @@ function Diary() {
 
   const { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate: diaryMutate } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
-  // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
-  console.log(diaryInfo, diaryMode, contentOptions, 'options');
 
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
 
   const diaryContents = useMemo(() => {
-    // 처음 페이지 & isRead 라면 작성하기 보여줄 것.
     if (diaryMode === DiaryMode.CREATE)
       return (
         <EmptyContainer>
@@ -65,7 +62,6 @@ function Diary() {
       return <EmptyContainer>작성된 내용이 없습니다.</EmptyContainer>;
     }
 
-    // 기본적으로 값
     return contentOptions.map((options) => {
       const { title, isChecked } = options;
       if (!isChecked) return null;
@@ -105,14 +101,12 @@ function Diary() {
     console.log(body, 'Body!!');
 
     if (_id === '') {
-      // create 일 때
       await mutate('/api/contents', createDiary(body)).then((res) => {
         diaryMutate(res?.data);
       });
       return;
     }
 
-    // update 일 때
     await mutate(`/api/contents/${diaryInfo?._id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
 
     setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));

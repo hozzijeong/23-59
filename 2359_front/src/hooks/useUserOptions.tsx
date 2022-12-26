@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { baseAxios } from 'api';
-import { useNavigate } from 'react-router';
 import useSWR from 'swr';
 import { ContentOptionProps, OptionCheckedProps } from 'types/interfaces';
 import { converUserOptionToContent } from 'utilities/utils';
@@ -12,7 +11,6 @@ interface UserOptionsProps {
 
 function useUserOptions() {
   const accessToken = localStorage.getItem('token') || '';
-  const navigation = useNavigate();
   const [contentOptions, setContentOptions] = useState<ContentOptionProps[]>([]);
 
   const fetcher = async (url: string) => {
