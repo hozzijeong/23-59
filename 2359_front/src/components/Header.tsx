@@ -8,23 +8,7 @@ import UserAttribute from '../utilities/UserLoginAttribute';
 function Header() {
   const { logoClickHandler, handleLoginClick } = UserAttribute();
   const [loginState, setLoginState] = useRecoilState(userLogin);
-  // const [loginState, setLoginState] = useState<boolean>(false);
-  // const navigate = useNavigate();
   const getToken = localStorage.getItem('token') ? true : null;
-  // const handleLoginClick = () => {
-  //   if (getToken === null) {
-  //     setLoginState(true);
-  //     navigate('/');
-  //   } else {
-  //     localStorage.clear();
-  //     setLoginState(false);
-  //     navigate('/login');
-  //   }
-  // };
-
-  // const logoClickHandler = () => {
-  //   navigate('/user/main');
-  // };
 
   useEffect(() => {
     if (getToken) {
