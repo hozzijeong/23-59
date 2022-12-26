@@ -11,10 +11,14 @@ const currentYear = date.getFullYear();
 const currentMonth = date.getMonth() + 1;
 const monthLastDate = lastDay.getDate();
 
+interface emotionStaticProps {
+  [key: string]: number | string;
+}
+
 function EmotionStatistics() {
   // 객체를 typing할 때는 Record!!!
-  const initialData: Record<string, string | number>[] = [];
-  const [data, setData] = useState(initialData);
+  const initialData: emotionStaticProps[] = [];
+  const [data, setData] = useState<emotionStaticProps[]>(initialData);
 
   async function getFilterEmotion() {
     try {
@@ -27,30 +31,18 @@ function EmotionStatistics() {
         }
       );
       const res = await result.data;
-      res.name = '감정';
 
-      const tmpData = [res];
+      const convert: emotionStaticProps = Object.entries(res).reduce((acc, [key, val]) => {
+        return { ...acc, [EMOTIONS[key as emotionEnums]]: val };
+      }, {});
 
-      /*
-      data = [
-        { 
-          VERY_GOOD: 3, 
-          GOOD: 5, 
-          SO_SO: 4, 
-          BAD: 2, 
-          VERY_BAD: 1,
-          name: "감정",
-        },
-      ]
-      */
-      setData(tmpData);
-      // converter 이용 해야할듯!
-      // data = { VERY_GOOD: 3, GOOD: 5, SO_SO: 4, BAD: 2, VERY_BAD: 1 }
-      // convertData = { 매우 좋음: 3, 좋음: 5, 보통: 4, 나쁨: 2, 매우 나쁨: 1}
+      convert.name = '감정';
+      setData([convert]);
     } catch (e) {
       throw new Error();
     }
   }
+
   useEffect(() => {
     getFilterEmotion();
   }, []);
@@ -62,7 +54,7 @@ function EmotionStatistics() {
         <StatisticsScript>감정 통계 - {currentMonth}월😘</StatisticsScript>
         <ResponsiveBar
           data={data}
-          keys={['VERY_BAD', 'BAD', 'SO_SO', 'GOOD', 'VERY_GOOD']}
+          keys={Object.values(EMOTIONS)}
           margin={{ top: 30, right: 130, bottom: 60, left: 60 }}
           indexBy="name"
           padding={0.1}

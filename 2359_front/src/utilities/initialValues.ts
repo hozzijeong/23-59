@@ -15,15 +15,17 @@ const INITIAL_CONTENT_OPTIONS = {
   ACCOUNT_BOOK: false,
 };
 
+const QNA_INNITIAL = {
+  question: '',
+  tag: '',
+  answer: '',
+};
+
 const INITIAL_DIARY_INFO = {
   _id: '',
   selectedDate: '',
   todo: [],
-  qna: {
-    question: '',
-    tag: '',
-    answer: '',
-  },
+  qna: QNA_INNITIAL,
   emotion: emotionEnums.SO_SO,
   diary: INITIAL_TODAY_DIARY,
   account: [],
@@ -38,4 +40,4 @@ const INITIAL_ACCOUNT_INFO: AccountTableRow = {
   memo: '',
 };
 
-export { INITIAL_DIARY_INFO, INITIAL_TODAY_DIARY, INITIAL_CONTENT_OPTIONS, INITIAL_ACCOUNT_INFO };
+export { INITIAL_DIARY_INFO, INITIAL_TODAY_DIARY, INITIAL_CONTENT_OPTIONS, INITIAL_ACCOUNT_INFO, QNA_INNITIAL };
