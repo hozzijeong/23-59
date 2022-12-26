@@ -31,6 +31,7 @@ function EmotionStatistics() {
       let tmpData = [...data];
       tmpData = [res];
       setData(tmpData);
+      // converter 이용 해야할듯!
     } catch (e) {
       throw new Error();
     }
