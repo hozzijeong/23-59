@@ -140,7 +140,7 @@ function Diary() {
   return (
     <DiarySection>
       <HeadContent>
-        <Title isEmpty={everyUnChecked}>{date}</Title>
+        <Title isempty={everyUnChecked}>{date}</Title>
         <UpdateDiv>
           {diaryMode === DiaryMode.CREATE && null}
           {diaryMode === DiaryMode.READ && (
@@ -214,11 +214,11 @@ const Content = tw.div`
   text-lg	
 `;
 
-const Title = tw.p<{ isEmpty: boolean }>`
+const Title = tw.p<{ isempty: boolean }>`
   text-4xl
   font-extrabold
   break-keep	
-  ${(props) => props.isEmpty && 'text-gray-500'}
+  ${(props) => props.isempty && 'text-gray-500'}
   
 `;
 

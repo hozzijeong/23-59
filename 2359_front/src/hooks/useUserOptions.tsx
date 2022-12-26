@@ -29,8 +29,9 @@ function useUserOptions() {
     onError: (error) => {
       console.log(`${error}가 발생했습니다.`);
     },
-    revalidateOnMount: false,
-    revalidateOnFocus: false,
+
+    // revalidateOnMount: false,
+    // revalidateOnFocus: false,
     // 데이터의 불변성을 보장하는 값들.
     // revalidateIfStale: false,
     // revalidateOnFocus: false,
@@ -44,7 +45,8 @@ function useUserOptions() {
       setContentOptions(mixedData);
     }
   }, [data]);
-  return { contentOptions, setContentOptions, firstLogin: data?.firstLogin, isLoading };
+
+  return { contentOptions, setContentOptions, firstLogin: data && data.firstLogin, isLoading };
 }
 
 export { useUserOptions };
