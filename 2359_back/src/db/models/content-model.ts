@@ -27,7 +27,7 @@ const findAll = async () => {
 };
 
 const findDates = async () => {
-  const dates = await Content.find({ selectedDate: { $exists: true } });
+  const dates = await Content.find({}).select({ selectedDate: 1, author: 1 });
   return dates;
 };
 
@@ -130,7 +130,7 @@ const filterByCategory = async (prevDate: string, nextDate: string, authorId: st
     'account.cls': 'EXPENSE',
     'account.category': { $exists: true },
     author: authorId,
-  });
+  }).select({ selectedDate: 1, account: 1, author: 1 });
   console.log('model-categories: ', cateogries);
   return cateogries;
 };
