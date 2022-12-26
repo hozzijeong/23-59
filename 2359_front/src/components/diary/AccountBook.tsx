@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import uuid from 'react-uuid';
-import { useRecoilState } from 'recoil';
-import { accountTableAtom } from 'recoil/diaryAtom';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 import { EXPENSE_CATEGORY, INCOME_CATEGORY, CLS } from 'types/enumConverter';
@@ -18,7 +16,6 @@ const MONEY_STATE = Object.values(MONEY);
 
 function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
   const [todayAccountInfo, setTodatAccountInfo] = useState<AccountTableRow>(INITIAL_ACCOUNT_INFO);
-  const [accountTable, setAccountTable] = useRecoilState<AccountTableRow[]>(accountTableAtom);
   const { diaryInfo, diaryMode } = todayDiary;
 
   const readMode = diaryMode === DiaryMode.READ;
@@ -37,7 +34,6 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
   };
 
   const appendAccountInfoHandler = () => {
-    // setAccountTable((prev) => [...prev, { ...todayAccountInfo, id: getCurrentDate() }]);
     setTodayDiary((prev) => ({
       ...prev,
       diaryInfo: {
@@ -57,7 +53,6 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
           account: [...prev.diaryInfo.account].filter((row) => row.id !== id),
         },
       }));
-      // setAccountTable((cur) => [...cur].filter((row) => row.id !== id));
     },
     [setTodayDiary]
   );
@@ -103,11 +98,13 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
           </Td>
           <Td scope="row">{`${Number(amount).toLocaleString('ko-KR')}`}원</Td>
           <Td scope="row">{memo}</Td>
-          <Td scope="row">
-            <button type="button" onClick={(e) => deleteTableInfoHandler(e, id)}>
-              삭제하기
-            </button>
-          </Td>
+          {readMode ? null : (
+            <Td scope="row">
+              <button type="button" onClick={(e) => deleteTableInfoHandler(e, id)}>
+                삭제하기
+              </button>
+            </Td>
+          )}
         </TableRow>
       )),
     [deleteTableInfoHandler, diaryInfo.account]
@@ -162,7 +159,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
             <Th scope="col">카테고리</Th>
             <Th scope="col">금액</Th>
             <Th scope="col">메모</Th>
-            <Th scope="col"> </Th>
+            {readMode ? null : <Th scope="col"> </Th>}
           </TableRow>
         </TableHead>
         <tbody>{tableInfo}</tbody>

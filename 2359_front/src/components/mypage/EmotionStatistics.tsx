@@ -25,7 +25,6 @@ function EmotionStatistics() {
         }
       );
       const res = await result.data;
-      console.log(res);
       res.name = '감정';
 
       let tmpData = [...data];
