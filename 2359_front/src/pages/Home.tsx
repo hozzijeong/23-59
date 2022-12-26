@@ -1,24 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import Calendar from 'components/calendar/Calendar';
 import ModalBasic from 'components/ModalBasic';
-import { ContentOptions } from 'components/diary/ContentOptions';
 import { useUserOptions } from 'hooks/useUserOptions';
 import { TutorialOption } from 'components/tutorial/TutorialOption';
+import { baseAxios } from 'api';
 
 function Home() {
   const { firstLogin, contentOptions, setContentOptions } = useUserOptions();
-  // console.log(firstLogin, contentOptions, 'firstLogin');
-  const [showModal, setShowModal] = useState(false);
+  // console.log(firstLogin, contentOptions, '수정 전');
+  const [showModal, setShowModal] = useState(firstLogin);
 
   useEffect(() => {
-    if (firstLogin) {
+    if (firstLogin === true) {
       setShowModal(true);
+    } else if (firstLogin === false) {
+      setShowModal(false);
     }
   }, [firstLogin]);
 
+  // option 설정
+  const title = contentOptions.map((option) => {
+    return option.title;
+  });
+  const isChecked = contentOptions.map((option) => {
+    return option.isChecked;
+  });
+  const newObj = title.reduce((acc, cur, idx) => {
+    return { ...acc, [cur]: isChecked[idx] };
+  }, {});
+  const data = {
+    firstLogin: false,
+    createOption: newObj,
+  };
+  const userToken = localStorage.getItem('token');
+
+  async function updateUser() {
+    try {
+      await baseAxios.patch('/api/user/option', data, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+    } catch (err) {
+      alert('정보를 저장할 수 없습니다');
+    }
+  }
+
   const optionSaveHandler = () => {
-    setShowModal(false);
     setContentOptions(contentOptions);
+    updateUser().then(() => setShowModal(false));
+    // console.log(firstLogin, contentOptions, '수정 후');
   };
 
   return (
