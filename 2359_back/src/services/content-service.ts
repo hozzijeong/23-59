@@ -19,9 +19,11 @@ class ContentService {
   async checkDate() {
     const dates = await this.contentModel.findDates();
     const dateArr = dates.map((obj: any) => obj.selectedDate);
+    const authorArr = dates.map((obj: any) => obj.author);
     console.log('dateArr', dateArr.sort());
-
-    return dateArr.sort();
+    console.log('authorArr', authorArr);
+    //console.log('dates ', dates.selectedDate);
+    return dates;
   }
 
   // 컨텐츠 생성
@@ -288,8 +290,10 @@ class ContentService {
 
     for (let i = 0; i < filtered.length; i++) {
       for (let j = 0; j < filtered[i].length; j++) {
-        categories.push(filtered[i][j].category);
-        amounts.push(filtered[i][j].amount);
+        if (filtered[i][j].cls === 'EXPENSE') {
+          categories.push(filtered[i][j].category);
+          amounts.push(filtered[i][j].amount);
+        }
       }
     }
     console.log('categories: ', categories);
