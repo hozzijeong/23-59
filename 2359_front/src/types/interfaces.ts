@@ -62,7 +62,7 @@ interface TodayDiaryProps {
 
 interface DiaryComponentPrpos {
   todayDiary: TodayDiaryProps;
-  setTodayDiary: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
+  setTodayDiary?: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
 }
 
 interface ContentOptionsProps {
