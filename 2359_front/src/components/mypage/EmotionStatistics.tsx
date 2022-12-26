@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
+import { emotionEnums } from 'types/enums';
+import { EMOTIONS } from 'types/enumConverter';
 
 const date = new Date();
 const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -27,10 +29,24 @@ function EmotionStatistics() {
       const res = await result.data;
       res.name = '감정';
 
-      let tmpData = [...data];
-      tmpData = [res];
+      const tmpData = [res];
+
+      /*
+      data = [
+        { 
+          VERY_GOOD: 3, 
+          GOOD: 5, 
+          SO_SO: 4, 
+          BAD: 2, 
+          VERY_BAD: 1,
+          name: "감정",
+        },
+      ]
+      */
       setData(tmpData);
       // converter 이용 해야할듯!
+      // data = { VERY_GOOD: 3, GOOD: 5, SO_SO: 4, BAD: 2, VERY_BAD: 1 }
+      // convertData = { 매우 좋음: 3, 좋음: 5, 보통: 4, 나쁨: 2, 매우 나쁨: 1}
     } catch (e) {
       throw new Error();
     }
@@ -38,7 +54,7 @@ function EmotionStatistics() {
   useEffect(() => {
     getFilterEmotion();
   }, []);
-
+  console.log(data);
   return (
     <Container>
       <div>여기도 차트를 보여줄거에여~</div>
