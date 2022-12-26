@@ -18,6 +18,8 @@ import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
 import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
+import { useRecoilValue } from 'recoil';
+import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -40,6 +42,14 @@ function Diary() {
 
   const { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate: diaryMutate } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
+
+  const todo = useRecoilValue(todayTodo);
+  const qna = useRecoilValue(questionAtom);
+  const emotion = useRecoilValue(emotionAtom);
+  const diary = useRecoilValue(todayDiaryAtom);
+  const account = useRecoilValue(accountTableAtom);
+
+  console.log(todo, qna, emotion, diary, account, contentOptions, todayDiary.diaryInfo.checkOption);
 
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
 
@@ -86,7 +96,7 @@ function Diary() {
       (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
       INITIAL_CONTENT_OPTIONS
     );
-    const { _id, qna, diary, emotion, todo, account, selectedDate } = diaryInfo;
+    const { _id, selectedDate } = diaryInfo;
     const body = {
       selectedDate: selectedDate === '' ? id ?? '' : selectedDate,
       emotion,
@@ -106,9 +116,9 @@ function Diary() {
       return;
     }
 
-    await mutate(`/api/contents/${diaryInfo?._id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
+    await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
 
-    setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+    setTodayDiary({ diaryInfo: { ...diaryInfo, ...body }, diaryMode: DiaryMode.READ });
   };
 
   const cancelHandler = () => {
