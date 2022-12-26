@@ -42,6 +42,7 @@ function Calendar() {
   const { data } = useSWR(userToken ? `/api/contents/monthCalendar/${MonthDate}` : null, fetcher);
 
   useEffect(() => {
+    console.log(data);
     setDiaryData(data);
   });
 

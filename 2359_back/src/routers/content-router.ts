@@ -19,10 +19,11 @@ contentRouter.get('/', async (req, res, next) => {
 });
 // api/contents/calendar/:selectedDate
 // 메인페이지 달력-날짜별(하루) 조회
-contentRouter.get('/calendar/:selectedDate', async (req, res, next) => {
+contentRouter.get('/calendar/:selectedDate', loginRequired, async (req, res, next) => {
   try {
     const { selectedDate } = req.params;
-    const contents = await contentService.getCalendar(selectedDate);
+    const authorId = req.currentUserId;
+    const contents = await contentService.getCalendar(selectedDate, authorId.toString());
 
     res.status(200).json(contents);
   } catch (error) {
@@ -63,14 +64,17 @@ contentRouter.get('/:id', async (req, res, next) => {
 // 컨텐츠 날짜별(하루) 조회
 // api/contents/date/20221225
 // loginRequired?
-contentRouter.get('/date/:selectedDate', async (req, res, next) => {
+contentRouter.get('/date/:selectedDate', loginRequired, async (req, res, next) => {
   try {
     const { selectedDate } = req.params;
-    const content = await contentService.getContentBySelectedDate(selectedDate);
+    const authorId = req.currentUserId;
+    console.log('id ', authorId);
+    const content = await contentService.getContentBySelectedDate(selectedDate, authorId.toString());
     if (!content) {
       res.status(400).json('Bad Request');
       return;
     }
+    console.log('router ', content);
     res.status(200).json(content);
   } catch (error) {
     console.log('err ', error);

@@ -4,11 +4,13 @@ import ModalBasic from 'components/ModalBasic';
 import { useUserOptions } from 'hooks/useUserOptions';
 import { TutorialOption } from 'components/tutorial/TutorialOption';
 import { baseAxios } from 'api';
+import { useInitializeDiaryRecoil } from 'hooks/useInitiallizeDiaryRecoil';
 
 function Home() {
-  const { firstLogin, contentOptions, setContentOptions } = useUserOptions();
+  const { firstLogin, contentOptions, setContentOptions, mutate } = useUserOptions();
   // console.log(firstLogin, contentOptions, '수정 전');
   const [showModal, setShowModal] = useState(firstLogin);
+  const { initilizeSetRecoilState } = useInitializeDiaryRecoil();
 
   useEffect(() => {
     if (firstLogin === true) {
@@ -16,6 +18,7 @@ function Home() {
     } else if (firstLogin === false) {
       setShowModal(false);
     }
+    initilizeSetRecoilState();
   }, [firstLogin]);
 
   // option 설정
@@ -49,6 +52,7 @@ function Home() {
   const optionSaveHandler = () => {
     setContentOptions(contentOptions);
     updateUser().then(() => setShowModal(false));
+    mutate();
     // console.log(firstLogin, contentOptions, '수정 후');
   };
 
