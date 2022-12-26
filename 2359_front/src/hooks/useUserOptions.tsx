@@ -22,14 +22,12 @@ function useUserOptions() {
     return res.data;
   };
 
-  // onSuccess 사용해서 성공시 데이터 맞추기.
   // 조건부 가져오기 이용했습니다! => 공식문서 참고
   const { data, isLoading } = useSWR<UserOptionsProps>(accessToken ? '/api/user/option' : null, fetcher, {
     errorRetryInterval: 1000,
     errorRetryCount: 5,
     onError: (error) => {
       console.log(`${error}가 발생했습니다.`);
-      // navigation('/login');
     },
     revalidateOnMount: false,
     revalidateOnFocus: false,

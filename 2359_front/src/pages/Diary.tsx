@@ -27,7 +27,6 @@ function Diary() {
   const navigation = useNavigate();
   const { id } = useParams();
   const [date, setDate] = useState(id);
-
   const { mutate } = useSWRConfig();
 
   useEffect(() => {

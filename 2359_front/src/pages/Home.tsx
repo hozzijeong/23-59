@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Calendar from 'components/calendar/Calendar';
 import ModalBasic from 'components/ModalBasic';
-import { ContentOptions } from 'components/diary/ContentOptions';
 import { useUserOptions } from 'hooks/useUserOptions';
 import { TutorialOption } from 'components/tutorial/TutorialOption';
 
