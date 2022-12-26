@@ -40,7 +40,7 @@ interface DiaryStateProps {
   emotion: EMOTION;
   diary: DiaryProps;
   account: AccountTableRow[];
-  contentOptions: OptionCheckedProps;
+  checkOption: OptionCheckedProps;
 }
 
 interface OptionProps {
