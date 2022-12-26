@@ -41,7 +41,6 @@ function Diary() {
 
   const { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate: diaryMutate } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
-
   // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
   console.log(diaryInfo, diaryMode, contentOptions, 'options');
 
@@ -179,6 +178,7 @@ export default Diary;
 
 const DiarySection = tw.section`
   w-full
+  pb-[2.5rem]
 `;
 
 const HeadContent = tw.div`
@@ -234,5 +234,4 @@ const SubmitContainer = tw.div`
   flex
   justify-between
   mt-[20px]
-  pb-[40px]
 `;

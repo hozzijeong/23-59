@@ -9,7 +9,6 @@ import SetDiaryOption from 'components/mypage/SetDiaryOption';
 import EmotionStatistics from 'components/mypage/EmotionStatistics';
 import AccountStatistics from 'components/mypage/AccountStatistics';
 import Questions from 'components/mypage/Questions';
-import Test from 'components/mypage/Test';
 import SignUp from './pages/SignUp';
 
 export default function Routes() {

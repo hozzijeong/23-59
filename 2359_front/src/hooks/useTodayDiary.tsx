@@ -22,20 +22,12 @@ function useTodayDiary(date: string) {
     `${END_POINT}/${date}`,
     () => baseAxios.get(`${END_POINT}/${date}`).then((res) => res.data),
     {
-      onSuccess: (data) => {
-        const diaryInfo = data[0] ?? null;
-        if (!diaryInfo) {
-          setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
-        } else {
-          setTodayDiary({ diaryInfo, diaryMode: DiaryMode.READ });
-        }
-      },
       onError: (error) => {
         console.log(error, 'error on api/contents/date');
       },
       // revalidateOnMount: false,
       revalidateOnFocus: false,
-      revalidateOnReconnect: false,
+      // revalidateOnReconnect: false,
       // revalidateIfStale: false,
     }
   );
@@ -45,22 +37,21 @@ function useTodayDiary(date: string) {
    * 2. diarymode가 READ와 UPDATE라면 data에 있는 현재 체크된 옵션들이 contentOptions르 넘어가게 된되고
    * 3. diaryMode가 create라면 swr을 통해 받은 값들이 contentOption이 된다.
    */
-
   useEffect(() => {
     if (!data) return;
     const diaryInfo = data[0] ?? null;
-    if (todayDiary.diaryMode === DiaryMode.CREATE) {
-      setContentOptions(contentOptions);
+    if (!diaryInfo) {
+      setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
     } else {
-      setContentOptions(converUserOptionToContent(diaryInfo.checkOption));
+      setTodayDiary({ diaryInfo, diaryMode: DiaryMode.READ });
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (todayDiary.diaryMode !== DiaryMode.CREATE) {
+      setContentOptions(converUserOptionToContent(todayDiary.diaryInfo.checkOption));
     }
   }, [todayDiary.diaryMode]);
-
-  // const contentOption = useMemo(() => {
-  //   if (!data) return contentOptions;
-  //   const diaryInfo = data[0] ?? null;
-  //   return converUserOptionToContent(diaryInfo.checkOption);
-  // }, [contentOptions, data]); // 이렇게 하면 setState가 안먹혀벌임...
 
   return { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate };
 }
