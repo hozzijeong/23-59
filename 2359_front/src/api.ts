@@ -23,5 +23,5 @@ const deleteDiary = (_id: string) =>
       contentId: _id,
     },
   });
-
-export { baseAxios, updateDiary, createDiary, deleteDiary };
+const getRandomQuestion = () => baseAxios.get('/api/questions/random').then((res) => res.data);
+export { baseAxios, updateDiary, createDiary, deleteDiary, getRandomQuestion };
