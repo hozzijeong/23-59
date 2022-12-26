@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { LoginFormValue } from 'types/interfaces';
 import { useCallback } from 'react';
 import { baseAxios } from 'api';
+import uuid from 'react-uuid';
 
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/jsx-props-no-spreading */
@@ -15,6 +16,7 @@ function useLogin() {
       .post(`/api/user/login`, Data)
       .then((res) => {
         localStorage.setItem('token', res.data.token);
+        localStorage.setItem('tempId', uuid());
         navigate('/');
       })
       .catch((err) => {
