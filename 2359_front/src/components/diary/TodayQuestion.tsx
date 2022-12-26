@@ -1,13 +1,16 @@
 import { getRandomQuestion } from 'api';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { questionAtom } from 'recoil/diaryAtom';
 import useSWR from 'swr';
 import tw from 'tailwind-styled-components';
 import { DiaryMode } from 'types/enums';
 import { DiaryComponentPrpos } from 'types/interfaces';
 
-function TodayQuestion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
-  const { diaryInfo, diaryMode } = todayDiary;
-  const [temp, setTemp] = useState('');
+function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
+  const { diaryMode } = todayDiary;
+  const [qna, setQna] = useRecoilState(questionAtom);
+
   const { data: question } = useSWR('/api/questions/random', getRandomQuestion, {
     revalidateOnMount: false,
     revalidateOnFocus: false,
@@ -21,29 +24,25 @@ function TodayQuestion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
    *  값을 관리해야 함.
    */
 
-  const answerChangeHandler = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { value } = event.target;
-    // setTodayDiary({
-    //   diaryMode,
-    //   diaryInfo: {
-    //     ...diaryInfo,
-    //     qna: {
-    //       question: diaryMode === DiaryMode.CREATE ? question : diaryInfo.qna.question,
-    //       tag: '',
-    //       answer: value,
-    //     },
-    //   },
-    // });
-    setTemp(value);
-  };
+  const answerChangeHandler = useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const { value } = event.target;
+      setQna((prev) => ({
+        question: diaryMode === DiaryMode.CREATE ? question : prev.question,
+        tag: '',
+        answer: value,
+      }));
+    },
+    [diaryMode, question, setQna]
+  );
 
   return (
     <div>
-      <Question>{diaryMode === DiaryMode.READ ? diaryInfo.qna.question : question}</Question>
+      <Question>{diaryMode === DiaryMode.READ ? qna.question : question}</Question>
       {diaryMode === DiaryMode.READ ? (
-        <div>{diaryInfo.qna.answer}</div>
+        <div>{qna.answer}</div>
       ) : (
-        <AnswerArea value={temp} onChange={answerChangeHandler} />
+        <AnswerArea value={qna.answer} onChange={answerChangeHandler} />
       )}
     </div>
   );

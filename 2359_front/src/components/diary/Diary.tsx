@@ -1,42 +1,27 @@
 import React, { useCallback } from 'react';
+import { useRecoilState } from 'recoil';
+import { todayDiaryAtom } from 'recoil/diaryAtom';
 import tw from 'tailwind-styled-components';
 import { DiaryMode } from 'types/enums';
 import { DiaryComponentPrpos } from 'types/interfaces';
 import { Question } from './TodayQuestion';
 
-function Diary({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
-  const { diaryInfo, diaryMode } = todayDiary;
+function Diary({ todayDiary }: DiaryComponentPrpos) {
+  const { diaryMode } = todayDiary;
+  const [diary, setDiary] = useRecoilState(todayDiaryAtom);
 
   const diaryChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const { target } = event;
       if (target instanceof HTMLInputElement) {
-        setTodayDiary((prev) => ({
-          ...prev,
-          diaryInfo: {
-            ...prev.diaryInfo,
-            diary: {
-              ...prev.diaryInfo.diary,
-              title: target.value,
-            },
-          },
-        }));
+        setDiary((prev) => ({ ...prev, title: target.value }));
       }
 
       if (target instanceof HTMLTextAreaElement) {
-        setTodayDiary((prev) => ({
-          ...prev,
-          diaryInfo: {
-            ...prev.diaryInfo,
-            diary: {
-              ...prev.diaryInfo.diary,
-              diaryContent: target.value,
-            },
-          },
-        }));
+        setDiary((prev) => ({ ...prev, diaryContent: target.value }));
       }
     },
-    [setTodayDiary]
+    [setDiary]
   );
 
   const readMode = diaryMode === DiaryMode.READ;
@@ -45,18 +30,18 @@ function Diary({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
       <Question>오늘 하루 무슨 일이 있었는지 남겨주세요.</Question>
       {readMode ? (
         <div>
-          <p>{diaryInfo.diary.title}</p>
-          <div>{diaryInfo.diary.diaryContent}</div>
+          <p>{diary.title}</p>
+          <div>{diary.diaryContent}</div>
         </div>
       ) : (
         <div>
           <DiaryTitle
             type="text"
             placeholder="제목을 입력해주세요"
-            defaultValue={diaryInfo.diary.title}
+            defaultValue={diary.title}
             onChange={diaryChangeHandler}
           />
-          <DiaryArea defaultValue={diaryInfo.diary.diaryContent} onChange={diaryChangeHandler} />
+          <DiaryArea defaultValue={diary.diaryContent} onChange={diaryChangeHandler} />
         </div>
       )}
     </div>

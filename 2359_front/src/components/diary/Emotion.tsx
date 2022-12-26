@@ -4,28 +4,25 @@ import { DiaryMode, emotionEnums as EMOTION } from 'types/enums';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
 import { DiaryComponentPrpos } from 'types/interfaces';
+import { useRecoilState } from 'recoil';
+import { emotionAtom } from 'recoil/diaryAtom';
 import { Question } from './TodayQuestion';
 
 const EMOTION_STATE = Object.values(EMOTION);
 
-function Emotion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
-  const { diaryInfo, diaryMode } = todayDiary;
+function Emotion({ todayDiary }: DiaryComponentPrpos) {
+  const { diaryMode } = todayDiary;
+  const [emotion, setEmotion] = useRecoilState(emotionAtom);
 
   const emotionChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { target } = event;
 
       if (target.type === 'radio') {
-        setTodayDiary((prev) => ({
-          ...prev,
-          diaryInfo: {
-            ...prev.diaryInfo,
-            emotion: target.value as EMOTION,
-          },
-        }));
+        setEmotion(target.value as EMOTION);
       }
     },
-    [setTodayDiary]
+    [setEmotion]
   );
 
   const readMode = diaryMode === DiaryMode.READ;
@@ -36,7 +33,7 @@ function Emotion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
         return (
           <li key={uuid()}>
             <input
-              checked={diaryInfo.emotion === state}
+              checked={emotion === state}
               id={state}
               type="radio"
               name="emotion"
@@ -48,7 +45,7 @@ function Emotion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
           </li>
         );
       }),
-    [diaryInfo.emotion, readMode, emotionChangeHandler]
+    [emotion, readMode, emotionChangeHandler]
   );
 
   return (
