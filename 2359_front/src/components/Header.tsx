@@ -6,8 +6,7 @@ function Header() {
   const nav = useNavigate();
   const [loginState, setLoginState] = useState<boolean>(false);
   const navigate = useNavigate();
-  const getToken = localStorage.getItem('token');
-
+  const getToken = localStorage.getItem('token') ? true : null;
   const handleLoginClick = () => {
     if (getToken === null) {
       setLoginState(true);
@@ -37,7 +36,7 @@ function Header() {
         <Logo onClick={logoClickHandler}>Logo</Logo>
         <HeaderRightContainer>
           <Link to="/mypage/user">myPage</Link>
-          <GetLog onClick={handleLoginClick}>{getToken === null ? `login` : `logout`}</GetLog>
+          <GetLog onClick={handleLoginClick}>{loginState ? `logout` : `login`}</GetLog>
         </HeaderRightContainer>
       </HeaderContent>
     </HeaderContainer>
