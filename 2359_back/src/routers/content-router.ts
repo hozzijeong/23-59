@@ -107,7 +107,7 @@ contentRouter.post('/', loginRequired, async (req, res, next) => {
     const { selectedDate, emotion, diary, todo, account, qna, checkOption } = req.body;
     const answer = qna;
     const author = req.currentUserId;
-    const dates = await contentService.checkDate();
+    const dates = await contentService.checkDuplicate(author.toString());
     console.log('author ', author);
     for (let i = 0; i < dates.length; i++) {
       const dateArr = dates[i].selectedDate;
