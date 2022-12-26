@@ -23,7 +23,7 @@ function useUserOptions() {
     });
     return res.data;
   };
-
+  console.log(accessToken, 'accessToken');
   // 조건부 가져오기 이용했습니다! => 공식문서 참고
   const { data, isLoading } = useSWR<UserOptionsProps>(accessToken ? `/api/user/option/${tempId}` : null, fetcher, {
     errorRetryInterval: 1000,
@@ -37,6 +37,7 @@ function useUserOptions() {
     // revalidateIfStale: false,
     // revalidateOnFocus: false,
     // revalidateOnReconnect: false,
+    dedupingInterval: 60000,
   });
 
   console.log(data?.firstLogin, 'firstLogin');
