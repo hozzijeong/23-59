@@ -26,8 +26,10 @@ const findAll = async () => {
   return contents;
 };
 
-const findDates = async () => {
-  const dates = await Content.find({}).select({ selectedDate: 1, author: 1 });
+// 작성자, 날짜 중복 확인
+const findDuplicate = async (authorId: string) => {
+  const dates = await Content.find({ author: authorId }).select({ selectedDate: 1, author: 1 });
+  console.log('dates ', dates);
   return dates;
 };
 
@@ -152,7 +154,7 @@ const filterByTag = async () => {
 export default {
   createContent,
   findAll,
-  findDates,
+  findDuplicate,
   updateContent,
   deleteById,
   findById,

@@ -11,15 +11,15 @@ interface UserOptionsProps {
 }
 
 interface LabelProps {
-  textSize?: 'text-xs' | 'text-sm' | 'text-base' | 'text-lg' | 'text-xl';
-  marginY?: 'my-0' | 'my-1' | 'my-2' | 'my-3' | 'my-4' | 'my-5' | 'my-6';
+  textsize?: 'text-xs' | 'text-sm' | 'text-base' | 'text-lg' | 'text-xl';
+  marginy?: 'my-0' | 'my-1' | 'my-2' | 'my-3' | 'my-4' | 'my-5' | 'my-6';
 }
 
 function UserOptions({ state, handler }: UserOptionsProps) {
   const { title, isChecked } = state;
 
   return (
-    <OptionLabel key={uuid()} htmlFor={title} textSize="text-sm" marginY="my-1">
+    <OptionLabel key={uuid()} htmlFor={title} textsize="text-sm" marginy="my-1">
       <CustomCheckInput id={title} type="checkbox" onChange={handler} checked={isChecked} />
       <CustomCheckBox>{CONTENT_OPTION[title]}</CustomCheckBox>
     </OptionLabel>
@@ -33,8 +33,8 @@ const OptionLabel = tw.label<LabelProps>`
   leading-relaxed
   flex
   items-center
-  ${(props) => props.textSize ?? 'text-lg'}
-  ${(props) => props.marginY ?? 'my-0'}
+  ${(props) => props.textsize ?? 'text-lg'}
+  ${(props) => props.marginy ?? 'my-0'}
 `;
 
 const CustomCheckInput = styled.input`

@@ -16,8 +16,8 @@ class ContentService {
   }
 
   // 날짜 중복 체크
-  async checkDate() {
-    const dates = await this.contentModel.findDates();
+  async checkDuplicate(authorId: string) {
+    const dates = await this.contentModel.findDuplicate(authorId);
     const dateArr = dates.map((obj: any) => obj.selectedDate);
     const authorArr = dates.map((obj: any) => obj.author);
     console.log('dateArr', dateArr.sort());
@@ -88,16 +88,16 @@ class ContentService {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
 
-    let checkTodo: boolean | undefined = content.checkOption?.TODO_LIST;
-    checkTodo = !isEmpty(content.todo);
-    let checkQna: boolean | undefined = content.checkOption?.TODAY_QUESTION;
-    checkQna = !isEmpty(content.qna?.answer);
-    let checkDiary: boolean | undefined = content.checkOption?.DIARY;
-    checkDiary = !isEmpty(content.diary);
-    let checkEmotion: boolean | undefined = content.checkOption?.EMOTION;
-    checkEmotion = !isEmpty(content.emotion);
-    let checkAccount: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
-    checkAccount = !isEmpty(content.account);
+    //let checkTodo: boolean | undefined = content.checkOption?.TODO_LIST;
+    content.checkOption.TODO_LIST = !isEmpty(content.todo);
+    //let checkQna: boolean | undefined = content.checkOption?.TODAY_QUESTION;
+    content.checkOption.TODAY_QUESTION = !isEmpty(content.qna?.answer);
+    //let checkDiary: boolean | undefined = content.checkOption?.DIARY;
+    content.checkOption.DIARY = !isEmpty(content.diary);
+    //let checkEmotion: boolean | undefined = content.checkOption?.EMOTION;
+    content.checkOption.EMOTION = !isEmpty(content.emotion);
+    //let checkAccount: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
+    content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
     console.log('content.checkOption ', content.checkOption);
     return content;
   }

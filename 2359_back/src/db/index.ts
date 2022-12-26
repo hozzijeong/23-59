@@ -15,5 +15,5 @@ const connectDB = () => {
 
 export default connectDB;
 
-export * from './models/content-model';
-export * from './models/question-model';
+// export * from './models/content-model';
+// export * from './models/question-model';
