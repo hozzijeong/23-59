@@ -21,6 +21,7 @@ const Container = tw.div`
   max-w-screen-lg
   my-0
   mx-auto
+  py-16
   relative
 `;
 
