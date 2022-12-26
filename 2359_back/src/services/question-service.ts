@@ -1,4 +1,5 @@
 import questionModel from '../db/models/question-model';
+import { ObjectId } from 'mongoose';
 
 class QuestionService {
   questionModel;
@@ -60,24 +61,21 @@ class QuestionService {
   // 랜덤 질문
   async randomQuestion() {
     const questions = await this.questionModel.findQuestions();
-    //console.log('item ', questions);
-    const questionArr = questions.map((obj: any) => obj.item);
-    console.log('questionArr: ', questionArr);
-    const random = questionArr[Math.floor(Math.random() * questionArr.length)];
-    console.log('random ', random);
+    console.log('item ', questions);
+    const random = questions[Math.floor(Math.random() * questions.length)];
     return random;
   }
 
   // 랜덤 질문
-  async randomQuestionId() {
-    const questions = await this.questionModel.findQuestions();
-    //console.log('item ', questions);
-    const questionArr = questions.map((obj: any) => obj);
-    console.log('questionArr: ', questionArr);
-    const random = questionArr[Math.floor(Math.random() * questionArr.length)];
-    console.log('random ', random);
-    return random;
-  }
+  // async randomQuestionId() {
+  //   const questions = await this.questionModel.findQuestions();
+  //   //console.log('item ', questions);
+  //   const questionArr = questions.map((obj: any) => obj);
+  //   console.log('questionArr: ', questionArr);
+  //   const random = questionArr[Math.floor(Math.random() * questionArr.length)];
+  //   console.log('random ', random);
+  //   return random;
+  // }
 }
 
 const questionService = new QuestionService(questionModel);

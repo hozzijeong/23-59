@@ -195,8 +195,10 @@ class ContentService {
   }
 
   // 한달용
-  async getCalendarByMonth(prevDate: string, nextDate: string) {
-    const content = await this.contentModel.filterByDate(prevDate, nextDate);
+  async getCalendarByMonth(prevDate: string, nextDate: string, authorId: string) {
+    // const authorContent = await this.contentModel.findByAuthor(author);
+    // console.log('authorContent', authorContent);
+    const content = await this.contentModel.filterByDate(prevDate, nextDate, authorId);
     if (!content) {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
@@ -215,8 +217,8 @@ class ContentService {
   }
 
   // 감정 통계
-  async filterEmotion(prevDate: string, nextDate: string) {
-    const emotions = await this.contentModel.filterByEmotion(prevDate, nextDate);
+  async filterEmotion(prevDate: string, nextDate: string, authorId: string) {
+    const emotions = await this.contentModel.filterByEmotion(prevDate, nextDate, authorId);
     if (!emotions) {
       console.log('저장된 감정표시가 없습니다.');
     }
@@ -250,8 +252,8 @@ class ContentService {
   }
 
   // 가계부 수입 합산
-  async filterCls(prevDate: string, nextDate: string) {
-    const cls = await this.contentModel.filterByCls(prevDate, nextDate);
+  async filterCls(prevDate: string, nextDate: string, authorId: string) {
+    const cls = await this.contentModel.filterByCls(prevDate, nextDate, authorId);
     if (!cls) {
       console.log('저장된 가계부가 없습니다.');
     }
@@ -273,8 +275,8 @@ class ContentService {
   }
 
   // 가계부 지출 카테고리별 통계
-  async filterCategory(prevDate: string, nextDate: string) {
-    const category = await this.contentModel.filterByCategory(prevDate, nextDate);
+  async filterCategory(prevDate: string, nextDate: string, authorId: string) {
+    const category = await this.contentModel.filterByCategory(prevDate, nextDate, authorId);
     if (!category) {
       console.log('저장된 가계부가 없습니다.');
     }
@@ -307,8 +309,8 @@ class ContentService {
   }
 
   // 작성된 질문 모아보기
-  async filterQna() {
-    const qnas = await this.contentModel.findAllQna();
+  async filterQna(authorId: string) {
+    const qnas = await this.contentModel.findAllQna(authorId);
     const filteredQna = qnas.map((obj: any) => obj.qna);
     const filteredDate = qnas.map((obj: any) => obj.selectedDate);
     console.log('filteredQna ', filteredQna[4]);
