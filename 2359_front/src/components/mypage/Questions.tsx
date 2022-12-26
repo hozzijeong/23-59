@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './Paging.css';
+import './Questions.css';
 import axios from 'axios';
 import tw from 'tailwind-styled-components';
 import ModalBasic from 'components/ModalBasic';
@@ -39,6 +39,7 @@ function Questions() {
       tag: '',
     },
   });
+  const [enabled, setEnabled] = useState(false);
 
   async function getAllQuestionList() {
     const res = await axios.get('/api/contents/filter/qna', {
@@ -73,7 +74,6 @@ function Questions() {
       const reducedArr = tmpArr.reduce((acc: any, cur: any) => {
         return [...acc, ...cur];
       });
-
       setResultAnswer(reducedArr);
     }
   }
@@ -90,7 +90,14 @@ function Questions() {
     }
     return nonSelectBtnClass;
   };
+  // 토글버튼으로 만들까??
+  // const changeAllTagToTrue = () => {
+  //   setIsSelect()
+  // }
 
+  // const changeAllTagToFalse = () => {
+
+  // }
   const handlePageChange = (page: number) => {
     setPage(page);
   };
@@ -100,25 +107,38 @@ function Questions() {
   };
 
   useEffect(() => {
-    showAnswer();
-  }, [page, resultAnswer]);
-
-  useEffect(() => {
     getAllQuestionList();
   }, []);
 
   useEffect(() => {
-    showSelectedAnswers();
     showAnswer();
-  }, [qnaList]);
+  }, [page, resultAnswer]);
 
   useEffect(() => {
     showSelectedAnswers();
-  }, [isSelect]);
+    showAnswer();
+  }, [qnaList, isSelect]);
 
   return (
     <Container>
       <div>오늘의 질문 모아보기</div>
+      <ToggleContainer>
+        <div className="flex">
+          <label className="inline-flex relative items-center mr-5 cursor-pointer">
+            <input type="checkbox" className="sr-only peer" checked={enabled} readOnly />
+            <ToggleButton
+              onClick={() => {
+                setEnabled(!enabled);
+              }}
+            >
+              {null}
+            </ToggleButton>
+            <span className="ml-2 text-sm font-medium text-gray-900">
+              {enabled ? '모든 태그 선택' : '모두 선택 해제'}
+            </span>
+          </label>
+        </div>
+      </ToggleContainer>
       <ButtonContainer>
         {tagList
           ? tagList.map((tagItem) => {
@@ -232,6 +252,14 @@ const AnswerList = tw.li`
   hover:bg-gray-200
   active:bg-stone-300
   cursor-pointer
+`;
+
+const ToggleContainer = tw.div`
+  flex flex-col items-center justify-center
+`;
+
+const ToggleButton = tw.div`
+  w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-green-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600
 `;
 
 // // 모달 영역
