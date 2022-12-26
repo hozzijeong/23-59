@@ -20,7 +20,7 @@ import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
 import { INITIAL_CONTENT_OPTIONS, INITIAL_TODAY_DIARY, QNA_INNITIAL } from 'utilities/initialValues';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 
 type DiaryContentsPrpos = {
@@ -45,19 +45,11 @@ function Diary() {
   const { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate: diaryMutate } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
 
-  const [todo, setTodo] = useRecoilState(todayTodo);
-  const [qna, setQna] = useRecoilState(questionAtom);
-  const [emotion, setEmotion] = useRecoilState(emotionAtom);
-  const [diary, setDiary] = useRecoilState(todayDiaryAtom);
-  const [account, setAccount] = useRecoilState(accountTableAtom);
-
-  const initilizeSetRecoilState = useCallback(() => {
-    setTodo([]);
-    setQna(QNA_INNITIAL);
-    setEmotion(emotionEnums.SO_SO);
-    setDiary(INITIAL_TODAY_DIARY);
-    setAccount([]);
-  }, [setAccount, setDiary, setEmotion, setQna, setTodo]);
+  const todo = useRecoilValue(todayTodo);
+  const qna = useRecoilValue(questionAtom);
+  const emotion = useRecoilValue(emotionAtom);
+  const diary = useRecoilValue(todayDiaryAtom);
+  const account = useRecoilValue(accountTableAtom);
 
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
 
@@ -130,7 +122,6 @@ function Diary() {
       } else {
         setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
       }
-      initilizeSetRecoilState();
       // navigation('/');
     }
   };
@@ -139,7 +130,6 @@ function Diary() {
     // eslint-disable-next-line no-restricted-globals
     if (confirm('정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.')) {
       mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id));
-      initilizeSetRecoilState();
       navigation('/');
     }
   };
