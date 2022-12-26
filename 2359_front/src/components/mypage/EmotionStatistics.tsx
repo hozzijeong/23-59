@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
+import { emotionEnums } from 'types/enums';
+import { EMOTIONS } from 'types/enumConverter';
 
 const date = new Date();
 const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -9,10 +11,14 @@ const currentYear = date.getFullYear();
 const currentMonth = date.getMonth() + 1;
 const monthLastDate = lastDay.getDate();
 
+interface emotionStaticProps {
+  [key: string]: number | string;
+}
+
 function EmotionStatistics() {
   // 객체를 typing할 때는 Record!!!
-  const initialData: Record<string, string | number>[] = [];
-  const [data, setData] = useState(initialData);
+  const initialData: emotionStaticProps[] = [];
+  const [data, setData] = useState<emotionStaticProps[]>(initialData);
 
   async function getFilterEmotion() {
     try {
@@ -25,17 +31,18 @@ function EmotionStatistics() {
         }
       );
       const res = await result.data;
-      console.log(res);
-      res.name = '감정';
 
-      let tmpData = [...data];
-      tmpData = [res];
-      setData(tmpData);
-      // converter 이용 해야할듯!
+      const convert: emotionStaticProps = Object.entries(res).reduce((acc, [key, val]) => {
+        return { ...acc, [EMOTIONS[key as emotionEnums]]: val };
+      }, {});
+
+      convert.name = '감정';
+      setData([convert]);
     } catch (e) {
       throw new Error();
     }
   }
+
   useEffect(() => {
     getFilterEmotion();
   }, []);
@@ -47,7 +54,7 @@ function EmotionStatistics() {
         <StatisticsScript>감정 통계 - {currentMonth}월😘</StatisticsScript>
         <ResponsiveBar
           data={data}
-          keys={['VERY_BAD', 'BAD', 'SO_SO', 'GOOD', 'VERY_GOOD']}
+          keys={Object.values(EMOTIONS)}
           margin={{ top: 30, right: 130, bottom: 60, left: 60 }}
           indexBy="name"
           padding={0.1}
