@@ -23,7 +23,6 @@ function useUserOptions() {
     });
     return res.data;
   };
-  console.log(accessToken, 'accessToken');
   // 조건부 가져오기 이용했습니다! => 공식문서 참고
   const { data, isLoading, mutate } = useSWR<UserOptionsProps>(
     accessToken ? `/api/user/option/${tempId}` : null,
@@ -35,7 +34,7 @@ function useUserOptions() {
         console.log(`${error}가 발생했습니다.`);
       },
       revalidateOnFocus: false,
-      dedupingInterval: 60000,
+      dedupingInterval: 6000000000,
     }
   );
 

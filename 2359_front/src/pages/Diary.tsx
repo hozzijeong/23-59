@@ -111,12 +111,12 @@ function Diary() {
 
     if (diaryMode === DiaryMode.CREATE) {
       await mutate('/api/contents', createDiary(body)).then((res) => {
-        diaryMutate(res?.data);
+        diaryMutate();
       });
       return;
     }
 
-    await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
+    await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate());
 
     setTodayDiary({ diaryInfo: { ...diaryInfo, ...body }, diaryMode: DiaryMode.READ });
   };
