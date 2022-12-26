@@ -24,4 +24,10 @@ const deleteDiary = (_id: string) =>
     },
   });
 const getRandomQuestion = () => baseAxios.get('/api/questions/random').then((res) => res.data);
-export { baseAxios, updateDiary, createDiary, deleteDiary, getRandomQuestion };
+
+const fetcher = async (url: string) => {
+  const res = await headerAxios.get(url);
+  return res.data;
+};
+
+export { baseAxios, updateDiary, createDiary, deleteDiary, getRandomQuestion, fetcher };

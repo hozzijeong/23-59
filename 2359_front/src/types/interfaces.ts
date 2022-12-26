@@ -98,7 +98,10 @@ interface DiaryBodyProps {
   selectedDate: string;
   emotion: EMOTION;
   diary: DiaryProps;
-  qna: QuestionAnswerProps;
+  qna: {
+    questionId: string;
+    answer: string;
+  };
   todo: TodoListProps[];
   account: AccountTableRow[];
   checkOption: OptionCheckedProps;

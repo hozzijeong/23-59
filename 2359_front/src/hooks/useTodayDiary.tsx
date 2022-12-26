@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { useEffect, useState } from 'react';
-import { baseAxios } from 'api';
+import { baseAxios, fetcher } from 'api';
 import useSWR from 'swr';
 import { DiaryStateProps, TodayDiaryProps } from 'types/interfaces';
 import { DiaryMode } from 'types/enums';
@@ -21,17 +21,13 @@ function useTodayDiary(date: string) {
   // 유저들 옵션 처리, 이게 CREATE일 때만 값을 불러오면 됨.
   const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);
 
-  const { data, mutate } = useSWR<DiaryStateProps[]>(
-    `${END_POINT}/${date}`,
-    () => baseAxios.get(`${END_POINT}/${date}`).then((res) => res.data),
-    {
-      onError: (error) => {
-        console.log(error, 'error on api/contents/date');
-      },
-      revalidateOnFocus: false,
-      dedupingInterval: 6000000000,
-    }
-  );
+  const { data, mutate } = useSWR<DiaryStateProps[]>(`${END_POINT}/${date}`, fetcher, {
+    onError: (error) => {
+      console.log(error, 'error on api/contents/date');
+    },
+    revalidateOnFocus: false,
+    dedupingInterval: 6000000000,
+  });
 
   const [initTodo, setTodo] = useRecoilState(todayTodo);
   const [initQna, setQna] = useRecoilState(questionAtom);
