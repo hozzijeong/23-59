@@ -89,16 +89,16 @@ class ContentService {
     }
 
     //let checkTodo: boolean | undefined = content.checkOption?.TODO_LIST;
-    content.checkOption.TODO_LIST = !isEmpty(content.todo);
+    //content.checkOption.TODO_LIST = !isEmpty(content.todo);
     //let checkQna: boolean | undefined = content.checkOption?.TODAY_QUESTION;
-    content.checkOption.TODAY_QUESTION = !isEmpty(content.qna?.answer);
+    //content.checkOption.TODAY_QUESTION = !isEmpty(content.qna?.answer);
     //let checkDiary: boolean | undefined = content.checkOption?.DIARY;
-    content.checkOption.DIARY = !isEmpty(content.diary);
+    //content.checkOption.DIARY = !isEmpty(content.diary);
     //let checkEmotion: boolean | undefined = content.checkOption?.EMOTION;
-    content.checkOption.EMOTION = !isEmpty(content.emotion);
+    //content.checkOption.EMOTION = !isEmpty(content.emotion);
     //let checkAccount: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
-    content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
-    console.log('content.checkOption ', content.checkOption);
+    //content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
+    //console.log('content.checkOption ', content.checkOption);
     return content;
   }
 
