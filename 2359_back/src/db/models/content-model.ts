@@ -55,6 +55,8 @@ const findById = async (id: string) => {
 const findBySelectedDate = async (selectedDate: string, authorId: string) => {
   const content = await Content.find({ selectedDate, author: authorId });
   //console.log('content: ', content);
+  //console.log('id ', authorId);
+  console.log('model ', content);
   return content;
 };
 
