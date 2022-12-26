@@ -16,12 +16,14 @@ class ContentService {
   }
 
   // 날짜 중복 체크
-  async checkDate() {
-    const dates = await this.contentModel.findDates();
+  async checkDuplicate(authorId: string) {
+    const dates = await this.contentModel.findDuplicate(authorId);
     const dateArr = dates.map((obj: any) => obj.selectedDate);
+    const authorArr = dates.map((obj: any) => obj.author);
     console.log('dateArr', dateArr.sort());
-
-    return dateArr.sort();
+    console.log('authorArr', authorArr);
+    //console.log('dates ', dates.selectedDate);
+    return dates;
   }
 
   // 컨텐츠 생성
@@ -86,17 +88,17 @@ class ContentService {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
 
-    let checkTodo: boolean | undefined = content.checkOption?.TODO_LIST;
-    checkTodo = !isEmpty(content.todo);
-    let checkQna: boolean | undefined = content.checkOption?.TODAY_QUESTION;
-    checkQna = !isEmpty(content.qna?.answer);
-    let checkDiary: boolean | undefined = content.checkOption?.DIARY;
-    checkDiary = !isEmpty(content.diary);
-    let checkEmotion: boolean | undefined = content.checkOption?.EMOTION;
-    checkEmotion = !isEmpty(content.emotion);
-    let checkAccount: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
-    checkAccount = !isEmpty(content.account);
-    console.log('content.checkOption ', content.checkOption);
+    //let checkTodo: boolean | undefined = content.checkOption?.TODO_LIST;
+    //content.checkOption.TODO_LIST = !isEmpty(content.todo);
+    //let checkQna: boolean | undefined = content.checkOption?.TODAY_QUESTION;
+    //content.checkOption.TODAY_QUESTION = !isEmpty(content.qna?.answer);
+    //let checkDiary: boolean | undefined = content.checkOption?.DIARY;
+    //content.checkOption.DIARY = !isEmpty(content.diary);
+    //let checkEmotion: boolean | undefined = content.checkOption?.EMOTION;
+    //content.checkOption.EMOTION = !isEmpty(content.emotion);
+    //let checkAccount: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
+    //content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
+    //console.log('content.checkOption ', content.checkOption);
     return content;
   }
 
@@ -195,8 +197,10 @@ class ContentService {
   }
 
   // 한달용
-  async getCalendarByMonth(prevDate: string, nextDate: string) {
-    const content = await this.contentModel.filterByDate(prevDate, nextDate);
+  async getCalendarByMonth(prevDate: string, nextDate: string, authorId: string) {
+    // const authorContent = await this.contentModel.findByAuthor(author);
+    // console.log('authorContent', authorContent);
+    const content = await this.contentModel.filterByDate(prevDate, nextDate, authorId);
     if (!content) {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
@@ -215,8 +219,8 @@ class ContentService {
   }
 
   // 감정 통계
-  async filterEmotion(prevDate: string, nextDate: string) {
-    const emotions = await this.contentModel.filterByEmotion(prevDate, nextDate);
+  async filterEmotion(prevDate: string, nextDate: string, authorId: string) {
+    const emotions = await this.contentModel.filterByEmotion(prevDate, nextDate, authorId);
     if (!emotions) {
       console.log('저장된 감정표시가 없습니다.');
     }
@@ -250,8 +254,8 @@ class ContentService {
   }
 
   // 가계부 수입 합산
-  async filterCls(prevDate: string, nextDate: string) {
-    const cls = await this.contentModel.filterByCls(prevDate, nextDate);
+  async filterCls(prevDate: string, nextDate: string, authorId: string) {
+    const cls = await this.contentModel.filterByCls(prevDate, nextDate, authorId);
     if (!cls) {
       console.log('저장된 가계부가 없습니다.');
     }
@@ -273,8 +277,8 @@ class ContentService {
   }
 
   // 가계부 지출 카테고리별 통계
-  async filterCategory(prevDate: string, nextDate: string) {
-    const category = await this.contentModel.filterByCategory(prevDate, nextDate);
+  async filterCategory(prevDate: string, nextDate: string, authorId: string) {
+    const category = await this.contentModel.filterByCategory(prevDate, nextDate, authorId);
     if (!category) {
       console.log('저장된 가계부가 없습니다.');
     }
@@ -286,8 +290,10 @@ class ContentService {
 
     for (let i = 0; i < filtered.length; i++) {
       for (let j = 0; j < filtered[i].length; j++) {
-        categories.push(filtered[i][j].category);
-        amounts.push(filtered[i][j].amount);
+        if (filtered[i][j].cls === 'EXPENSE') {
+          categories.push(filtered[i][j].category);
+          amounts.push(filtered[i][j].amount);
+        }
       }
     }
     console.log('categories: ', categories);
@@ -307,8 +313,8 @@ class ContentService {
   }
 
   // 작성된 질문 모아보기
-  async filterQna() {
-    const qnas = await this.contentModel.findAllQna();
+  async filterQna(authorId: string) {
+    const qnas = await this.contentModel.findAllQna(authorId);
     const filteredQna = qnas.map((obj: any) => obj.qna);
     const filteredDate = qnas.map((obj: any) => obj.selectedDate);
     console.log('filteredQna ', filteredQna[4]);

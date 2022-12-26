@@ -36,7 +36,7 @@ function ContentOptions({ state, setState, diaryMode }: DiaryContentOptionsProps
 
   return (
     <RelativeDiv>
-      {diaryMode === DiaryMode.UPDATE && <DiaryCheckOptionLayout isleft component={contentCheckBox} />}
+      {diaryMode !== DiaryMode.READ && <DiaryCheckOptionLayout isleft component={contentCheckBox} />}
       <DiaryCheckOptionLayout isleft={false} component={tableContents} />
     </RelativeDiv>
   );

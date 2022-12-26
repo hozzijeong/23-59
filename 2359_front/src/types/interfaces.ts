@@ -30,6 +30,7 @@ interface QuestionAnswerProps {
   question: string;
   tag: string;
   answer: string;
+  _id: string;
 }
 
 interface DiaryStateProps {
@@ -62,7 +63,7 @@ interface TodayDiaryProps {
 
 interface DiaryComponentPrpos {
   todayDiary: TodayDiaryProps;
-  setTodayDiary: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
+  setTodayDiary?: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
 }
 
 interface ContentOptionsProps {

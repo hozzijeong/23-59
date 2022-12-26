@@ -19,6 +19,7 @@ const QNA_INNITIAL = {
   question: '',
   tag: '',
   answer: '',
+  _id: '',
 };
 
 const INITIAL_DIARY_INFO = {

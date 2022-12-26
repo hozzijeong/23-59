@@ -5,6 +5,9 @@ module.exports = {
   darkMode: ['class', '[data-mode="dark"]'],
   theme: {
     extend: {
+      fontFamily: {
+        LAB: ['LABDigital'],
+      },
       margin: {
         zeroAuto: '0 auto',
       },

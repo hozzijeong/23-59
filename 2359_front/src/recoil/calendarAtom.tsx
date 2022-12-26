@@ -1,13 +1,14 @@
 import React from 'react';
+import uuid from 'react-uuid';
 import { atom } from 'recoil';
 
 const calendarPage = atom({
-  key: 'calendarPage',
+  key: `calendarPage/${uuid()}`,
   default: new Date(),
 });
 
 const calendarSummary = atom({
-  key: 'calendarSummary',
+  key: `calendarSummary/${uuid()}`,
   default: [],
 });
 
