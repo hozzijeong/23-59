@@ -32,13 +32,15 @@ contentRouter.get('/calendar/:selectedDate', async (req, res, next) => {
 // api/contents/monthCalendar/:date
 // 메인페이지 달력-날짜별(한달) 조회
 //loginRequired
-contentRouter.get('/monthCalendar/:month/:author', loginRequired, async (req, res, next) => {
+contentRouter.get('/monthCalendar/:month', loginRequired, async (req, res, next) => {
   try {
-    const { month, author } = req.params;
+    const { month } = req.params;
+    const authorId = req.currentUserId;
+    //console.log('authId', auth, typeof auth);
     //const author = req.params.author;
     const splitDate = month.split('-');
     console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
-    const contents = await contentService.getCalendarByMonth(splitDate[0], splitDate[1], author);
+    const contents = await contentService.getCalendarByMonth(splitDate[0], splitDate[1], authorId.toString());
 
     res.status(200).json(contents);
   } catch (error) {
@@ -103,17 +105,20 @@ contentRouter.post('/', loginRequired, async (req, res, next) => {
     }
     // diary, todo, account, answer
     const { selectedDate, emotion, diary, todo, account, qna, checkOption } = req.body;
-
-    const dates = await contentService.checkDate();
-
-    if (dates.includes(selectedDate)) {
-      // 날짜 중복
-      res.status(400).json('DB에 생성된 날짜가 있습니다.');
-      return;
-    }
-
     const answer = qna;
     const author = req.currentUserId;
+    const dates = await contentService.checkDuplicate(author.toString());
+    console.log('author ', author);
+    for (let i = 0; i < dates.length; i++) {
+      const dateArr = dates[i].selectedDate;
+      //const authorArr = dates[i].author;
+      if (dateArr.includes(selectedDate)) {
+        // 날짜, 작성자 중복
+        res.status(400).json('DB에 생성된 컨텐츠가 있습니다.');
+        return;
+      }
+    }
+
     const newContent = await contentService.addContent(
       {
         selectedDate,
@@ -179,12 +184,13 @@ contentRouter.delete('/:contentId', loginRequired, async (req, res, next) => {
 // 감정 통계
 // api/filterEmotion/20221201-20221231
 //loginRequired
-contentRouter.get('/filterEmotion/:date/:authorId', loginRequired, async (req, res, next) => {
+contentRouter.get('/filterEmotion/:date', loginRequired, async (req, res, next) => {
   try {
-    const { date, authorId } = req.params;
+    const { date } = req.params;
+    const authorId = req.currentUserId;
     const splitDate = date.split('-');
     console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
-    const content = await contentService.filterEmotion(splitDate[0], splitDate[1], authorId);
+    const content = await contentService.filterEmotion(splitDate[0], splitDate[1], authorId.toString());
     res.status(200).json(content);
   } catch (error) {
     next(error);
@@ -194,12 +200,13 @@ contentRouter.get('/filterEmotion/:date/:authorId', loginRequired, async (req, r
 // 가계부 수입 합산
 // api/filterCls/20221201-20221231
 //loginRequired
-contentRouter.get('/filterCls/:date/:authorId', loginRequired, async (req, res, next) => {
+contentRouter.get('/filterCls/:date', loginRequired, async (req, res, next) => {
   try {
-    const { date, authorId } = req.params;
+    const { date } = req.params;
+    const authorId = req.currentUserId;
     const splitDate = date.split('-');
     console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
-    const content = await contentService.filterCls(splitDate[0], splitDate[1], authorId);
+    const content = await contentService.filterCls(splitDate[0], splitDate[1], authorId.toString());
     if (isEmpty(content)) {
       res.status(400).json('입력된 가계부 수입이 없습니다.');
     }
@@ -212,12 +219,13 @@ contentRouter.get('/filterCls/:date/:authorId', loginRequired, async (req, res, 
 // 가계부 지출 카테고리별 통계
 // api/contents/filterCategory/20221201-20221231
 //loginRequired
-contentRouter.get('/filterCategory/:date/:authorId', loginRequired, async (req, res, next) => {
+contentRouter.get('/filterCategory/:date', loginRequired, async (req, res, next) => {
   try {
-    const { date, authorId } = req.params;
+    const { date } = req.params;
+    const authorId = req.currentUserId;
     const splitDate = date.split('-');
     console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
-    const content = await contentService.filterCategory(splitDate[0], splitDate[1], authorId);
+    const content = await contentService.filterCategory(splitDate[0], splitDate[1], authorId.toString());
     console.log('router-content: ', content);
     //console.log('json-content: ', res.json(content));
     res.status(200).json(content);
@@ -229,10 +237,10 @@ contentRouter.get('/filterCategory/:date/:authorId', loginRequired, async (req, 
 // api/contents/qna
 // 오늘의 질문 모아보기
 //loginRequired
-contentRouter.get('/filter/qna/:authorId', loginRequired, async (req, res, next) => {
+contentRouter.get('/filter/qna', loginRequired, async (req, res, next) => {
   try {
-    const { authorId } = req.params;
-    const qnas = await contentService.filterQna(authorId);
+    const authorId = req.currentUserId;
+    const qnas = await contentService.filterQna(authorId.toString());
     res.status(200).json(qnas);
   } catch (error) {
     next(error);

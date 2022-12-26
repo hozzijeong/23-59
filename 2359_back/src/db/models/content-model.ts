@@ -26,8 +26,10 @@ const findAll = async () => {
   return contents;
 };
 
-const findDates = async () => {
-  const dates = await Content.find({ selectedDate: { $exists: true } });
+// 작성자, 날짜 중복 확인
+const findDuplicate = async (authorId: string) => {
+  const dates = await Content.find({ author: authorId }).select({ selectedDate: 1, author: 1 });
+  console.log('dates ', dates);
   return dates;
 };
 
@@ -130,7 +132,7 @@ const filterByCategory = async (prevDate: string, nextDate: string, authorId: st
     'account.cls': 'EXPENSE',
     'account.category': { $exists: true },
     author: authorId,
-  });
+  }).select({ selectedDate: 1, account: 1, author: 1 });
   console.log('model-categories: ', cateogries);
   return cateogries;
 };
@@ -152,7 +154,7 @@ const filterByTag = async () => {
 export default {
   createContent,
   findAll,
-  findDates,
+  findDuplicate,
   updateContent,
   deleteById,
   findById,

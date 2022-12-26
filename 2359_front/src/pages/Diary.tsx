@@ -54,16 +54,16 @@ function Diary() {
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
 
   const diaryContents = useMemo(() => {
-    if (diaryMode === DiaryMode.CREATE)
-      return (
-        <EmptyContainer>
-          <button type="button" onClick={() => setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.UPDATE }))}>
-            작성하기
-          </button>
-        </EmptyContainer>
-      );
+    // if (diaryMode === DiaryMode.CREATE)
+    //   return (
+    //     <EmptyContainer>
+    //       <button type="button" onClick={() => setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.UPDATE }))}>
+    //         작성하기
+    //       </button>
+    //     </EmptyContainer>
+    //   );
 
-    if (diaryMode === DiaryMode.UPDATE && everyUnChecked) {
+    if (diaryMode === (DiaryMode.UPDATE || DiaryMode.CREATE) && everyUnChecked) {
       return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
     }
 
@@ -76,11 +76,11 @@ function Diary() {
       if (!isChecked) return null;
 
       const diaryContentMap: DiaryContentsPrpos = {
-        [OPTION.TODO_LIST]: <TodoList todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
-        [OPTION.TODAY_QUESTION]: <TodayQuestion todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
-        [OPTION.EMOTION]: <Emotion todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
-        [OPTION.DIARY]: <TodayDiary todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
-        [OPTION.ACCOUNT_BOOK]: <AccountBook todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.TODO_LIST]: <TodoList todayDiary={todayDiary} />,
+        [OPTION.TODAY_QUESTION]: <TodayQuestion todayDiary={todayDiary} />,
+        [OPTION.EMOTION]: <Emotion todayDiary={todayDiary} />,
+        [OPTION.DIARY]: <TodayDiary todayDiary={todayDiary} />,
+        [OPTION.ACCOUNT_BOOK]: <AccountBook todayDiary={todayDiary} />,
       };
 
       return (
@@ -89,7 +89,7 @@ function Diary() {
         </DiaryComponentsLayout>
       );
     });
-  }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary, todayDiary]);
+  }, [contentOptions, diaryMode, everyUnChecked, todayDiary]);
 
   const submitHandler = async () => {
     const checkOption: OptionCheckedProps = contentOptions.reduce(
@@ -109,7 +109,7 @@ function Diary() {
 
     console.log(body, 'Body!!');
 
-    if (_id === '') {
+    if (diaryMode === DiaryMode.CREATE) {
       await mutate('/api/contents', createDiary(body)).then((res) => {
         diaryMutate(res?.data);
       });
@@ -140,7 +140,7 @@ function Diary() {
   return (
     <DiarySection>
       <HeadContent>
-        <Title isEmpty={everyUnChecked}>{date}</Title>
+        <Title isempty={everyUnChecked}>{date}</Title>
         <UpdateDiv>
           {diaryMode === DiaryMode.CREATE && null}
           {diaryMode === DiaryMode.READ && (
@@ -214,11 +214,11 @@ const Content = tw.div`
   text-lg	
 `;
 
-const Title = tw.p<{ isEmpty: boolean }>`
+const Title = tw.p<{ isempty: boolean }>`
   text-4xl
   font-extrabold
   break-keep	
-  ${(props) => props.isEmpty && 'text-gray-500'}
+  ${(props) => props.isempty && 'text-gray-500'}
   
 `;
 
