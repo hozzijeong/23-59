@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { userLogin } from 'recoil/userAtom';
 import tw from 'tailwind-styled-components';
 import { useNavigate, Link } from 'react-router-dom';
+import UserAttribute from '../utilities/UserLoginAttribute';
 
 function Header() {
-  const nav = useNavigate();
-  const [loginState, setLoginState] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const { logoClickHandler, handleLoginClick } = UserAttribute();
+  const [loginState, setLoginState] = useRecoilState(userLogin);
+  // const [loginState, setLoginState] = useState<boolean>(false);
+  // const navigate = useNavigate();
   const getToken = localStorage.getItem('token') ? true : null;
-  const handleLoginClick = () => {
-    if (getToken === null) {
-      setLoginState(true);
-      navigate('/');
-    } else {
-      localStorage.clear();
-      setLoginState(false);
-      navigate('/login');
-    }
-  };
+  // const handleLoginClick = () => {
+  //   if (getToken === null) {
+  //     setLoginState(true);
+  //     navigate('/');
+  //   } else {
+  //     localStorage.clear();
+  //     setLoginState(false);
+  //     navigate('/login');
+  //   }
+  // };
 
-  const logoClickHandler = () => {
-    nav('/user/main');
-  };
+  // const logoClickHandler = () => {
+  //   navigate('/user/main');
+  // };
 
   useEffect(() => {
     if (getToken) {
