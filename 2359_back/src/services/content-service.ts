@@ -29,12 +29,13 @@ class ContentService {
   // 컨텐츠 생성
   async addContent(contentData: any, answerData: any) {
     const { selectedDate, author, emotion, diary, todo, account, checkOption } = contentData;
-
-    if (isEmpty(answerData)) {
-      answerData = '';
-    }
-    const questionOid = answerData.questionId;
-    const answer = answerData.answer;
+    console.log('answerData ', answerData);
+    const questionOid = answerData?.questionId;
+    const answer = answerData?.answer;
+    // if (isEmpty(questionOid)) {
+    //   questionOid = '123';
+    // }
+    console.log('answerData ', answerData);
     const questionData = await questionService.getQuestionById(questionOid);
 
     if (isEmpty(questionData)) {
@@ -62,7 +63,7 @@ class ContentService {
     newContent.checkOption.DIARY = !isEmpty(newContent.diary);
     newContent.checkOption.EMOTION = !isEmpty(newContent.emotion);
     newContent.checkOption.ACCOUNT_BOOK = !isEmpty(newContent.account);
-
+    //console.log('checkOption ', newContent.checkOption);
     return newContent;
   }
 
