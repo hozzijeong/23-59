@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import uuid from 'react-uuid';
 import './Questions.css';
 import axios from 'axios';
 import tw from 'tailwind-styled-components';
@@ -69,19 +70,23 @@ function Questions() {
   function showSelectedAnswers() {
     if (qnaList.length !== 0) {
       const trueKey = Object.keys(isSelect).filter((key) => isSelect[key] === true);
+      if (trueKey.length !== 0) {
+        const tmpArr: any = [];
+        for (let i = 0; i < trueKey.length; i += 1) {
+          // TODO: qna 가 객체안의 객체 형태라서 type지정 필수!
+          tmpArr.push(qnaList.filter((ele: any) => trueKey[i] === ele.qna.tag));
+        }
+        const reducedArr = tmpArr.reduce((acc: any, cur: any) => {
+          return [...acc, ...cur];
+        });
 
-      const tmpArr: any = [];
-      for (let i = 0; i < trueKey.length; i += 1) {
-        // TODO: qna 가 객체안의 객체 형태라서 type지정 필수!
-        tmpArr.push(qnaList.filter((ele: any) => trueKey[i] === ele.qna.tag));
+        setResultAnswer(reducedArr);
+      } else {
+        setResultAnswer([]);
       }
-      const reducedArr = tmpArr.reduce((acc: any, cur: any) => {
-        return [...acc, ...cur];
-      });
-      setResultAnswer(reducedArr);
     }
   }
-
+  console.log(resultAnswer, 'resultAnswer');
   const handleTag = (item: string): void => {
     const newSelect = { ...isSelect };
     newSelect[item] = !newSelect[item];
@@ -156,20 +161,23 @@ function Questions() {
       </ButtonContainer>
       <AnswerContainer>
         <AnswerUl>
-          {pageList
-            ? pageList.map((ele: any) => (
-                // TODO: 배열안에 객체 interface 설정
-                <AnswerList
-                  key={ele.selectedDate}
-                  onClick={() => {
-                    setCurrentList(ele);
-                    setShowModal(true);
-                  }}
-                >
-                  {ele.qna.question}
-                </AnswerList>
-              ))
-            : null}
+          {pageList.length !== 0 ? (
+            pageList.map((ele: any) => (
+              // TODO: 배열안에 객체 interface 설정
+              <AnswerList
+                // ele.selectedDate
+                key={uuid()}
+                onClick={() => {
+                  setCurrentList(ele);
+                  setShowModal(true);
+                }}
+              >
+                {ele.qna.question}
+              </AnswerList>
+            ))
+          ) : (
+            <NoAnswer>선택된 태그가 없어요. 😢</NoAnswer>
+          )}
         </AnswerUl>
       </AnswerContainer>
       <Pagination
@@ -248,6 +256,12 @@ const AnswerList = tw.li`
   hover:bg-gray-200
   active:bg-stone-300
   cursor-pointer
+`;
+
+const NoAnswer = tw.div`
+text-center
+text-xl
+font-bold
 `;
 
 const ToggleContainer = tw.div`
