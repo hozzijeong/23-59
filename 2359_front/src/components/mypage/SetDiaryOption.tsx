@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import axios from 'axios';
-// import { baseAxios } from 'api';
-import { OptionEnums } from 'types/enums';
 import { baseAxios } from 'api';
-
+// import { CONTENT_OPTION } from 'types/enumConverter';
+import { OptionEnums } from 'types/enums';
 // {
 //   ACCOUNT_BOOK: false,
 //   DIARY: false,
@@ -12,6 +11,10 @@ import { baseAxios } from 'api';
 //   TODAY_QUESTION: false,
 //   TODO_LIST: false,
 // }
+
+type DiaryProps = {
+  [key in OptionEnums]: boolean;
+};
 
 function SetDiaryOption() {
   // Record<OptionEnums, boolean>[]

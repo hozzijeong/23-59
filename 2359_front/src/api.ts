@@ -13,15 +13,15 @@ const headerAxios = axios.create({
 });
 
 const updateDiary = ({ _id, body }: { _id: string; body: DiaryBodyProps }) =>
-  baseAxios.patch(`/api/contents/${_id}`, { ...body, contentId: _id });
+  headerAxios.patch(`/api/contents/${_id}`, { ...body, contentId: _id });
 
-const createDiary = (body: DiaryBodyProps) => baseAxios.post(`/api/contents`, body);
+const createDiary = (body: DiaryBodyProps) => headerAxios.post(`/api/contents`, body);
 
 const deleteDiary = (_id: string) =>
-  baseAxios.delete(`/api/contents/${_id}`, {
+  headerAxios.delete(`/api/contents/${_id}`, {
     data: {
       contentId: _id,
     },
   });
-
-export { baseAxios, updateDiary, createDiary, deleteDiary };
+const getRandomQuestion = () => baseAxios.get('/api/questions/random').then((res) => res.data);
+export { baseAxios, updateDiary, createDiary, deleteDiary, getRandomQuestion };

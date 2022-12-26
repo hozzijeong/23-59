@@ -18,6 +18,8 @@ import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
 import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
+import { useRecoilValue } from 'recoil';
+import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -27,7 +29,6 @@ function Diary() {
   const navigation = useNavigate();
   const { id } = useParams();
   const [date, setDate] = useState(id);
-
   const { mutate } = useSWRConfig();
 
   useEffect(() => {
@@ -41,23 +42,28 @@ function Diary() {
 
   const { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate: diaryMutate } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
-  // 여기서 체크되는 값들이 contentOption에도 적용이 되어야 하는데,, 흠,,,
-  console.log(diaryInfo, diaryMode, contentOptions, 'options');
+
+  const todo = useRecoilValue(todayTodo);
+  const qna = useRecoilValue(questionAtom);
+  const emotion = useRecoilValue(emotionAtom);
+  const diary = useRecoilValue(todayDiaryAtom);
+  const account = useRecoilValue(accountTableAtom);
+
+  console.log(todo, qna, emotion, diary, account, contentOptions, todayDiary.diaryInfo.checkOption);
 
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
 
   const diaryContents = useMemo(() => {
-    // 처음 페이지 & isRead 라면 작성하기 보여줄 것.
-    if (diaryMode === DiaryMode.CREATE)
-      return (
-        <EmptyContainer>
-          <button type="button" onClick={() => setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.UPDATE }))}>
-            작성하기
-          </button>
-        </EmptyContainer>
-      );
+    // if (diaryMode === DiaryMode.CREATE)
+    //   return (
+    //     <EmptyContainer>
+    //       <button type="button" onClick={() => setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.UPDATE }))}>
+    //         작성하기
+    //       </button>
+    //     </EmptyContainer>
+    //   );
 
-    if (diaryMode === DiaryMode.UPDATE && everyUnChecked) {
+    if (diaryMode === (DiaryMode.UPDATE || DiaryMode.CREATE) && everyUnChecked) {
       return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
     }
 
@@ -65,17 +71,16 @@ function Diary() {
       return <EmptyContainer>작성된 내용이 없습니다.</EmptyContainer>;
     }
 
-    // 기본적으로 값
     return contentOptions.map((options) => {
       const { title, isChecked } = options;
       if (!isChecked) return null;
 
       const diaryContentMap: DiaryContentsPrpos = {
-        [OPTION.TODO_LIST]: <TodoList todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
-        [OPTION.TODAY_QUESTION]: <TodayQuestion todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
-        [OPTION.EMOTION]: <Emotion todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
-        [OPTION.DIARY]: <TodayDiary todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
-        [OPTION.ACCOUNT_BOOK]: <AccountBook todayDiary={todayDiary} setTodayDiary={setTodayDiary} />,
+        [OPTION.TODO_LIST]: <TodoList todayDiary={todayDiary} />,
+        [OPTION.TODAY_QUESTION]: <TodayQuestion todayDiary={todayDiary} />,
+        [OPTION.EMOTION]: <Emotion todayDiary={todayDiary} />,
+        [OPTION.DIARY]: <TodayDiary todayDiary={todayDiary} />,
+        [OPTION.ACCOUNT_BOOK]: <AccountBook todayDiary={todayDiary} />,
       };
 
       return (
@@ -84,14 +89,14 @@ function Diary() {
         </DiaryComponentsLayout>
       );
     });
-  }, [contentOptions, diaryMode, everyUnChecked, setTodayDiary, todayDiary]);
+  }, [contentOptions, diaryMode, everyUnChecked, todayDiary]);
 
   const submitHandler = async () => {
     const checkOption: OptionCheckedProps = contentOptions.reduce(
       (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
       INITIAL_CONTENT_OPTIONS
     );
-    const { _id, qna, diary, emotion, todo, account, selectedDate } = diaryInfo;
+    const { _id, selectedDate } = diaryInfo;
     const body = {
       selectedDate: selectedDate === '' ? id ?? '' : selectedDate,
       emotion,
@@ -104,18 +109,16 @@ function Diary() {
 
     console.log(body, 'Body!!');
 
-    if (_id === '') {
-      // create 일 때
+    if (diaryMode === DiaryMode.CREATE) {
       await mutate('/api/contents', createDiary(body)).then((res) => {
         diaryMutate(res?.data);
       });
       return;
     }
 
-    // update 일 때
-    await mutate(`/api/contents/${diaryInfo?._id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
+    await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
 
-    setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+    setTodayDiary({ diaryInfo: { ...diaryInfo, ...body }, diaryMode: DiaryMode.READ });
   };
 
   const cancelHandler = () => {
@@ -137,7 +140,7 @@ function Diary() {
   return (
     <DiarySection>
       <HeadContent>
-        <Title isEmpty={everyUnChecked}>{date}</Title>
+        <Title isempty={everyUnChecked}>{date}</Title>
         <UpdateDiv>
           {diaryMode === DiaryMode.CREATE && null}
           {diaryMode === DiaryMode.READ && (
@@ -211,11 +214,11 @@ const Content = tw.div`
   text-lg	
 `;
 
-const Title = tw.p<{ isEmpty: boolean }>`
+const Title = tw.p<{ isempty: boolean }>`
   text-4xl
   font-extrabold
   break-keep	
-  ${(props) => props.isEmpty && 'text-gray-500'}
+  ${(props) => props.isempty && 'text-gray-500'}
   
 `;
 
