@@ -79,7 +79,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="todoCheck"
-              checked={data.TODO_LIST}
+              checked={data.TODO_LIST || ''}
               onChange={() => {
                 checkedHandler(OptionEnums.TODO_LIST);
               }}
@@ -93,7 +93,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="questionCheck"
-              checked={data.TODAY_QUESTION}
+              checked={data.TODAY_QUESTION || ''}
               onChange={() => {
                 checkedHandler(OptionEnums.TODAY_QUESTION);
               }}
@@ -107,7 +107,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="diaryCheck"
-              checked={data.DIARY}
+              checked={data.DIARY || ''}
               onChange={() => {
                 checkedHandler(OptionEnums.DIARY);
               }}
@@ -123,7 +123,7 @@ function SetDiaryOption() {
               id="emotionCheck"
               checked={data.EMOTION}
               onChange={() => {
-                checkedHandler(OptionEnums.EMOTION);
+                checkedHandler(OptionEnums.EMOTION || '');
               }}
             />
             하루 감정
@@ -137,7 +137,7 @@ function SetDiaryOption() {
               id="accountCheck"
               checked={data.ACCOUNT_BOOK}
               onChange={() => {
-                checkedHandler(OptionEnums.ACCOUNT_BOOK);
+                checkedHandler(OptionEnums.ACCOUNT_BOOK || '');
               }}
             />
             가계부

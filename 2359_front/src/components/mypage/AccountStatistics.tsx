@@ -46,12 +46,11 @@ function AccountStatistics() {
       );
 
       const tmpPayResult = payResponse.data;
-      console.log(tmpPayResult);
 
       const categories = Object.keys(tmpPayResult); // Object 형태
       const price = Object.values(tmpPayResult);
-      console.log('tmp', tmpPayResult);
       console.log('cate', categories, '가격', price);
+
       // Record<string, string | number>[]
       const tmpData: any = [];
       for (let i = 0; i < categories.length; i += 1) {
