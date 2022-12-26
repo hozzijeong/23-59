@@ -8,7 +8,6 @@ import { DiaryContentOptionsProps } from 'types/interfaces';
 import { DiaryCheckOptionLayout } from './Layout/DiaryCheckOptionLayout';
 
 function ContentOptions({ state, setState, diaryMode }: DiaryContentOptionsProps) {
-  // option Handler 추가로 구현하기.
   const optionHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { id } = event.target;

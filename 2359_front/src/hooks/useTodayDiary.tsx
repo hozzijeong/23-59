@@ -1,11 +1,13 @@
 /* eslint-disable no-underscore-dangle */
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { baseAxios } from 'api';
 import useSWR from 'swr';
 import { DiaryStateProps, TodayDiaryProps } from 'types/interfaces';
 import { DiaryMode } from 'types/enums';
 import { INITIAL_DIARY_INFO } from 'utilities/initialValues';
 import { converUserOptionToContent } from 'utilities/utils';
+import { useSetRecoilState } from 'recoil';
+import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 import { useUserOptions } from './useUserOptions';
 
 const END_POINT = '/api/contents/date';
@@ -37,13 +39,25 @@ function useTodayDiary(date: string) {
    * 2. diarymode가 READ와 UPDATE라면 data에 있는 현재 체크된 옵션들이 contentOptions르 넘어가게 된되고
    * 3. diaryMode가 create라면 swr을 통해 받은 값들이 contentOption이 된다.
    */
+  const setTodo = useSetRecoilState(todayTodo);
+  const setQna = useSetRecoilState(questionAtom);
+  const setEmotion = useSetRecoilState(emotionAtom);
+  const setDiary = useSetRecoilState(todayDiaryAtom);
+  const setAccount = useSetRecoilState(accountTableAtom);
+
   useEffect(() => {
     if (!data) return;
-    const diaryInfo = data[0] ?? null;
-    if (!diaryInfo) {
+    const info = data[0] ?? null;
+    if (!info) {
       setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
     } else {
-      setTodayDiary({ diaryInfo, diaryMode: DiaryMode.READ });
+      const { todo, qna, emotion, diary, account } = info;
+      setTodo(todo);
+      setQna(qna);
+      setEmotion(emotion);
+      setDiary(diary);
+      setAccount(account);
+      setTodayDiary({ diaryInfo: info, diaryMode: DiaryMode.READ });
     }
   }, [data]);
 
