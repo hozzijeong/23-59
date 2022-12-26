@@ -82,8 +82,8 @@ class ContentService {
   }
 
   // 날짜로 컨텐츠 조회
-  async getContentBySelectedDate(selectedDate: string) {
-    const content = await this.contentModel.findBySelectedDate(selectedDate);
+  async getContentBySelectedDate(selectedDate: string, authorId: string) {
+    const content = await this.contentModel.findBySelectedDate(selectedDate, authorId);
     if (!content) {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }

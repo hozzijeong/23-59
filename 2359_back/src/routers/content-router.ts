@@ -66,7 +66,8 @@ contentRouter.get('/:id', async (req, res, next) => {
 contentRouter.get('/date/:selectedDate', async (req, res, next) => {
   try {
     const { selectedDate } = req.params;
-    const content = await contentService.getContentBySelectedDate(selectedDate);
+    const authorId = req.currentUserId;
+    const content = await contentService.getContentBySelectedDate(selectedDate, authorId.toString());
     if (!content) {
       res.status(400).json('Bad Request');
       return;
