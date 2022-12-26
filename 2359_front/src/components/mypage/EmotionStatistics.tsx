@@ -46,7 +46,7 @@ function EmotionStatistics() {
   useEffect(() => {
     getFilterEmotion();
   }, []);
-
+  console.log(data);
   return (
     <Container>
       <div>여기도 차트를 보여줄거에여~</div>
