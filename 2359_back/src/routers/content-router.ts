@@ -152,7 +152,7 @@ contentRouter.patch('/:contentId', loginRequired, async (req, res, next) => {
     if (!errors.isEmpty()) {
       throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
     }
-    const { contentId, emotion, diary, todo, account, qna } = req.body;
+    const { contentId, emotion, diary, todo, account, qna, checkOption } = req.body;
     //const { contentId, selectedDate, answer } = req.body;
     console.log('contentId: ', contentId);
 
@@ -162,6 +162,7 @@ contentRouter.patch('/:contentId', loginRequired, async (req, res, next) => {
       ...(todo && { todo }),
       ...(account && { account }),
       ...(qna && { qna }),
+      ...(checkOption && { checkOption }),
     };
 
     const updatedContent = await contentService.setContent(contentId, toUpdate);

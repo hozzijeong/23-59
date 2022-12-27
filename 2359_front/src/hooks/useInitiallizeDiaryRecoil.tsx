@@ -14,7 +14,7 @@ function useInitializeDiaryRecoil() {
   const initilizeSetRecoilState = useCallback(() => {
     setTodo([]);
     setQna(QNA_INNITIAL);
-    setEmotion(emotionEnums.SO_SO);
+    setEmotion(null);
     setDiary(INITIAL_TODAY_DIARY);
     setAccount([]);
   }, [setAccount, setDiary, setEmotion, setQna, setTodo]);

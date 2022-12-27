@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import ModalBasic from 'components/ModalBasic';
+import useSWR from 'swr';
 import { useNavigate } from 'react-router-dom';
 import useUserDelete from 'hooks/useUserDelete';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -12,7 +13,6 @@ import {
   FormTitle,
   Form,
   Container,
-  SignUpLink,
   DeleteTag,
 } from '../signup/FormStyled';
 import useUserUpdate from '../../hooks/useUserUpdate';
@@ -34,27 +34,26 @@ function UserInfo() {
     formState: { errors },
   } = useForm<UpdateFormValue>();
 
-  // 유저 정보 가져오기
-  const userDataRequest = useCallback(() => {
-    baseAxios
-      .get(`/api/user/info`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setValue('email', res.data.email);
-        setValue('nickname', res.data.nickname);
-      })
-      .catch((err) => {
-        alert('로그인 해주세요!');
-        navigation('/login');
-      });
-  }, []);
+  const userToken = localStorage.getItem('token');
+
+  const fetcher = async (url: string) => {
+    const res = await baseAxios.get(url, {
+      headers: {
+        authorization: `Bearer ${userToken}`,
+      },
+    });
+    return res.data;
+  };
+
+  const { data } = useSWR(`/api/user/info`, fetcher);
 
   useEffect(() => {
-    userDataRequest();
-  }, []);
+    if (data) {
+      const { email, nickname } = data;
+      setValue('email', email);
+      setValue('nickname', nickname);
+    }
+  });
 
   const onSubmit: SubmitHandler<UpdateFormValue> = (data) => {
     userUpdateRequest(data);

@@ -4,6 +4,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
 import { emotionEnums } from 'types/enums';
 import { EMOTIONS } from 'types/enumConverter';
+import { EmotionStaticProps } from 'types/interfaces';
 
 const date = new Date();
 const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
@@ -11,14 +12,9 @@ const currentYear = date.getFullYear();
 const currentMonth = date.getMonth() + 1;
 const monthLastDate = lastDay.getDate();
 
-interface emotionStaticProps {
-  [key: string]: number | string;
-}
-
 function EmotionStatistics() {
-  // 객체를 typing할 때는 Record!!!
-  const initialData: emotionStaticProps[] = [];
-  const [data, setData] = useState<emotionStaticProps[]>(initialData);
+  const initialData: EmotionStaticProps[] = [];
+  const [data, setData] = useState<EmotionStaticProps[]>(initialData);
 
   async function getFilterEmotion() {
     try {
@@ -32,7 +28,7 @@ function EmotionStatistics() {
       );
       const res = await result.data;
 
-      const convert: emotionStaticProps = Object.entries(res).reduce((acc, [key, val]) => {
+      const convert: EmotionStaticProps = Object.entries(res).reduce((acc, [key, val]) => {
         return { ...acc, [EMOTIONS[key as emotionEnums]]: val };
       }, {});
 
@@ -46,7 +42,6 @@ function EmotionStatistics() {
   useEffect(() => {
     getFilterEmotion();
   }, []);
-  console.log(data);
   return (
     <Container>
       <div>여기도 차트를 보여줄거에여~</div>
