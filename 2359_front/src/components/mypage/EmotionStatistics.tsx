@@ -4,13 +4,12 @@ import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
 import { emotionEnums } from 'types/enums';
 import { EMOTIONS } from 'types/enumConverter';
+import { getMonthDate } from 'utilities/getMonthDate';
 import { EmotionStaticProps } from 'types/interfaces';
 
 const date = new Date();
-const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-const currentYear = date.getFullYear();
 const currentMonth = date.getMonth() + 1;
-const monthLastDate = lastDay.getDate();
+const monthDate = getMonthDate(date);
 
 function EmotionStatistics() {
   const initialData: EmotionStaticProps[] = [];
@@ -18,14 +17,11 @@ function EmotionStatistics() {
 
   async function getFilterEmotion() {
     try {
-      const result = await axios.get(
-        `/api/contents/filterEmotion/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      const result = await axios.get(`/api/contents/filterEmotion/${monthDate}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       const res = await result.data;
 
       const convert: EmotionStaticProps = Object.entries(res).reduce((acc, [key, val]) => {

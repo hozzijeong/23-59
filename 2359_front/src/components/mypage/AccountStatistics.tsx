@@ -5,18 +5,12 @@ import { ResponsivePie } from '@nivo/pie';
 import { expenseEnums, incomeEnums } from 'types/enums';
 import { EXPENSE_CATEGORY, INCOME_CATEGORY } from 'types/enumConverter';
 import { CategoriesStaticProps } from 'types/interfaces';
-// import { getCurrentDate } from 'utilities/getCurrentDate';
-// import { getMonthDate } from 'utilities/getMonthDate';
+import { getMonthDate } from 'utilities/getMonthDate';
 import { StatisticsScript, Container, BarChartContainer } from './EmotionStatistics';
 
 const date = new Date();
-const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-const currentYear = date.getFullYear();
 const currentMonth = date.getMonth() + 1;
-const monthLastDate = lastDay.getDate();
-// const days = getCurrentDate();
-// const result = getMonthDate(days);
-// console.log(result);
+const monthDate = getMonthDate(date);
 
 function AccountStatistics() {
   const initialData: CategoriesStaticProps[] = [];
@@ -26,14 +20,11 @@ function AccountStatistics() {
 
   async function getFilterIncome() {
     try {
-      const incomeResponse = await axios.get(
-        `/api/contents/filterCls/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      const incomeResponse = await axios.get(`/api/contents/filterCls/${monthDate}}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
       const incomeData = await incomeResponse.data;
       setIncome(incomeData);
     } catch (e) {
@@ -43,14 +34,11 @@ function AccountStatistics() {
 
   async function getFilterPayment() {
     try {
-      const payResponse = await axios.get(
-        `/api/contents/filterCategory/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`,
-        {
-          headers: {
-            authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+      const payResponse = await axios.get(`/api/contents/filterCategory/${monthDate}`, {
+        headers: {
+          authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
 
       const tmpPayResult = payResponse.data;
       // EXPENSE_CATEGORY의 값들로만 이루어진 배열
