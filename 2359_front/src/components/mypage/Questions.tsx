@@ -44,7 +44,7 @@ function Questions() {
       tag: '',
     },
   });
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
 
   async function getAllQuestionList() {
     const res = await axios.get('/api/contents/filter/qna', {
@@ -66,17 +66,17 @@ function Questions() {
     setQnaList(data);
     setTagList(tmpTagList);
   }
-  console.log(qnaList);
+
   function showSelectedAnswers() {
     if (qnaList.length !== 0) {
       const trueKey = Object.keys(isSelect).filter((key) => isSelect[key] === true);
       if (trueKey.length !== 0) {
-        const tmpArr: any = [];
+        const tmpArr: object[] = [];
         for (let i = 0; i < trueKey.length; i += 1) {
           // TODO: qna 가 객체안의 객체 형태라서 type지정 필수!
-          tmpArr.push(qnaList.filter((ele: any) => trueKey[i] === ele.qna.tag));
+          tmpArr.push(qnaList.filter((ele: IData) => trueKey[i] === ele.qna.tag));
         }
-        const reducedArr = tmpArr.reduce((acc: any, cur: any) => {
+        const reducedArr: any = tmpArr.reduce((acc: any, cur: any) => {
           return [...acc, ...cur];
         });
 
@@ -86,7 +86,6 @@ function Questions() {
       }
     }
   }
-  console.log(resultAnswer, 'resultAnswer');
   const handleTag = (item: string): void => {
     const newSelect = { ...isSelect };
     newSelect[item] = !newSelect[item];
@@ -107,6 +106,22 @@ function Questions() {
     setPageList(resultAnswer.slice(8 * (page - 1), 8 * page));
   };
 
+  const selectAllTag = () => {
+    const newSelect = { ...isSelect };
+    for (const key in newSelect) {
+      newSelect[key] = true;
+    }
+    setIsSelect(newSelect);
+  };
+
+  const nonSelectAllTag = () => {
+    const newSelect = { ...isSelect };
+    for (const key in newSelect) {
+      newSelect[key] = false;
+    }
+    setIsSelect(newSelect);
+  };
+
   useEffect(() => {
     getAllQuestionList();
   }, []);
@@ -122,24 +137,32 @@ function Questions() {
 
   return (
     <Container>
-      <div>오늘의 질문 모아보기</div>
-      <ToggleContainer>
-        <div className="flex">
-          <label className="inline-flex relative items-center mr-5 cursor-pointer">
-            <input type="checkbox" className="sr-only peer" checked={enabled} readOnly />
-            <ToggleButton
-              onClick={() => {
-                setEnabled(!enabled);
-              }}
-            >
-              {null}
-            </ToggleButton>
-            <span className="ml-2 text-sm font-medium text-gray-900">
-              {enabled ? '모든 태그 선택' : '모두 선택 해제'}
-            </span>
-          </label>
-        </div>
-      </ToggleContainer>
+      <div className="flex justify-between">
+        <div>오늘의 질문 모아보기</div>
+        <ToggleContainer>
+          <div className="flex">
+            <label className="inline-flex relative items-center mr-5 cursor-pointer">
+              <input type="checkbox" className="sr-only peer" checked={enabled} readOnly />
+              <ToggleButton
+                onClick={() => {
+                  setEnabled(!enabled);
+                  if (enabled) {
+                    nonSelectAllTag();
+                  } else {
+                    selectAllTag();
+                  }
+                }}
+              >
+                {null}
+              </ToggleButton>
+              <span className="ml-2 text-sm font-medium text-gray-900">
+                {enabled ? '모든 태그 선택' : '모두 선택 해제'}
+              </span>
+            </label>
+          </div>
+        </ToggleContainer>
+      </div>
+
       <ButtonContainer>
         {tagList
           ? tagList.map((tagItem) => {

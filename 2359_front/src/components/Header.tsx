@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { userLogin } from 'recoil/userAtom';
 import tw from 'tailwind-styled-components';
+import styled from 'styled-components';
 import { VscAccount } from 'react-icons/vsc';
 import { SlLogin, SlLogout } from 'react-icons/sl';
 import { useNavigate, Link } from 'react-router-dom';
@@ -23,7 +24,9 @@ function Header() {
   return (
     <HeaderContainer>
       <HeaderContent>
-        <Logotest onClick={logoClickHandler}>23:59</Logotest>
+        <Logotest onClick={logoClickHandler}>
+          23<Colon>:</Colon>59
+        </Logotest>
         <HeaderRightContainer>
           <Link to="/mypage/user" className="mypage">
             <VscAccount className="mypageLogo" />
@@ -90,4 +93,21 @@ text-primaryLight
 flex
 justify-center
 leading-none
+`;
+
+const Colon = styled.span`
+  animation-name: filcker;
+  animation-duration: 1s;
+  animation-timing-function: steps(2, start);
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+
+  @keyframes filcker {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 `;
