@@ -17,7 +17,7 @@ const initialDiary = {
   diaryMode: DiaryMode.CREATE,
 };
 function useTodayDiary(date: string) {
-  const { contentOptions, setContentOptions } = useUserOptions();
+  const { contentOptions, setContentOptions, initData } = useUserOptions();
   // 유저들 옵션 처리, 이게 CREATE일 때만 값을 불러오면 됨.
   const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);
 
@@ -64,7 +64,7 @@ function useTodayDiary(date: string) {
     contentOptions,
     setContentOptions,
     mutate,
-    isLoading,
+    initOptions: initData,
   };
 }
 
