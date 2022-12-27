@@ -1,3 +1,4 @@
+import React from 'react';
 import { OptionEnums } from 'types/enums';
 import { OptionCheckedProps } from 'types/interfaces';
 
@@ -8,4 +9,10 @@ const converUserOptionToContent = (options: OptionCheckedProps) => {
 
 const checkArrayAllFalse = (array: boolean[]) => array.every((data) => !data);
 
-export { converUserOptionToContent, checkArrayAllFalse };
+const handleOnKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, callback: () => void) => {
+  if (e.key === 'Enter') {
+    callback(); // Enter 입력이 되면 클릭 이벤트 실행
+  }
+};
+
+export { converUserOptionToContent, checkArrayAllFalse, handleOnKeyDown };

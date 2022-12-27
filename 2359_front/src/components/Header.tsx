@@ -29,9 +29,9 @@ function Header() {
         </Logotest>
         <HeaderRightContainer>
           <Link to="/mypage/user" className="mypage">
-            <VscAccount className="mypageLogo" />
+            <VscAccount className="mypageLogo" size={30} />
           </Link>
-          <GetLog onClick={handleLoginClick}>{loginState ? <SlLogout size={24} /> : <SlLogin size={24} />}</GetLog>
+          <GetLog onClick={handleLoginClick}>{loginState ? <SlLogout size={30} /> : <SlLogin size={30} />}</GetLog>
         </HeaderRightContainer>
       </HeaderContent>
     </HeaderContainer>

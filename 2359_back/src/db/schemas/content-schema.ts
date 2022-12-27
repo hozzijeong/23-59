@@ -33,7 +33,7 @@ interface IAccount {
 }
 
 interface IQnA {
-  //questionId: object;
+  questionId: object;
   question: string;
   answer: string;
   tag: string;
@@ -85,6 +85,10 @@ const accountSchema = new Schema<IAccount>({
 });
 
 const qnaSchema = new Schema<IQnA>({
+  questionId: {
+    type: Schema.Types.ObjectId,
+    ref: 'questions',
+  },
   question: {
     type: String,
   },
@@ -153,21 +157,3 @@ const ContentSchema = new Schema<IContent>(
 );
 
 export { ContentSchema };
-
-// const Content = model<IContent>('User', contentSchema);
-
-// run().catch((err) => console.log(err));
-
-// async function run() {
-//   // 4. Connect to MongoDB
-//   await connect('mongodb://localhost:27017/test');
-
-//   const content = new Content({
-//     email: 'abc@cc.com',
-//     password: 'abc123',
-//     nickname: 'st',
-//   });
-//   await content.save();
-
-//   console.log(content);
-// }
