@@ -28,7 +28,6 @@ function SetDiaryOption() {
       },
     });
     optionData = await res.data.createOption;
-    console.log(data, 'optionData');
     setData(optionData);
   }
 
@@ -47,7 +46,6 @@ function SetDiaryOption() {
           authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      console.log(data, 'optionData2');
       setData(obj);
     } catch (e) {
       throw new Error();
@@ -59,10 +57,8 @@ function SetDiaryOption() {
     newData[e] = !newData[e];
     setIsChecked(newData);
     patchCheckData(newData);
-    console.log(newData, 'newData');
   };
 
-  console.log(isChecked, 'isChecked');
   return (
     <Container>
       <div className="justify-self-start">작성페이지 옵션 설정</div>

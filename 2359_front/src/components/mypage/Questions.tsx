@@ -71,12 +71,12 @@ function Questions() {
     if (qnaList.length !== 0) {
       const trueKey = Object.keys(isSelect).filter((key) => isSelect[key] === true);
       if (trueKey.length !== 0) {
-        const tmpArr: any = [];
+        const tmpArr: object[] = [];
         for (let i = 0; i < trueKey.length; i += 1) {
           // TODO: qna 가 객체안의 객체 형태라서 type지정 필수!
-          tmpArr.push(qnaList.filter((ele: any) => trueKey[i] === ele.qna.tag));
+          tmpArr.push(qnaList.filter((ele: IData) => trueKey[i] === ele.qna.tag));
         }
-        const reducedArr = tmpArr.reduce((acc: any, cur: any) => {
+        const reducedArr: any = tmpArr.reduce((acc: any, cur: any) => {
           return [...acc, ...cur];
         });
 
@@ -86,7 +86,6 @@ function Questions() {
       }
     }
   }
-
   const handleTag = (item: string): void => {
     const newSelect = { ...isSelect };
     newSelect[item] = !newSelect[item];
