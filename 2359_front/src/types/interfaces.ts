@@ -11,7 +11,7 @@ interface AccountTableRow {
   id: string;
   cls: clsEnums;
   category: EXPENSE | INCOME;
-  amount: number;
+  amount: string;
   memo: string;
 }
 

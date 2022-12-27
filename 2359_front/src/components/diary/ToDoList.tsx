@@ -8,6 +8,7 @@ import { DiaryComponentPrpos } from 'types/interfaces';
 import { DiaryMode } from 'types/enums';
 import { useRecoilState } from 'recoil';
 import { todayTodo } from 'recoil/diaryAtom';
+import { handleOnKeyDown } from 'utilities/utils';
 
 function TodoList({ todayDiary }: DiaryComponentPrpos) {
   const [todoInput, setTodoInput] = useState<string>('');
@@ -54,7 +55,12 @@ function TodoList({ todayDiary }: DiaryComponentPrpos) {
       ) : (
         <>
           <ToDoHeader>
-            <ToDoInput placeholder="할 일을 추가해주세요!" onChange={changeTodoInputHandler} value={todoInput} />
+            <ToDoInput
+              placeholder="할 일을 추가해주세요!"
+              onChange={changeTodoInputHandler}
+              value={todoInput}
+              onKeyDown={(e) => handleOnKeyDown(e, addTodoHandler)}
+            />
             <Button type="button" onClick={addTodoHandler}>
               추가하기
             </Button>

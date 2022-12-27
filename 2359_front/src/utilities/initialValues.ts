@@ -37,7 +37,7 @@ const INITIAL_ACCOUNT_INFO: AccountTableRow = {
   id: getCurrentDate(),
   cls: MONEY.EXPENSE,
   category: EXPENSE.FOOD,
-  amount: 0,
+  amount: '',
   memo: '',
 };
 
