@@ -16,7 +16,7 @@ import {
   DeleteTag,
 } from '../signup/FormStyled';
 import useUserUpdate from '../../hooks/useUserUpdate';
-import { baseAxios } from '../../api';
+import { baseAxios, headerAxios } from '../../api';
 import { EMAIL_REGEX } from '../../utilities/regex';
 /* eslint-disable react/jsx-props-no-spreading */
 
@@ -34,14 +34,9 @@ function UserInfo() {
     formState: { errors },
   } = useForm<UpdateFormValue>();
 
-  const userToken = localStorage.getItem('token');
-
   const fetcher = async (url: string) => {
-    const res = await baseAxios.get(url, {
-      headers: {
-        authorization: `Bearer ${userToken}`,
-      },
-    });
+    const token = localStorage.getItem('token') ?? '';
+    const res = await headerAxios(token).get(url);
     return res.data;
   };
 

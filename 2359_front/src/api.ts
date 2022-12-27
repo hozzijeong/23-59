@@ -41,4 +41,4 @@ const fetcher = async (url: string) => {
   return res.data;
 };
 
-export { baseAxios, updateDiary, createDiary, deleteDiary, getRandomQuestion, fetcher };
+export { headerAxios, baseAxios, updateDiary, createDiary, deleteDiary, getRandomQuestion, fetcher };

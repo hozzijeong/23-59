@@ -18,7 +18,6 @@ function Userform() {
     formState: { errors },
   } = useForm<RegisterFormValue>();
 
-  // data를 보낸다.
   const onSubmit: SubmitHandler<RegisterFormValue> = (data) => {
     registerRequest(data);
   };
