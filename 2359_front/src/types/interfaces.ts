@@ -33,12 +33,14 @@ interface QuestionAnswerProps {
   _id: string;
 }
 
+type EmotionType = EMOTION | null;
+
 interface DiaryStateProps {
   _id: string;
   selectedDate: string;
   todo: TodoListProps[];
   qna: QuestionAnswerProps;
-  emotion: EMOTION;
+  emotion: EmotionType;
   diary: DiaryProps;
   account: AccountTableRow[];
   checkOption: OptionCheckedProps;
@@ -96,7 +98,7 @@ interface LoginFormValue {
 
 interface DiaryBodyProps {
   selectedDate: string;
-  emotion: EMOTION;
+  emotion: EmotionType;
   diary: DiaryProps;
   qna: {
     questionId: string;
@@ -142,4 +144,5 @@ export type {
   EmotionStaticProps,
   CategoriesStaticProps,
   RandomQuestionProps,
+  EmotionType,
 };

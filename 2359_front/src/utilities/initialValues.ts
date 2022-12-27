@@ -27,7 +27,7 @@ const INITIAL_DIARY_INFO = {
   selectedDate: '',
   todo: [],
   qna: QNA_INNITIAL,
-  emotion: emotionEnums.SO_SO,
+  emotion: null,
   diary: INITIAL_TODAY_DIARY,
   account: [],
   checkOption: INITIAL_CONTENT_OPTIONS,
