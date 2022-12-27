@@ -37,6 +37,10 @@ function SetDiaryOption() {
     getOptionsData();
   }, []);
 
+  useEffect(() => {
+    mutate();
+  }, [data]);
+
   async function patchCheckData(obj: DiaryProps) {
     const data = {
       firstLogin: false,
@@ -57,9 +61,30 @@ function SetDiaryOption() {
   const checkedHandler = (e: OptionEnums) => {
     const newData = { ...data };
     newData[e] = !newData[e];
-    setIsChecked(newData);
+    // setIsChecked(newData);
     patchCheckData(newData);
-    mutate();
+  };
+
+  const checkAll = () => {
+    const newData = { ...data };
+    for (const key in newData) {
+      if (newData[key] === false) {
+        newData[key] = true;
+      }
+    }
+    setData(newData);
+    patchCheckData(newData);
+  };
+
+  const unCheckAll = () => {
+    const newData = { ...data };
+    for (const key in newData) {
+      if (newData[key] === true) {
+        newData[key] = false;
+      }
+    }
+    setData(newData);
+    patchCheckData(newData);
   };
 
   return (
@@ -70,6 +95,11 @@ function SetDiaryOption() {
       </ScriptArea>
       <CheckboxArea>
         <div>
+          <SelectBox>
+            <div onClick={() => checkAll()}>전체 선택</div>
+            <div>|</div>
+            <div onClick={() => unCheckAll()}>전체 해제</div>
+          </SelectBox>
           <CheckLabel htmlFor="todoCheck">
             <CheckInput
               type="checkbox"
@@ -170,6 +200,14 @@ const ScriptArea = tw.div`
 const Script = tw.div`
   text-lg
   text-bold
+`;
+
+const SelectBox = tw.div`
+  flex
+  w-[55%]
+  justify-between  
+  cursor-pointer
+  mb-5
 `;
 
 const CheckboxArea = tw.div`
