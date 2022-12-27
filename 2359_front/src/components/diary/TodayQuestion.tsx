@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { getRandomQuestion } from 'api';
 import React, { useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { questionAtom } from 'recoil/diaryAtom';
 import useSWR from 'swr';
@@ -11,8 +12,9 @@ import { DiaryComponentPrpos, RandomQuestionProps } from 'types/interfaces';
 function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
   const { diaryMode } = todayDiary;
   const [qna, setQna] = useRecoilState(questionAtom);
+  const { id } = useParams();
 
-  const { data: question, isLoading } = useSWR<RandomQuestionProps>('/api/questions/random', getRandomQuestion, {
+  const { data: question, isLoading } = useSWR<RandomQuestionProps>(`/api/questions/random/${id}`, getRandomQuestion, {
     // revalidateOnMount: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,

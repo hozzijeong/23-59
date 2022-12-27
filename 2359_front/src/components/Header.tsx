@@ -1,27 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
+import { userLogin } from 'recoil/userAtom';
 import tw from 'tailwind-styled-components';
 import styled from 'styled-components';
+import { VscAccount } from 'react-icons/vsc';
+import { SlLogin, SlLogout } from 'react-icons/sl';
 import { useNavigate, Link } from 'react-router-dom';
+import UserAttribute from '../utilities/UserLoginAttribute';
 
 function Header() {
-  const nav = useNavigate();
-  const [loginState, setLoginState] = useState<boolean>(false);
-  const navigate = useNavigate();
+  const { logoClickHandler, handleLoginClick } = UserAttribute();
+  const [loginState, setLoginState] = useRecoilState(userLogin);
   const getToken = localStorage.getItem('token') ? true : null;
-  const handleLoginClick = () => {
-    if (getToken === null) {
-      setLoginState(true);
-      navigate('/');
-    } else {
-      localStorage.clear();
-      setLoginState(false);
-      navigate('/login');
-    }
-  };
-
-  const logoClickHandler = () => {
-    nav('/user/main');
-  };
 
   useEffect(() => {
     if (getToken) {
@@ -38,10 +28,10 @@ function Header() {
           23<Colon>:</Colon>59
         </Logotest>
         <HeaderRightContainer>
-          <Link to="/mypage/user" className="text-primaryLight">
-            myPage
+          <Link to="/mypage/user" className="mypage">
+            <VscAccount className="mypageLogo" />
           </Link>
-          <GetLog onClick={handleLoginClick}>{loginState ? `logout` : `login`}</GetLog>
+          <GetLog onClick={handleLoginClick}>{loginState ? <SlLogout size={24} /> : <SlLogin size={24} />}</GetLog>
         </HeaderRightContainer>
       </HeaderContent>
     </HeaderContainer>
@@ -73,8 +63,16 @@ const Logo = tw.button`
 
 const HeaderRightContainer = tw.div`
   flex
-  justify-between
+  justify-around
   w-[200px]
+  
+  .mypage{
+    text-primaryLight
+
+    .mypageLogo{
+      text-[24px]
+    }
+  }
 `;
 
 const GetLog = tw.div`
