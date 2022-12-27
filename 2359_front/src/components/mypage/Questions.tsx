@@ -137,8 +137,7 @@ function Questions() {
 
   return (
     <Container>
-      <div className="flex justify-between">
-        <div>오늘의 질문 모아보기</div>
+      <div className="flex justify-end">
         <ToggleContainer>
           <div className="flex">
             <label className="inline-flex relative items-center mr-5 cursor-pointer">

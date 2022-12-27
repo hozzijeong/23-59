@@ -40,7 +40,6 @@ function EmotionStatistics() {
   }, []);
   return (
     <Container>
-      <div>여기도 차트를 보여줄거에여~</div>
       <BarChartContainer>
         <StatisticsScript>감정 통계 - {currentMonth}월😘</StatisticsScript>
         <ResponsiveBar

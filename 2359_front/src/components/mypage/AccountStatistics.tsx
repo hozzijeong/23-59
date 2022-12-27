@@ -79,7 +79,6 @@ function AccountStatistics() {
 
   return (
     <Container>
-      <div>자 여기 차트가 나와요</div>
       <BarChartContainer>
         <StatisticsScript>가계부 통계 - {currentMonth}월😘</StatisticsScript>
         <AmountTotalDiv>수입 총 계: {`${income.toLocaleString('ko-KR')} 원`}</AmountTotalDiv>

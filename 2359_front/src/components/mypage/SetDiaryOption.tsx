@@ -61,7 +61,6 @@ function SetDiaryOption() {
 
   return (
     <Container>
-      <div className="justify-self-start">작성페이지 옵션 설정</div>
       <ScriptArea>
         <Script>1. 일일 결산을할 때 고정적으로 적용할 옵션을 설정하는 페이지 입니다.</Script>
         <Script>2. 원하는 옵션을 체크하고 자신만의 결산 템플릿을 만들어 보세요!</Script>
