@@ -46,6 +46,11 @@ function Questions() {
   });
   const [enabled, setEnabled] = useState(true);
 
+  const currentDate = currentList.selectedDate;
+  const year = currentDate.slice(0, 4);
+  const month = currentDate.slice(4, 6);
+  const day = currentDate.slice(6);
+
   async function getAllQuestionList() {
     const res = await axios.get('/api/contents/filter/qna', {
       headers: {
@@ -211,7 +216,7 @@ function Questions() {
       />
       {showModal ? (
         <ModalBasic title={currentList.qna.question} closeText="닫기" cancelHandler={() => setShowModal(false)}>
-          <div>작성날짜: {currentList.selectedDate}</div>
+          <div>작성날짜: {`${year}년 ${month}월 ${day}일`}</div>
           <div>답변: {currentList.qna.answer}</div>
         </ModalBasic>
       ) : null}
@@ -280,7 +285,7 @@ const AnswerList = tw.li`
   cursor-pointer
 `;
 
-const NoAnswer = tw.div`
+export const NoAnswer = tw.div`
 text-center
 text-xl
 font-bold
