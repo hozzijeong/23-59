@@ -19,7 +19,7 @@ import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
-import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
+import { INITIAL_CONTENT_OPTIONS, INITIAL_DIARY_INFO } from 'utilities/initialValues';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 
@@ -48,7 +48,7 @@ function Diary() {
     contentOptions,
     setContentOptions,
     mutate: diaryMutate,
-    isLoading,
+    initOptions,
   } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
 
@@ -139,7 +139,10 @@ function Diary() {
   const deleteHandler = () => {
     // eslint-disable-next-line no-restricted-globals
     if (confirm('정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.')) {
-      mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id));
+      mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id)).then((res) => {
+        if (!initOptions) return;
+        diaryMutate([{ ...INITIAL_DIARY_INFO, checkOption: initOptions }]);
+      });
       navigation('/');
     }
   };
