@@ -1,5 +1,5 @@
 # **하루 결산 기록 사이트, 23:59✍️**
-### `23:59, 하루의 끝에 작성하는 하루 결산 기록 사이트`
+### `하루의 끝🕛에 작성하는 하루 결산 기록 사이트`
 
 ## 1. 서비스 소개
 
@@ -30,41 +30,30 @@
 
 ## 2. 서비스 주요 기능 설명
 **웹서비스의 유용성, 편의성 및 시각화의 실용성에 대한 설명**
-  ### ✨주요 기능 및 서브 기능 소개    
+  ### ✨ 페이지별 기능 소개    
   <details>
-  <summary>로그인 페이지 이메일, 비밀번호 유효성 체크</summary>
+  <summary>로그인 페이지</summary>
+  1. 이메일, 비밀번호 유효성 체크<br/>   
+  2. 이메일 중복 체크   
+</details>
+<details>
+  <summary>홈 페이지</summary>
+  1. 첫 로그인 모달 페이지 기본 옵션 설정 저장<br/>      
+  2. 달력에서 다이어리 요약본 확인   
 영상 
 </details>
 <details>
-  <summary> 첫 로그인 모달 페이지 기본 옵션 설정 저장</summary>
+  <summary>작성 페이지</summary>
+  1. 체크박스로 컴포넌트 추가/빼기<br/>      
+  2. Todolist, 일기, 오늘의 질문, 감정, 가계부 기록<br/>      
+  3. 기록 수정/삭제   
 영상 
 </details>
 <details>
-  <summary>작성 페이지에서 체크박스로 컴포넌트 추가/빼기</summary>
-영상 
-</details>
-<details>
-  <summary>작성 페이지에서 Todolist, 일기, 오늘의 질문, 감정, 가계부 기록</summary>
-영상 
-</details>
-<details>
-  <summary>홈 페이지 달력에서 다이어리 요약본 확인</summary>
-영상 
-</details>
-<details>
-  <summary>작성 페이지 수정/삭제</summary>
-영상 
-</details>
-<details>
-  <summary>마이페이지 회원 정보 수정/탈퇴</summary>
-영상 
-</details>
-<details>
-  <summary>마이페이지 감정, 가계부 통계 확인</summary>
-영상 
-</details>
-<details>
-  <summary>마이페이지 태그별로 오늘의 질문 모아보기</summary>
+  <summary>마이페이지</summary>
+  1. 회원 정보 수정/탈퇴<br/>     
+  2. 감정, 가계부 통계 확인<br/>      
+  3. 태그별 오늘의 질문 모아보기   
 영상 
 </details>
 
@@ -78,19 +67,21 @@
 
 ## 3. 서비스 구성도
   ### 🗺️서비스 구조도
-  ### 🎨와이어프레임 👉[23:59 피그마 보기](https://www.figma.com/file/weAyFeVUqDEUxBhpiWEe8W/23%3A59?node-id=0%3A1&t=0lGAFZpWEHLHBfqr-1)
-  ### 📋API 명세 👉[23:59 API 명세](https://surgedev.notion.site/DB-API-3c9c7cdb822f4dd080dcdb45fb8e3de2)
+  ### 🎨와이어프레임 
+  👉[23:59 피그마 보기](https://www.figma.com/file/weAyFeVUqDEUxBhpiWEe8W/23%3A59?node-id=0%3A1&t=0lGAFZpWEHLHBfqr-1)
+  ### 📋API 명세 
+  👉[23:59 API 명세](https://surgedev.notion.site/DB-API-3c9c7cdb822f4dd080dcdb45fb8e3de2)
 
 ## 4. 프로젝트 팀원 역할 분담
-### MEMBERS
-[박우찬](https://github.com/Croossh)🧑‍💻 - 팀장/프론트엔드 개발      
-[김혜민](https://github.com/pansgraphy)🧑‍💻 - 백엔드 개발   
-[정지헌](https://github.com/honey989)👩‍💻 - 백엔드 개발   
-[정호진](https://github.com/hozzijeong)🧑‍💻 - 프론트엔드 개발      
-[홍화낙](https://github.com/Nakhong)🧑‍💻 - 프론트엔드 개발   
-[설지윤](https://github.com/yoonbly)👩‍💻 - 프론트엔드 개발   
+### 👥프로젝트 팀원
+- [박우찬](https://github.com/Croossh) 
+- [김혜민](https://github.com/pansgraphy) 
+- [정지헌](https://github.com/honey989)   
+- [정호진](https://github.com/hozzijeong)     
+- [홍화낙](https://github.com/Nakhong)   
+- [설지윤](https://github.com/yoonbly)   
 
-**멤버별 responsibility(예시)**
+### 🏋️멤버별 responsibility
 
 1. 박우찬: 팀장/프론트엔드 담당
 - 기획 단계: 구체적인 설계와 지표에 따른 프로젝트 제안서 작성
