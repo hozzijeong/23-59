@@ -61,10 +61,12 @@ const CustomCheckInput = styled.input`
 
   &:hover {
     background-color: #706e6e;
+    cursor: pointer;
   }
 `;
 
 const CustomCheckBox = tw.span`
   ml-[0.5rem]
-  hover:font-semibold	  
+  hover:font-semibold
+  hover:cursor-pointer
 `;
