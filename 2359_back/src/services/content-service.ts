@@ -29,12 +29,13 @@ class ContentService {
   // 컨텐츠 생성
   async addContent(contentData: any, answerData: any) {
     const { selectedDate, author, emotion, diary, todo, account, checkOption } = contentData;
-
-    if (isEmpty(answerData)) {
-      answerData = '';
-    }
-    const questionOid = answerData.questionId;
-    const answer = answerData.answer;
+    console.log('answerData ', answerData);
+    const questionOid = answerData?.questionId;
+    const answer = answerData?.answer;
+    // if (isEmpty(questionOid)) {
+    //   questionOid = '123';
+    // }
+    console.log('answerData ', answerData);
     const questionData = await questionService.getQuestionById(questionOid);
 
     if (isEmpty(questionData)) {
@@ -62,7 +63,7 @@ class ContentService {
     newContent.checkOption.DIARY = !isEmpty(newContent.diary);
     newContent.checkOption.EMOTION = !isEmpty(newContent.emotion);
     newContent.checkOption.ACCOUNT_BOOK = !isEmpty(newContent.account);
-
+    //console.log('checkOption ', newContent.checkOption);
     return newContent;
   }
 
@@ -82,8 +83,8 @@ class ContentService {
   }
 
   // 날짜로 컨텐츠 조회
-  async getContentBySelectedDate(selectedDate: string) {
-    const content = await this.contentModel.findBySelectedDate(selectedDate);
+  async getContentBySelectedDate(selectedDate: string, authorId: string) {
+    const content = await this.contentModel.findBySelectedDate(selectedDate, authorId);
     if (!content) {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
@@ -99,6 +100,7 @@ class ContentService {
     //let checkAccount: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
     //content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
     //console.log('content.checkOption ', content.checkOption);
+    console.log('service ', content);
     return content;
   }
 
@@ -151,8 +153,8 @@ class ContentService {
     return contents;
   }
 
-  async getCalendar(selectedDate: string) {
-    const content = await this.contentModel.findBySelectedDate(selectedDate);
+  async getCalendar(selectedDate: string, authorId: string) {
+    const content = await this.contentModel.findBySelectedDate(selectedDate, authorId);
     if (!content) {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
@@ -168,16 +170,18 @@ class ContentService {
       etcBool = true;
     }
     const accounts = content.map((obj: any) => obj.account);
-    //console.log('accounts: ', accounts);
+    console.log('accounts: ', accounts);
 
     const clsArr = [];
     const amountArr = [];
-    for (let i = 0; i < accounts[0].length; i++) {
-      if (accounts[0][i] === undefined) {
-        continue;
+    if (!isEmpty(accounts[0])) {
+      for (let i = 0; i < accounts[0].length; i++) {
+        if (accounts[0][i] === undefined) {
+          continue;
+        }
+        clsArr.push(accounts[0][i].cls);
+        amountArr.push(accounts[0][i].amount);
       }
-      clsArr.push(accounts[0][i].cls);
-      amountArr.push(accounts[0][i].amount);
     }
     //console.log('clsArr ', clsArr);
     //console.log('amountArr ', amountArr);
@@ -210,7 +214,7 @@ class ContentService {
     //const result = this.getCalendar(dateArr[1]);
     const result = [];
     for (let i = 0; i < dateArr.length; i++) {
-      result.push(this.getCalendar(dateArr[i]));
+      result.push(this.getCalendar(dateArr[i], authorId));
     }
     //result.push(await this.getCalendar(dateArr[i]));
     const result2 = Promise.all(result);

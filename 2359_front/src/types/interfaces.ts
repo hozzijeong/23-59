@@ -30,6 +30,7 @@ interface QuestionAnswerProps {
   question: string;
   tag: string;
   answer: string;
+  _id: string;
 }
 
 interface DiaryStateProps {
@@ -97,10 +98,28 @@ interface DiaryBodyProps {
   selectedDate: string;
   emotion: EMOTION;
   diary: DiaryProps;
-  qna: QuestionAnswerProps;
+  qna: {
+    questionId: string;
+    answer: string;
+  };
   todo: TodoListProps[];
   account: AccountTableRow[];
   checkOption: OptionCheckedProps;
+}
+
+interface EmotionStaticProps {
+  [key: string]: number | string;
+}
+
+interface CategoriesStaticProps {
+  id: string;
+  label: string;
+  value: number;
+}
+
+interface RandomQuestionProps {
+  _id: string;
+  item: string;
 }
 
 export type {
@@ -120,4 +139,7 @@ export type {
   DiaryContentOptionsProps,
   DiaryComponentPrpos,
   DiaryBodyProps,
+  EmotionStaticProps,
+  CategoriesStaticProps,
+  RandomQuestionProps,
 };

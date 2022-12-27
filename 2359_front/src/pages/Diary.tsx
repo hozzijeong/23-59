@@ -1,5 +1,7 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-alert */
 /* eslint-disable no-underscore-dangle */
-import React, { useMemo, useState, ReactNode, useEffect } from 'react';
+import React, { useMemo, useState, ReactNode, useEffect, useCallback } from 'react';
 import { AccountBook } from 'components/diary/AccountBook';
 import { DiaryComponentsLayout } from 'components/diary/Layout/DiaryComponentsLayout';
 import { Emotion } from 'components/diary/Emotion';
@@ -40,7 +42,14 @@ function Diary() {
     window.scrollTo(0, 0);
   }, []);
 
-  const { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate: diaryMutate } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
+  const {
+    todayDiary,
+    setTodayDiary,
+    contentOptions,
+    setContentOptions,
+    mutate: diaryMutate,
+    isLoading,
+  } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
 
   const todo = useRecoilValue(todayTodo);
@@ -49,20 +58,9 @@ function Diary() {
   const diary = useRecoilValue(todayDiaryAtom);
   const account = useRecoilValue(accountTableAtom);
 
-  console.log(todo, qna, emotion, diary, account, contentOptions, todayDiary.diaryInfo.checkOption);
-
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
 
   const diaryContents = useMemo(() => {
-    // if (diaryMode === DiaryMode.CREATE)
-    //   return (
-    //     <EmptyContainer>
-    //       <button type="button" onClick={() => setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.UPDATE }))}>
-    //         작성하기
-    //       </button>
-    //     </EmptyContainer>
-    //   );
-
     if (diaryMode === (DiaryMode.UPDATE || DiaryMode.CREATE) && everyUnChecked) {
       return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
     }
@@ -101,30 +99,39 @@ function Diary() {
       selectedDate: selectedDate === '' ? id ?? '' : selectedDate,
       emotion,
       diary,
-      qna,
+      qna: {
+        questionId: qna._id,
+        answer: qna.answer,
+      },
       todo,
       account,
       checkOption,
     };
+    try {
+      if (diaryMode === DiaryMode.CREATE) {
+        await mutate('/api/contents', createDiary(body)).then((res) => {
+          diaryMutate();
+        });
+        return;
+      }
 
-    console.log(body, 'Body!!');
-
-    if (diaryMode === DiaryMode.CREATE) {
-      await mutate('/api/contents', createDiary(body)).then((res) => {
-        diaryMutate(res?.data);
-      });
-      return;
+      await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate());
+      setTodayDiary({ diaryInfo: { ...diaryInfo, ...body, qna }, diaryMode: DiaryMode.READ });
+    } catch (e) {
+      throw Error(`errorOccure ${e}`);
     }
-
-    await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
-
-    setTodayDiary({ diaryInfo: { ...diaryInfo, ...body }, diaryMode: DiaryMode.READ });
   };
 
   const cancelHandler = () => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm('정말 취소하시겠습니까?\n작성하신 내용은 저장되지 않습니다.')) {
-      setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+    const isCreate = diaryMode === DiaryMode.CREATE;
+    if (
+      confirm(`정말 취소하시겠습니까?\n작성하신 내용은 저장되지 ${isCreate ? '않고 홈으로 이동합니다' : '않습니다'}.`)
+    ) {
+      if (isCreate) {
+        navigation('/');
+      } else {
+        setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+      }
       // navigation('/');
     }
   };

@@ -22,9 +22,11 @@ function Header() {
   return (
     <HeaderContainer>
       <HeaderContent>
-        <Logo onClick={logoClickHandler}>Logo</Logo>
+        <Logotest onClick={logoClickHandler}>23:59</Logotest>
         <HeaderRightContainer>
-          <Link to="/mypage/user">myPage</Link>
+          <Link to="/mypage/user" className="text-primaryLight">
+            myPage
+          </Link>
           <GetLog onClick={handleLoginClick}>{loginState ? `logout` : `login`}</GetLog>
         </HeaderRightContainer>
       </HeaderContent>
@@ -36,8 +38,9 @@ export default Header;
 
 const HeaderContainer = tw.div`
   w-full
-  h-[115px]
-  bg-primaryDark
+  h-[100px]
+  bg-primaryDeepDark
+  opacity-80
 `;
 
 const HeaderContent = tw.div`
@@ -56,13 +59,26 @@ const Logo = tw.button`
 
 const HeaderRightContainer = tw.div`
   flex
-  justify-around
+  justify-between
   w-[200px]
 `;
 
 const GetLog = tw.div`
   flex
   justify-around
-  w-[200px]
+  mr-2
   cursor-pointer
+  text-primaryLight
+`;
+
+const Logotest = tw.button`
+font-['LABDigital']
+text-[3rem]
+text-bold
+italic
+opacity-80
+text-primaryLight
+flex
+justify-center
+leading-none
 `;

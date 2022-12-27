@@ -23,7 +23,8 @@ export default Footer;
 const FooterContainer = tw.div`
   w-full
   h-[115px]
-  bg-primaryDark
+  bg-primaryDeepDark
+  opacity-80
 `;
 
 const Container = tw.div`
