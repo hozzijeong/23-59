@@ -19,8 +19,8 @@ app.use(express.urlencoded({ extended: false }));
 // app.use(cors());
 app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 
-app.use('/api', userRouter);
-app.use('/api', userOptionRouter);
+app.use('/api/user', userRouter);
+app.use('/api/user', userOptionRouter);
 app.use('/api/contents', contentRouter);
 app.use('/api/questions', questionRouter);
 app.use(errorHandler);
