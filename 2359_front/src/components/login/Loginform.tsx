@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import tw from 'tailwind-styled-components';
 import { LoginFormValue } from '../../types/interfaces';
 import {
   ErrorMesg,
@@ -30,6 +31,12 @@ function Loginform() {
 
   return (
     <Container>
+      <WelcomeLogo>
+        <FirstLine>당신의 하루는 어떠셨나요?</FirstLine>
+        <SecondLine>
+          <br /> 하루의 끝, “23:59”
+        </SecondLine>
+      </WelcomeLogo>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormTitle>로그인</FormTitle>
         <FormLabel>이메일</FormLabel>
@@ -54,3 +61,22 @@ function Loginform() {
 }
 
 export default Loginform;
+
+const WelcomeLogo = tw.span`
+  mb-[20px]
+  animate-pulse	
+  text-primaryLight
+  font-['LABDigital'] 
+  text-bold 
+  italic 
+  text-[black] 
+  text-center
+`;
+
+const FirstLine = tw.span`
+text-[20px]
+`;
+
+const SecondLine = tw.span`
+text-[18px]
+`;
