@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import { userLogin } from 'recoil/userAtom';
 import tw from 'tailwind-styled-components';
+import { VscAccount } from 'react-icons/vsc';
 import { useNavigate, Link } from 'react-router-dom';
 import UserAttribute from '../utilities/UserLoginAttribute';
 
