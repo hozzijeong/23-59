@@ -1,4 +1,14 @@
-import { addDays, endOfMonth, isSameMonth, isToday, startOfDay, startOfMonth, startOfWeek } from 'date-fns';
+import {
+  addDays,
+  endOfMonth,
+  isSameMonth,
+  isSaturday,
+  isSunday,
+  isToday,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns';
 import React from 'react';
 import tw from 'tailwind-styled-components';
 
@@ -7,10 +17,21 @@ export function CalendarWeeks() {
   return (
     <Weeks>
       {weeks.map((week) => (
-        <Week key={week}>{week}</Week>
+        <Week key={week} className={weekColor(week)}>
+          {week}
+        </Week>
       ))}
     </Weeks>
   );
+}
+function weekColor(week: string) {
+  if (week === '일') {
+    return 'text-red-600';
+  }
+  if (week === '토') {
+    return 'text-blue-600';
+  }
+  return '';
 }
 
 export function takeWeek(start = new Date()) {
@@ -47,16 +68,46 @@ function lastDayofRange(range: Date[][]) {
 }
 
 export function dayColor(day: Date, currentDate: Date) {
+  if (isSameMonth(day, currentDate) && isSunday(day)) {
+    return 'text-red-600';
+  }
+  if (isSameMonth(day, currentDate) && isSaturday(day)) {
+    return 'text-blue-600';
+  }
   if (isSameMonth(day, currentDate)) {
     return 'text-black';
   }
-  return 'text-gray-400';
+  return 'text-gray-300';
 }
 export function todayColor(day: Date) {
   if (isToday(day)) {
     return 'bg-primary';
   }
   return 'bg-primaryLight';
+}
+export function emotionEmoji(emotion: string) {
+  let emoji = '';
+  switch (emotion) {
+    case '매우 안좋음':
+      emoji = '😭';
+      break;
+    case '안좋음':
+      emoji = '😢';
+      break;
+    case '보통':
+      emoji = '🙂';
+      break;
+    case '좋음':
+      emoji = '😃';
+      break;
+    case '매우 좋음':
+      emoji = '😍';
+      break;
+    default:
+      emoji = '';
+      break;
+  }
+  return emoji;
 }
 
 export const Weeks = tw.div`
