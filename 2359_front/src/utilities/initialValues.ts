@@ -1,13 +1,13 @@
-import { AccountTableRow } from 'types/interfaces';
+import { AccountTableRow, DiaryBodyProps, DiaryProps, OptionCheckedProps } from 'types/interfaces';
 import { expenseEnums as EXPENSE, incomeEnums as INCOME, clsEnums as MONEY, emotionEnums } from 'types/enums';
 import { getCurrentDate } from './getCurrentDate';
 
-const INITIAL_TODAY_DIARY = {
+const INITIAL_TODAY_DIARY: DiaryProps = {
   title: '',
   diaryContent: '',
 };
 
-const INITIAL_CONTENT_OPTIONS = {
+const INITIAL_CONTENT_OPTIONS: OptionCheckedProps = {
   TODO_LIST: false,
   TODAY_QUESTION: false,
   EMOTION: false,
@@ -41,4 +41,24 @@ const INITIAL_ACCOUNT_INFO: AccountTableRow = {
   memo: '',
 };
 
-export { INITIAL_DIARY_INFO, INITIAL_TODAY_DIARY, INITIAL_CONTENT_OPTIONS, INITIAL_ACCOUNT_INFO, QNA_INNITIAL };
+const INITIAL_BODY: DiaryBodyProps = {
+  selectedDate: '',
+  emotion: null,
+  diary: INITIAL_TODAY_DIARY,
+  qna: {
+    questionId: '',
+    answer: '',
+  },
+  todo: [],
+  account: [],
+  checkOption: INITIAL_CONTENT_OPTIONS,
+};
+
+export {
+  INITIAL_DIARY_INFO,
+  INITIAL_TODAY_DIARY,
+  INITIAL_CONTENT_OPTIONS,
+  INITIAL_ACCOUNT_INFO,
+  QNA_INNITIAL,
+  INITIAL_BODY,
+};

@@ -13,19 +13,26 @@ import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
 import Button from 'components/Button';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DiaryMode, OptionEnums as OPTION } from 'types/enums';
+import { DiaryMode, OptionEnums as OPTION, OptionEnums } from 'types/enums';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
-import { OptionCheckedProps } from 'types/interfaces';
-import { INITIAL_CONTENT_OPTIONS, INITIAL_DIARY_INFO } from 'utilities/initialValues';
+import { DiaryBodyProps, OptionCheckedProps } from 'types/interfaces';
+import {
+  INITIAL_BODY,
+  INITIAL_CONTENT_OPTIONS,
+  INITIAL_DIARY_INFO,
+  INITIAL_TODAY_DIARY,
+} from 'utilities/initialValues';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
 };
+
+const setInitialBodySelectedDate = (selectedDate: string) => ({ ...INITIAL_BODY, selectedDate });
 
 function Diary() {
   const navigation = useNavigate();
@@ -90,25 +97,60 @@ function Diary() {
   }, [contentOptions, diaryMode, everyUnChecked, todayDiary]);
 
   const submitHandler = async () => {
-    const checkOption: OptionCheckedProps = contentOptions.reduce(
-      (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
-      INITIAL_CONTENT_OPTIONS
-    );
+    // 여기서 checkOption을 값을 바꿀 때 isChecked를 false로 해버림
+    const isCreateMode = diaryMode === DiaryMode.CREATE;
+    /**
+     * contentoption이 true인데 값이 없거나
+     * contentOption이 false 라면 무조건 값이 없음.
+     */
     const { _id, selectedDate } = diaryInfo;
-    const body = {
-      selectedDate: selectedDate === '' ? id ?? '' : selectedDate,
-      emotion,
-      diary,
-      qna: {
-        questionId: qna._id,
-        answer: qna.answer,
-      },
-      todo,
-      account,
-      checkOption,
-    };
+
+    const body: DiaryBodyProps = contentOptions.reduce((acc, { title, isChecked }) => {
+      switch (title) {
+        case OptionEnums.ACCOUNT_BOOK:
+          if (isChecked && account.length !== 0) {
+            return { ...acc, account, checkOption: { ...acc.checkOption, [title]: isChecked } };
+          }
+          return { ...acc, checkOption: { ...acc.checkOption, [title]: false } };
+        case OptionEnums.DIARY:
+          if (isChecked && diary.title !== '') {
+            // 타이틀만은 무조건 받기
+            return { ...acc, diary, checkOption: { ...acc.checkOption, [title]: isChecked } };
+          }
+          return { ...acc, checkOption: { ...acc.checkOption, [title]: false } };
+        case OptionEnums.EMOTION:
+          if (isChecked && emotion !== null) {
+            return { ...acc, emotion, checkOption: { ...acc.checkOption, [title]: isChecked } };
+          }
+          return { ...acc, checkOption: { ...acc.checkOption, [title]: false } };
+        case OptionEnums.TODAY_QUESTION:
+          if (isChecked && qna.answer !== '') {
+            return {
+              ...acc,
+              qna: {
+                questionId: qna._id,
+                answer: qna.answer,
+              },
+              checkOption: { ...acc.checkOption, [title]: isChecked },
+            };
+          }
+          return { ...acc, checkOption: { ...acc.checkOption, [title]: false } };
+        case OptionEnums.TODO_LIST:
+          if (isChecked && todo.length !== 0) {
+            return { ...acc, todo, checkOption: { ...acc.checkOption, [title]: isChecked } };
+          }
+          return { ...acc, checkOption: { ...acc.checkOption, [title]: false } };
+
+        default: {
+          return { ...acc };
+        }
+      }
+    }, setInitialBodySelectedDate(isCreateMode ? id ?? '' : selectedDate));
+
+    console.log(body);
+
     try {
-      if (diaryMode === DiaryMode.CREATE) {
+      if (isCreateMode) {
         await mutate('/api/contents', createDiary(body)).then((res) => {
           diaryMutate();
         });
