@@ -20,7 +20,7 @@ function useLogin() {
         navigate('/');
       })
       .catch((err) => {
-        alert(err);
+        alert(err.response.data.reason);
       });
   }, []);
   return { loginRequest };
