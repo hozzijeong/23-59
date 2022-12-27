@@ -21,7 +21,7 @@ function useTodayDiary(date: string) {
   // 유저들 옵션 처리, 이게 CREATE일 때만 값을 불러오면 됨.
   const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);
 
-  const { data, mutate, isLoading } = useSWR<DiaryStateProps[]>(`${END_POINT}/${date}`, fetcher, {
+  const { data, mutate } = useSWR<DiaryStateProps[]>(`${END_POINT}/${date}`, fetcher, {
     onError: (error) => {
       console.log(error, 'error on api/contents/date');
     },
@@ -34,7 +34,6 @@ function useTodayDiary(date: string) {
   const [initEmotion, setEmotion] = useRecoilState(emotionAtom);
   const [initDiary, setDiary] = useRecoilState(todayDiaryAtom);
   const [initAccount, setAccount] = useRecoilState(accountTableAtom);
-  console.log(data, isLoading, 'data!');
 
   useEffect(() => {
     if (!data) return;
