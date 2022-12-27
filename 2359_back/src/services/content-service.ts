@@ -1,10 +1,5 @@
 import contentModel from '../db/models/content-model';
-// import {
-//   emotionEnums as EMOTION,
-//   incomeEnums as INCOMES,
-//   expenseEnums as EXPENSES,
-//   clsEnums as CLS,
-// } from '../../../2359_front/src/types/enums';
+import mongoose from 'mongoose';
 import { questionService } from './question-service';
 import { isEmpty } from '../middlewares/is-empty';
 
@@ -32,13 +27,34 @@ class ContentService {
     console.log('answerData ', answerData);
     const questionOid = answerData?.questionId;
     const answer = answerData?.answer;
-    // if (isEmpty(questionOid)) {
-    //   questionOid = '123';
-    // }
-    console.log('answerData ', answerData);
-    const questionData = await questionService.getQuestionById(questionOid);
+    if (!mongoose.Types.ObjectId.isValid(questionOid)) {
+      //throw new Error('zzzz');
+      console.log('질문 작성 안함');
+      const result = {
+        selectedDate,
+        author,
+        emotion,
+        diary,
+        todo,
+        account,
+        checkOption,
+      };
+      //console.log('result ', result);
+      const newContent = await this.contentModel.createContent(result);
 
+      newContent.checkOption.TODO_LIST = !isEmpty(newContent.todo);
+      newContent.checkOption.TODAY_QUESTION = !isEmpty(newContent.qna?.answer);
+      newContent.checkOption.DIARY = !isEmpty(newContent.diary);
+      newContent.checkOption.EMOTION = !isEmpty(newContent.emotion);
+      newContent.checkOption.ACCOUNT_BOOK = !isEmpty(newContent.account);
+      //console.log('checkOption ', newContent.checkOption);
+      return newContent;
+    }
+    //console.log('answerData ', answerData);
+    const questionData = await questionService.getQuestionById(questionOid);
+    //console.log('qdata ', questionData);
     if (isEmpty(questionData)) {
+      console.log('qdata ', questionData[0]);
       questionData[0] = '';
     }
     const { item, tag } = questionData[0];
