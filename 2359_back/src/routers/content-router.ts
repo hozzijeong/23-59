@@ -112,7 +112,7 @@ contentRouter.post('/', loginRequired, async (req, res, next) => {
     const answer = qna;
     const author = req.currentUserId;
     const dates = await contentService.checkDuplicate(author.toString());
-    console.log('author ', author);
+    //console.log('author ', author);
     for (let i = 0; i < dates.length; i++) {
       const dateArr = dates[i].selectedDate;
       //const authorArr = dates[i].author;
@@ -154,8 +154,13 @@ contentRouter.patch('/:contentId', loginRequired, async (req, res, next) => {
     }
     const { contentId, emotion, diary, todo, account, qna, checkOption } = req.body;
     //const { contentId, selectedDate, answer } = req.body;
-    console.log('contentId: ', contentId);
-
+    //console.log('contentId: ', contentId);
+    console.log('router-qna ', qna);
+    // const { question, answer, tag } = qna;
+    //qna.question =
+    // console.log('destruct qna ', question, answer, tag);
+    //const questionData = await questionService.getQuestionById(qna.questionId);
+    //console.log('qdata ', questionData);
     const toUpdate = {
       ...(emotion && { emotion }),
       ...(diary && { diary }),

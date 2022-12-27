@@ -3,7 +3,7 @@ import tw from 'tailwind-styled-components';
 import Button from './Button';
 import Tooltip from './Tooltip';
 
-interface ModalBasicProps {
+export interface ModalBasicProps {
   title: string;
   children?: React.ReactNode;
   tooltip?: boolean;
@@ -43,7 +43,7 @@ function ModalBasic({
                 </Button>
               )}
             </ModalHeader>
-            <ModalContent>{children}</ModalContent>
+            {children && <ModalContent>{children}</ModalContent>}
             <ModalFooter>
               {closeText && (
                 <Button btntype="cancel" onClick={cancelHandler}>
@@ -67,7 +67,7 @@ function ModalBasic({
 export default ModalBasic;
 
 ModalBasic.defaultProps = {
-  children: '내용을 넣어주세요',
+  children: null,
   tooltip: false,
   tooltipText: '',
   headerClose: false,

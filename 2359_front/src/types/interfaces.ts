@@ -11,7 +11,7 @@ interface AccountTableRow {
   id: string;
   cls: clsEnums;
   category: EXPENSE | INCOME;
-  amount: number;
+  amount: string;
   memo: string;
 }
 
@@ -28,9 +28,8 @@ interface DiaryProps {
 
 interface QuestionAnswerProps {
   question: string;
-  tag: string;
   answer: string;
-  _id: string;
+  questionId: string;
 }
 
 type EmotionType = EMOTION | null;

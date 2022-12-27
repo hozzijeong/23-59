@@ -29,9 +29,11 @@ class QuestionService {
     if (!question) {
       console.log('해당 id의 질문이 없습니다.');
     }
-    if (isEmpty(question)) {
-      return 0;
-    }
+    // console.log('id', id);
+    // console.log('q ', question);
+    // if (isEmpty(question)) {
+    //   return 0;
+    // }
     //const filtered = question.map((obj: any) => obj.item);
     //console.log('filtered ', filtered[0]);
     //return question[0].item;
