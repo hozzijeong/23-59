@@ -20,9 +20,14 @@ function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
     revalidateOnReconnect: false,
     revalidateIfStale: false,
     onSuccess: (data) => {
+      console.log('onQuestion Success', diaryMode, diaryMode === DiaryMode.CREATE, qna);
+      // 새로고침 했을 때 새로운 값을 불러오게됨.
+      // MODE가 CREATE인 경우에는 data.item을 갖는데, 그게 아니면 이전에 있던 question을 얻는데 여긴 왜그럴까
+      // diaryMode가 CREATE가 된다. 데이터를 처음 render 했을 때 값이 CREATE였기 때문에 그렇게 된 것 같음...
+      // 즉 onSuccess는 제일 처음 들어가자마자 실행하는데,
       setQna((prev) => ({
         ...prev,
-        question: diaryMode === DiaryMode.CREATE ? data.item : prev.question,
+        question: diaryMode === DiaryMode.CREATE && prev.questionId === '' ? data.item : prev.question,
       }));
     },
   });
@@ -48,11 +53,14 @@ function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
     [diaryMode, question, setQna]
   );
 
+  console.log(qna, diaryMode, question, 'QNA');
+
   if (isLoading) return <div>is Loading... </div>;
 
   return (
     <div>
       {question && <Question>{diaryMode === DiaryMode.CREATE ? question.item : qna.question}</Question>}
+      {/* <Question>{qna.question}</Question> */}
       {diaryMode === DiaryMode.READ ? (
         <div>{qna.answer}</div>
       ) : (
