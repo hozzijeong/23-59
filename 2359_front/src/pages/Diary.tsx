@@ -13,14 +13,14 @@ import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
 import Button from 'components/Button';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DiaryMode, emotionEnums, OptionEnums as OPTION } from 'types/enums';
+import { DiaryMode, OptionEnums as OPTION } from 'types/enums';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { OptionCheckedProps } from 'types/interfaces';
-import { INITIAL_CONTENT_OPTIONS, INITIAL_TODAY_DIARY, QNA_INNITIAL } from 'utilities/initialValues';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
+import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 
 type DiaryContentsPrpos = {
@@ -42,7 +42,14 @@ function Diary() {
     window.scrollTo(0, 0);
   }, []);
 
-  const { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate: diaryMutate } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
+  const {
+    todayDiary,
+    setTodayDiary,
+    contentOptions,
+    setContentOptions,
+    mutate: diaryMutate,
+    isLoading,
+  } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
 
   const todo = useRecoilValue(todayTodo);
