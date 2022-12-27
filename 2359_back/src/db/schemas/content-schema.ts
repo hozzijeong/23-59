@@ -96,24 +96,30 @@ const qnaSchema = new Schema<IQnA>({
   },
 });
 
+const checkOpotionSchema = new Schema<ICheckOption>(
+  {
+    TODO_LIST: Boolean,
+    TODAY_QUESTION: Boolean,
+    DIARY: Boolean,
+    EMOTION: Boolean,
+    ACCOUNT_BOOK: Boolean,
+  },
+  {
+    _id: false,
+  }
+);
+
 const ContentSchema = new Schema<IContent>(
   {
     selectedDate: {
       type: String,
       required: true,
     },
-    // month: {
-    //   type: String,
-    //   required: true,
-    // },
     author: {
       type: Schema.Types.ObjectId,
       ref: 'users',
       required: true,
     },
-    // author: {
-    //   type: String,
-    // },
     emotion: {
       type: String,
     },
@@ -130,18 +136,7 @@ const ContentSchema = new Schema<IContent>(
       type: qnaSchema,
     },
     checkOption: {
-      type: new Schema(
-        {
-          TODO_LIST: Boolean,
-          TODAY_QUESTION: Boolean,
-          DIARY: Boolean,
-          EMOTION: Boolean,
-          ACCOUNT_BOOK: Boolean,
-        },
-        {
-          _id: false,
-        }
-      ),
+      type: checkOpotionSchema,
       default: {
         TODO_LIST: false,
         TODAY_QUESTION: false,

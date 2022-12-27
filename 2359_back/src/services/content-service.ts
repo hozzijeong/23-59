@@ -88,18 +88,25 @@ class ContentService {
     if (!content) {
       console.log('해당 날짜의 컨텐츠가 없습니다.');
     }
-
-    //let checkTodo: boolean | undefined = content.checkOption?.TODO_LIST;
-    //content.checkOption.TODO_LIST = !isEmpty(content.todo);
-    //let checkQna: boolean | undefined = content.checkOption?.TODAY_QUESTION;
-    //content.checkOption.TODAY_QUESTION = !isEmpty(content.qna?.answer);
-    //let checkDiary: boolean | undefined = content.checkOption?.DIARY;
-    //content.checkOption.DIARY = !isEmpty(content.diary);
-    //let checkEmotion: boolean | undefined = content.checkOption?.EMOTION;
-    //content.checkOption.EMOTION = !isEmpty(content.emotion);
-    //let checkAccount: boolean | undefined = content.checkOption?.ACCOUNT_BOOK;
-    //content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
-    //console.log('content.checkOption ', content.checkOption);
+    // content.checkOption.TODO_LIST = !isEmpty(content.todo);
+    // content.checkOption.TODAY_QUESTION = !isEmpty(content.qna.answer);
+    // content.checkOption.DIARY = !isEmpty(content.diary);
+    // content.checkOption.EMOTION = !isEmpty(content.emotion);
+    // content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
+    if (!isEmpty(content.checkOption)) {
+      content.checkOption.TODO_LIST = !isEmpty(content.todo);
+      content.checkOption.TODAY_QUESTION = !isEmpty(content.qna.answer);
+      content.checkOption.DIARY = !isEmpty(content.diary);
+      content.checkOption.EMOTION = !isEmpty(content.emotion);
+      content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
+    }
+    // let checkTodo = content.checkOption?.TODO_LIST;
+    // checkTodo = !isEmpty(content.todo);
+    // let checkQna = content.checkOption?.TODAY_QUESTION;
+    // checkQna = !isEmpty(content.qna.answer);
+    // content.checkOption.DIARY = !isEmpty(content.diary);
+    // content.checkOption.EMOTION = !isEmpty(content.emotion);
+    // content.checkOption.ACCOUNT_BOOK = !isEmpty(content.account);
     console.log('service ', content);
     return content;
   }
@@ -111,23 +118,12 @@ class ContentService {
       update: toUpdate,
     });
 
-    // let checkTodo: boolean | undefined = updatedContent.checkOption?.TODO_LIST;
-    // updatedContent.checkOption.TODO_LIST = !isEmpty(updatedContent.todo);
-    // let checkQna: boolean | undefined = updatedContent.checkOption?.TODAY_QUESTION;
-    // updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna?.answer);
-    // let checkDiary: boolean | undefined = updatedContent.checkOption?.DIARY;
-    // updatedContent.checkOption.DIARY = !isEmpty(updatedContent.diary);
-    // let checkEmotion: boolean | undefined = updatedContent.checkOption?.EMOTION;
-    // updatedContent.checkOption.EMOTION = !isEmpty(updatedContent.emotion);
-    // let checkAccount: boolean | undefined = updatedContent.checkOption?.ACCOUNT_BOOK;
-    // updatedContent.checkOption.ACCOUNT_BOOK = !isEmpty(updatedContent.account);
-
     updatedContent.checkOption.TODO_LIST = !isEmpty(updatedContent.todo);
     updatedContent.checkOption.TODAY_QUESTION = !isEmpty(updatedContent.qna.answer);
     updatedContent.checkOption.DIARY = !isEmpty(updatedContent.diary);
     updatedContent.checkOption.EMOTION = !isEmpty(updatedContent.emotion);
     updatedContent.checkOption.ACCOUNT_BOOK = !isEmpty(updatedContent.account);
-    //console.log('checkoption ', updatedContent.checkOption);
+    console.log('updated checkoption ', updatedContent.checkOption);
 
     return updatedContent;
   }
