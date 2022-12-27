@@ -122,7 +122,7 @@ class ContentService {
 
   // 컨텐츠 변경
   async setContent(contentId: string, toUpdate: any) {
-    console.log('toUpdate.qna ', toUpdate.qna);
+    //console.log('toUpdate.qna ', toUpdate.qna);
     const questionId = toUpdate.qna?.questionId;
     const answer = toUpdate.qna?.answer;
 

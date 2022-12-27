@@ -9,6 +9,7 @@ import { expenseEnums as EXPENSE, incomeEnums as INCOME, clsEnums as MONEY, Diar
 import { AccountTableRow, DiaryComponentPrpos } from 'types/interfaces';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 import { INITIAL_ACCOUNT_INFO } from 'utilities/initialValues';
+import { handleOnKeyDown } from 'utilities/utils';
 import { Question } from './TodayQuestion';
 import { Button } from './ToDoList';
 
@@ -129,7 +130,7 @@ function AccountBook({ todayDiary }: DiaryComponentPrpos) {
                 <input
                   type="number"
                   min={0}
-                  placeholder="금액을 입력해주세요"
+                  placeholder="금액"
                   name="amount"
                   value={todayAccountInfo.amount}
                   style={{ width: '85%' }}
@@ -137,7 +138,13 @@ function AccountBook({ todayDiary }: DiaryComponentPrpos) {
                 <span>원</span>
               </label>
             </div>
-            <input type="text" placeholder="메모를 입력해주세요" name="memo" value={todayAccountInfo.memo} />
+            <input
+              type="text"
+              placeholder="메모를 입력해주세요"
+              name="memo"
+              value={todayAccountInfo.memo}
+              onKeyDown={(e) => handleOnKeyDown(e, appendAccountInfoHandler)}
+            />
             <AppendButton type="button" onClick={appendAccountInfoHandler}>
               추가하기
             </AppendButton>
