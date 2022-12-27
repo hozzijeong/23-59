@@ -14,7 +14,7 @@ function TodoList({ todayDiary }: DiaryComponentPrpos) {
   const [todoInput, setTodoInput] = useState<string>('');
   const { diaryMode } = todayDiary;
   const [todo, setTodo] = useRecoilState(todayTodo);
-
+  const readMode = diaryMode === DiaryMode.READ;
   const addTodoHandler = () => {
     if (!todoInput.length) {
       alert('한 글자 이상 입력해주세요!');
@@ -42,12 +42,14 @@ function TodoList({ todayDiary }: DiaryComponentPrpos) {
   };
   return (
     <div>
-      {diaryMode === DiaryMode.READ ? (
+      {readMode ? (
         <ul>
           {todo.map(({ done, item }) => {
             return (
               <LiContainer key={uuid()}>
-                <ToDoSpan isChecked={done}>{item}</ToDoSpan>
+                <ToDoSpan isChecked={done} readMode={readMode}>
+                  {item}
+                </ToDoSpan>
               </LiContainer>
             );
           })}
@@ -72,7 +74,9 @@ function TodoList({ todayDiary }: DiaryComponentPrpos) {
                   <LiContainer key={uuid()}>
                     <TodoLabel htmlFor={id}>
                       <CheckBox id={id} type="checkbox" checked={done} onChange={changeTodoCheckHandler} />
-                      <ToDoSpan isChecked={done}>{item}</ToDoSpan>
+                      <ToDoSpan isChecked={done} readMode={readMode}>
+                        {item}
+                      </ToDoSpan>
                     </TodoLabel>
                     <Button onClick={(event) => todoDeleteHandler(event, id)} type="button">
                       삭제하기
@@ -141,13 +145,15 @@ const CheckBox = tw(CustomCheckInput)`
   h-4  
 `;
 
-const Span = styled.span<{ isChecked: boolean }>`
+const Span = styled.span<{ isChecked: boolean; readMode: boolean }>`
   text-decoration: ${(props) => (props.isChecked ? 'line-through' : '')};
+  &:hover {
+    font-weight: ${(props) => (props.readMode ? '400' : '600')};
+  }
 `;
 
 const ToDoSpan = tw(Span)`
   w-full
   text-grey-darkest
   ml-[0.5rem]
-  hover:font-semibold	 
 `;
