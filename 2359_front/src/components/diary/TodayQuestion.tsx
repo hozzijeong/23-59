@@ -45,7 +45,7 @@ function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
       if (!question) return;
       setQna((prev) => ({
         ...prev,
-        questionId: diaryMode === DiaryMode.CREATE ? question._id : prev.questionId,
+        _id: diaryMode === DiaryMode.CREATE ? question._id : prev.questionId,
         question: diaryMode === DiaryMode.CREATE ? question.item : prev.question,
         answer: value,
       }));
