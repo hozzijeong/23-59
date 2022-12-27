@@ -17,10 +17,13 @@ const INITIAL_CONTENT_OPTIONS: OptionCheckedProps = {
 
 const QNA_INNITIAL = {
   question: '',
-  tag: '',
   answer: '',
-  _id: '',
+  questionId: '',
 };
+
+// POST -> questionId, answer, (req)
+// UPDATE -> questionId, answer (req)
+// GET -> questionId, answer, question(res) // /api/contents/date/:selectedDate re s{ qna : {}}
 
 const INITIAL_DIARY_INFO = {
   _id: '',

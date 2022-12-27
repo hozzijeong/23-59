@@ -28,9 +28,8 @@ interface DiaryProps {
 
 interface QuestionAnswerProps {
   question: string;
-  tag: string;
   answer: string;
-  _id: string;
+  questionId: string;
 }
 
 type EmotionType = EMOTION | null;
