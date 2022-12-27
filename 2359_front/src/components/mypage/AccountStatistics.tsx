@@ -86,6 +86,7 @@ function AccountStatistics() {
         <ResponsivePie
           data={data}
           margin={{ top: 50, right: 200, bottom: 80, left: 120 }}
+          valueFormat=","
           sortByValue
           cornerRadius={5}
           activeOuterRadiusOffset={15}
@@ -94,14 +95,16 @@ function AccountStatistics() {
           borderColor={{ theme: 'background' }}
           arcLinkLabelsTextOffset={12}
           arcLinkLabelsTextColor="#333333"
-          arcLinkLabelsDiagonalLength={29}
+          arcLinkLabelsDiagonalLength={35}
           arcLinkLabelsStraightLength={32}
           arcLinkLabelsThickness={2}
           arcLinkLabelsColor={{ from: 'color' }}
           arcLabelsRadiusOffset={0.6}
+          arcLabelsSkipAngle={10}
+          arcLinkLabelsSkipAngle={10}
           arcLabelsTextColor={{
             from: 'color',
-            modifiers: [['darker', 2.1]],
+            modifiers: [['darker', 2]],
           }}
           animate
           motionConfig="gentle"
