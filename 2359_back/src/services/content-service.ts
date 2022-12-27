@@ -145,6 +145,7 @@ class ContentService {
     if (isEmpty(questionData)) {
       questionData[0] = '';
     }
+
     const { item, tag } = questionData[0];
     const question = item;
     toUpdate.qna = { questionId, question, tag, answer };
