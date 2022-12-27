@@ -117,6 +117,11 @@ interface CategoriesStaticProps {
   value: number;
 }
 
+interface RandomQuestionProps {
+  _id: string;
+  item: string;
+}
+
 export type {
   OptionProps,
   ContentOptionProps,
@@ -136,4 +141,5 @@ export type {
   DiaryBodyProps,
   EmotionStaticProps,
   CategoriesStaticProps,
+  RandomQuestionProps,
 };
