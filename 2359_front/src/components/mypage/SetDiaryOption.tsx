@@ -3,6 +3,7 @@ import tw from 'tailwind-styled-components';
 import axios from 'axios';
 import { baseAxios } from 'api';
 import { OptionEnums } from 'types/enums';
+import { useUserOptions } from 'hooks/useUserOptions';
 
 type DiaryProps = {
   [key in OptionEnums]: boolean;
@@ -19,6 +20,7 @@ function SetDiaryOption() {
   const initialData: any = {};
   const [data, setData] = useState(initialData);
   const [isChecked, setIsChecked] = useState<DiaryProps[]>(checkStaticData);
+  const { mutate } = useUserOptions();
 
   let optionData: DiaryProps;
   async function getOptionsData() {
@@ -57,6 +59,7 @@ function SetDiaryOption() {
     newData[e] = !newData[e];
     setIsChecked(newData);
     patchCheckData(newData);
+    mutate();
   };
 
   return (
