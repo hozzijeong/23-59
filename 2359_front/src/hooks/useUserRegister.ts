@@ -15,7 +15,7 @@ const useRegister = () => {
         navigate('/login');
       })
       .catch((err) => {
-        alert(err);
+        alert(err.response.data.reason);
       });
   }, []);
   return { registerRequest };
