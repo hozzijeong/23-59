@@ -46,7 +46,14 @@ function useUserOptions() {
     }
   }, [data]);
 
-  return { contentOptions, setContentOptions, firstLogin: data && data.firstLogin, isLoading, mutate };
+  return {
+    contentOptions,
+    setContentOptions,
+    firstLogin: data && data.firstLogin,
+    isLoading,
+    mutate,
+    initData: data && data.createOption,
+  };
 }
 
 export { useUserOptions };
