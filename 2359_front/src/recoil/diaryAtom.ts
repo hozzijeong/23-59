@@ -1,7 +1,6 @@
 import uuid from 'react-uuid';
 import { atom } from 'recoil';
-import { emotionEnums as EMOTION } from 'types/enums';
-import { AccountTableRow, DiaryProps, QuestionAnswerProps, TodoListProps } from 'types/interfaces';
+import { AccountTableRow, DiaryProps, EmotionType, QuestionAnswerProps, TodoListProps } from 'types/interfaces';
 import { INITIAL_TODAY_DIARY, QNA_INNITIAL } from 'utilities/initialValues';
 
 const todayTodo = atom<TodoListProps[]>({
@@ -14,9 +13,9 @@ const questionAtom = atom<QuestionAnswerProps>({
   default: QNA_INNITIAL,
 });
 
-const emotionAtom = atom<EMOTION>({
+const emotionAtom = atom<EmotionType>({
   key: `emotionState/${uuid()}`,
-  default: EMOTION.SO_SO,
+  default: null,
 });
 
 const todayDiaryAtom = atom<DiaryProps>({
