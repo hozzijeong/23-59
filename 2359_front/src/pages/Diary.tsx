@@ -12,6 +12,7 @@ import { ContentOptions } from 'components/diary/ContentOptions';
 import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
 import Button from 'components/Button';
+import ModalBasic, { ModalBasicProps } from 'components/ModalBasic';
 import { useNavigate, useParams } from 'react-router-dom';
 import { DiaryMode, OptionEnums as OPTION, OptionEnums } from 'types/enums';
 import { useTodayDiary } from 'hooks/useTodayDiary';
@@ -34,6 +35,8 @@ function Diary() {
   const { id } = useParams();
   const [date, setDate] = useState(id);
   const { mutate } = useSWRConfig();
+  const [showModal, setShowModal] = useState(false);
+  const [modalProps, setModalProps] = useState<ModalBasicProps>({ title: '' });
 
   useEffect(() => {
     if (id === undefined) {
@@ -125,7 +128,7 @@ function Diary() {
             return {
               ...acc,
               qna: {
-                questionId: qna._id,
+                questionId: qna.questionId,
                 answer: qna.answer,
               },
               checkOption,
@@ -161,33 +164,52 @@ function Diary() {
     }
   };
 
-  const cancelHandler = () => {
-    const isCreate = diaryMode === DiaryMode.CREATE;
-    if (
-      confirm(`정말 취소하시겠습니까?\n작성하신 내용은 저장되지 ${isCreate ? '않고 홈으로 이동합니다' : '않습니다'}.`)
-    ) {
-      if (isCreate) {
+  const toggleModal = useCallback(() => setShowModal((cur) => !cur), []);
+
+  const deleteModalHandler = () => {
+    setModalProps((prev) => ({
+      ...prev,
+      title: '정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.',
+      submitHandler: () => {
+        mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id)).then((res) => {
+          if (!initOptions) return;
+          diaryMutate([{ ...INITIAL_DIARY_INFO, checkOption: initOptions }]);
+        });
+        toggleModal();
         navigation('/');
-      } else {
-        setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
-      }
-      // navigation('/');
-    }
+      },
+    }));
+    toggleModal();
   };
 
-  const deleteHandler = () => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm('정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.')) {
-      mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id)).then((res) => {
-        if (!initOptions) return;
-        diaryMutate([{ ...INITIAL_DIARY_INFO, checkOption: initOptions }]);
-      });
-      navigation('/');
-    }
+  const cancelModalHandler = () => {
+    const isCreate = diaryMode === DiaryMode.CREATE;
+    setModalProps((prev) => ({
+      ...prev,
+      title: `정말 취소하시겠습니까?\n작성하신 내용은 저장되지 ${isCreate ? '않고 홈으로 이동합니다' : '않습니다'}.`,
+      submitHandler: () => {
+        if (isCreate) {
+          navigation('/');
+        } else {
+          setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+        }
+        toggleModal();
+      },
+    }));
+    toggleModal();
   };
 
   return (
     <DiarySection>
+      {showModal && (
+        <ModalBasic
+          closeText="닫기"
+          cancelHandler={toggleModal}
+          title={modalProps.title}
+          submitText="예"
+          submitHandler={modalProps.submitHandler}
+        />
+      )}
       <HeadContent>
         <Title isempty={everyUnChecked}>{date}</Title>
         <UpdateDiv>
@@ -201,7 +223,7 @@ function Diary() {
             </UpdateButton>
           )}
           {diaryMode === DiaryMode.READ && (
-            <UpdateButton onClick={deleteHandler} type="button">
+            <UpdateButton onClick={deleteModalHandler} type="button">
               삭제하기
             </UpdateButton>
           )}
@@ -213,11 +235,11 @@ function Diary() {
         {diaryMode !== DiaryMode.READ &&
           (everyUnChecked ? null : (
             <SubmitContainer>
-              <Button onClick={cancelHandler} btntype="cancel">
+              <Button onClick={cancelModalHandler} btntype="cancel">
                 취소하기
               </Button>
               <Button onClick={submitHandler} btntype="save">
-                작성하기
+                {diaryMode === DiaryMode.CREATE ? '작성하기' : '수정하기'}
               </Button>
             </SubmitContainer>
           ))}
