@@ -19,7 +19,7 @@ import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
-import { DiaryBodyProps } from 'types/interfaces';
+import { DiaryBodyProps, QuestionAnswerProps } from 'types/interfaces';
 import { INITIAL_BODY, INITIAL_DIARY_INFO } from 'utilities/initialValues';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
@@ -30,7 +30,17 @@ type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
 };
 
-const setInitialBodySelectedDate = (selectedDate: string) => ({ ...INITIAL_BODY, selectedDate });
+const setInitialBodySelectedDate = (
+  selectedDate: string,
+  { questionId, answer }: { questionId: string; answer: string }
+) => ({
+  ...INITIAL_BODY,
+  qna: {
+    questionId,
+    answer,
+  },
+  selectedDate,
+});
 
 function Diary() {
   const navigation = useNavigate();
@@ -97,17 +107,14 @@ function Diary() {
   }, [contentOptions, diaryMode, everyUnChecked, todayDiary]);
 
   const submitHandler = async () => {
-    // 여기서 checkOption을 값을 바꿀 때 isChecked를 false로 해버림
     const isCreateMode = diaryMode === DiaryMode.CREATE;
-    /**
-     * contentoption이 true인데 값이 없거나
-     * contentOption이 false 라면 무조건 값이 없음.
-     */
-    const { _id, selectedDate } = diaryInfo;
 
+    const { _id, selectedDate } = diaryInfo;
+    const { questionId, answer } = qna;
     const body: DiaryBodyProps = contentOptions.reduce((acc, { title, isChecked }) => {
       const checkOption = { ...acc.checkOption, [title]: isChecked };
       const falseOption = { ...acc.checkOption, [title]: false };
+
       switch (title) {
         case OptionEnums.ACCOUNT_BOOK:
           if (isChecked && account.length !== 0) {
@@ -127,14 +134,7 @@ function Diary() {
           return { ...acc, checkOption: falseOption };
         case OptionEnums.TODAY_QUESTION:
           if (isChecked && qna.answer !== '') {
-            return {
-              ...acc,
-              qna: {
-                questionId: qna.questionId,
-                answer: qna.answer,
-              },
-              checkOption,
-            };
+            return { ...acc, qna: { questionId, answer }, checkOption };
           }
           return { ...acc, checkOption: falseOption };
         case OptionEnums.TODO_LIST:
@@ -147,12 +147,14 @@ function Diary() {
           return { ...acc };
         }
       }
-    }, setInitialBodySelectedDate(isCreateMode ? id ?? '' : selectedDate));
-
-    const initialDiary = { diaryInfo: { ...diaryInfo, ...body, qna }, diaryMode: DiaryMode.READ };
+    }, setInitialBodySelectedDate(isCreateMode ? id ?? '' : selectedDate, { questionId, answer: '' }));
+    const initialDiary = {
+      diaryInfo: { ...diaryInfo, ...body, qna },
+      diaryMode: DiaryMode.READ,
+    };
     try {
       if (isCreateMode) {
-        await mutate('/api/contents', createDiary(body)).then((res) => diaryMutate([INITIAL_DIARY_INFO]));
+        await mutate('/api/contents', createDiary(body)).then((res) => diaryMutate());
         const title = `일일 결산 등록을 완료했습니다.`;
         setModalProps((prev) => ({
           ...prev,
@@ -171,9 +173,7 @@ function Diary() {
 
         toggleModal();
       } else {
-        await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) =>
-          diaryMutate([INITIAL_DIARY_INFO])
-        );
+        await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate());
         setTodayDiary(initialDiary);
       }
 
