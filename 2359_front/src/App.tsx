@@ -8,13 +8,7 @@ import { DeferredComponent } from 'components/skeleton/DeferredComponent';
 export default function App() {
   return (
     <ErrorBoundary fallback={<h2>Could not get fetching.</h2>}>
-      <Suspense
-        fallback={
-          <DeferredComponent>
-            <SkeletonLayout />
-          </DeferredComponent>
-        }
-      >
+      <Suspense fallback={<SkeletonLayout />}>
         <PageLayout>
           <Routes />
         </PageLayout>
