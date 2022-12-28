@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Calendar from 'components/calendar/Calendar';
 import ModalBasic from 'components/ModalBasic';
 import { useUserOptions } from 'hooks/useUserOptions';
 import { TutorialOption } from 'components/tutorial/TutorialOption';
 import { baseAxios } from 'api';
 import { useInitializeDiaryRecoil } from 'hooks/useInitiallizeDiaryRecoil';
+import { CalendarSkeleton } from 'components/skeleton/CalendarSkeleton';
+import { SkeletonLayout } from 'components/skeleton/SkeletonLayout';
 
 function Home() {
   const { firstLogin, contentOptions, setContentOptions, mutate } = useUserOptions();
@@ -53,7 +55,7 @@ function Home() {
     mutate();
   };
   return (
-    <div>
+    <Suspense fallback={<CalendarSkeleton />}>
       <Calendar />
       {showModal && (
         <ModalBasic
@@ -68,7 +70,7 @@ function Home() {
           <TutorialOption state={contentOptions} setState={setContentOptions} />
         </ModalBasic>
       )}
-    </div>
+    </Suspense>
   );
 }
 

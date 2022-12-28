@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-alert */
 /* eslint-disable no-underscore-dangle */
-import React, { useMemo, useState, ReactNode, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, ReactNode, useEffect, useCallback, Suspense } from 'react';
 import { AccountBook } from 'components/diary/AccountBook';
 import { DiaryComponentsLayout } from 'components/diary/Layout/DiaryComponentsLayout';
 import { Emotion } from 'components/diary/Emotion';
@@ -23,6 +23,8 @@ import { DiaryBodyProps } from 'types/interfaces';
 import { INITIAL_BODY, INITIAL_DIARY_INFO } from 'utilities/initialValues';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
+import { DiarySkeleton } from 'components/skeleton/DiarySkeleton';
+import { SkeletonLayout } from 'components/skeleton/SkeletonLayout';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -228,20 +230,23 @@ function Diary() {
         </UpdateDiv>
         <ContentOptions state={contentOptions} setState={setContentOptions} diaryMode={diaryMode} />
       </HeadContent>
-      <Content>
-        {diaryContents}
-        {diaryMode !== DiaryMode.READ &&
-          (everyUnChecked ? null : (
-            <SubmitContainer>
-              <Button onClick={cancelModalHandler} btntype="cancel">
-                취소하기
-              </Button>
-              <Button onClick={submitHandler} btntype="save">
-                {diaryMode === DiaryMode.CREATE ? '작성하기' : '수정하기'}
-              </Button>
-            </SubmitContainer>
-          ))}
-      </Content>
+
+      <Suspense fallback={<DiarySkeleton stateLength={contentOptions.filter(({ isChecked }) => isChecked).length} />}>
+        <Content>
+          {diaryContents}
+          {diaryMode !== DiaryMode.READ &&
+            (everyUnChecked ? null : (
+              <SubmitContainer>
+                <Button onClick={cancelModalHandler} btntype="cancel">
+                  취소하기
+                </Button>
+                <Button onClick={submitHandler} btntype="save">
+                  {diaryMode === DiaryMode.CREATE ? '작성하기' : '수정하기'}
+                </Button>
+              </SubmitContainer>
+            ))}
+        </Content>
+      </Suspense>
     </DiarySection>
   );
 }
@@ -275,7 +280,7 @@ const UpdateButton = tw.button`
   hover:text-primaryDeepDark
 `;
 
-const Content = tw.div`
+export const Content = tw.div`
   max-w-screen-md
   mt-[3rem]
   md-0
