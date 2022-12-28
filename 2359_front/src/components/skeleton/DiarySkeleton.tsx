@@ -1,6 +1,7 @@
 import { Content } from 'pages/Diary';
 import React from 'react';
 import tw from 'tailwind-styled-components';
+import uuid from 'react-uuid';
 
 interface DiarySkeletonProps {
   stateLength: number;
@@ -9,8 +10,8 @@ interface DiarySkeletonProps {
 function DiarySkeleton({ stateLength }: DiarySkeletonProps) {
   return (
     <Content>
-      {Array.from({ length: stateLength }).map((data) => (
-        <TodoBoxes />
+      {Array.from({ length: stateLength }).map(() => (
+        <TodoBoxes key={uuid()} />
       ))}
     </Content>
   );
