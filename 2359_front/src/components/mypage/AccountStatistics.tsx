@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import tw from 'tailwind-styled-components';
-import useSWR from 'swr';
 import { ResponsivePie } from '@nivo/pie';
 import { expenseEnums, incomeEnums } from 'types/enums';
 import { EXPENSE_CATEGORY, INCOME_CATEGORY } from 'types/enumConverter';
@@ -53,19 +52,14 @@ function AccountStatistics() {
       });
 
       const tmpPayResult = payResponse.data;
-      // EXPENSE_CATEGORY의 값들로만 이루어진 배열
-      // const categories: EXPENSE_CATEGORY = [] 이게 왜 안됨?
+
       const categories: string[] = [];
       Object.keys(tmpPayResult).map((item) =>
         categories.push(EXPENSE_CATEGORY[item as expenseEnums] || INCOME_CATEGORY[item as incomeEnums])
       );
+
       const price: number[] = Object.values(tmpPayResult);
 
-      // const tmpData: Record<string, string | number>[] = []; // 이거 왜 안먹힘?
-      // interface categorisStaticProps {
-      //   [key: string]: number | string;
-      // }
-      // const tmpData: categorisStaticProps[] = []; // 이것도 안먹힘..
       const tmpData: CategoriesStaticProps[] = [];
       for (let i = 0; i < categories.length; i += 1) {
         tmpData.push({
@@ -77,6 +71,7 @@ function AccountStatistics() {
 
       const newData: CategoriesStaticProps[] = [...tmpData];
       const paymentAmount: number = price.reduce((acc: number, curr: number) => acc + curr);
+
       setPayment(paymentAmount as number);
       setData(newData);
     } catch {

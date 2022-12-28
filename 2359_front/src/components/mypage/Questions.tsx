@@ -209,8 +209,8 @@ function Questions() {
       </AnswerContainer>
       <Pagination
         activePage={page}
-        itemsCountPerPage={8} // 9
-        totalItemsCount={resultAnswer.length} // all.length
+        itemsCountPerPage={8}
+        totalItemsCount={resultAnswer.length}
         pageRangeDisplayed={5}
         onChange={handlePageChange}
       />
