@@ -76,6 +76,7 @@
 <img src="https://kdt-gitlab.elice.io/honghwanak/initialization/uploads/dd9d07cd3fb8f29823d6c8e94c902cd5/%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B5%AC%EC%A1%B0%EB%8F%84.png" width="500"/>
 
 ### 🎨와이어프레임
+
 ![2359_피그마](/uploads/06cf254d69be8d00923507fa95f1f7c6/2359_피그마.png)
 
 👉[피그마 자세히 보기](https://www.figma.com/file/weAyFeVUqDEUxBhpiWEe8W/23%3A59?node-id=0%3A1&t=0lGAFZpWEHLHBfqr-1)
@@ -132,9 +133,9 @@
 <details>
 <summary>홍화낙: 프론트엔드 담당</summary>
   <ul>
- <li>기획 단계: </li>
-<li>개발 단계:  </li>   
- <li>수정 단계: </li> 
+ <li>기획 단계:와이어프레임 작성,아이디어 공유</li>
+<li>개발 단계: 와이어프레임을 기반으로 홈페이지 로그인,회원가입,회원정보수정 페이지 담당</li>   
+ <li>수정 단계: 피드백 반영 및 UI개선</li> 
 </ul>   
 </details>
 <details>
