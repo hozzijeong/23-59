@@ -30,8 +30,8 @@ function Diary({ todayDiary }: DiaryComponentPrpos) {
       <Question>오늘 하루 무슨 일이 있었는지 남겨주세요.</Question>
       {readMode ? (
         <div>
-          <p>{diary.title}</p>
-          <div>{diary.diaryContent}</div>
+          <ReadDiaryTitle>{diary.title}</ReadDiaryTitle>
+          <ReadDiaryDiv>{diary.diaryContent}</ReadDiaryDiv>
         </div>
       ) : (
         <div>
@@ -71,4 +71,30 @@ const DiaryArea = tw.textarea`
   rounded 
   text-grey-darker
   shadow
+`;
+
+const ReadDiaryTitle = tw.p`
+  shadow 
+  appearance-none 
+  border 
+  rounded 
+  w-full
+  py-2 
+  px-3 
+  mb-4 
+  text-grey-darker
+  bg-primaryLight
+`;
+
+const ReadDiaryDiv = tw.div`
+  w-full
+  h-44
+  resize-none
+  p-2
+  border 
+  rounded 
+  text-grey-darker
+  shadow
+  bg-primaryLight
+
 `;

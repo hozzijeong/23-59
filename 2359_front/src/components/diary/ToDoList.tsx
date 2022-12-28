@@ -78,9 +78,9 @@ function TodoList({ todayDiary }: DiaryComponentPrpos) {
                         {item}
                       </ToDoSpan>
                     </TodoLabel>
-                    <Button onClick={(event) => todoDeleteHandler(event, id)} type="button">
-                      삭제하기
-                    </Button>
+                    <DeleteButton onClick={(event) => todoDeleteHandler(event, id)} type="button">
+                      삭제
+                    </DeleteButton>
                   </LiContainer>
                 );
               })}
@@ -120,6 +120,19 @@ const Button = tw.button`
  hover:bg-primaryDeepDark
 `;
 
+const DeleteButton = tw.button`
+  flex-no-shrink 
+  p-1 
+  border-2 
+  rounded 
+  bg-primaryDark
+  text-white 
+  hover:bg-primaryDeepDark
+  w-[4.5rem]
+  text-sm
+  
+  `;
+
 const LiContainer = tw.li`
   flex 
   mb-1
@@ -130,10 +143,12 @@ const Label = styled.label`
   input {
     margin-right: 8px;
   }
+  display: flex;
+  align-items: center;
 `;
 
 const TodoLabel = tw(Label)`
-  py-2 
+  py-1 
   px-3 
   mr-4
   w-10/12
@@ -150,10 +165,18 @@ const Span = styled.span<{ isChecked: boolean; readMode: boolean }>`
   &:hover {
     font-weight: ${(props) => (props.readMode ? '400' : '600')};
   }
+  opacity: ${(props) => (props.isChecked ? '50%' : '')};
 `;
 
 const ToDoSpan = tw(Span)`
   w-full
   text-grey-darkest
   ml-[0.5rem]
-`;
+  shadow 
+  appearance-none 
+  border 
+  rounded 
+  py-2 
+  px-3 
+  bg-primaryLight
+  text-base	`;
