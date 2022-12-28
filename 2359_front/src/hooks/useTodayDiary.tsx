@@ -9,17 +9,20 @@ import { converUserOptionToContent } from 'utilities/utils';
 import { useRecoilState } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 import { useUserOptions } from './useUserOptions';
+import { useRandomQuestion } from './useRandomQuestion';
 
 const END_POINT = '/api/contents/date';
 
-const initialDiary = {
-  diaryInfo: INITIAL_DIARY_INFO,
-  diaryMode: DiaryMode.CREATE,
-};
 function useTodayDiary(date: string) {
   const { contentOptions, setContentOptions, initData } = useUserOptions();
-  // 유저들 옵션 처리, 이게 CREATE일 때만 값을 불러오면 됨.
-  const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);
+  const { data: question } = useRandomQuestion();
+  const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>({
+    diaryInfo: {
+      ...INITIAL_DIARY_INFO,
+      qna: { questionId: question?._id ?? '', question: question?.item ?? '', answer: '' },
+    },
+    diaryMode: DiaryMode.CREATE,
+  });
 
   const [initTodo, setTodo] = useRecoilState(todayTodo);
   const [initQna, setQna] = useRecoilState(questionAtom);
@@ -27,6 +30,7 @@ function useTodayDiary(date: string) {
   const [initDiary, setDiary] = useRecoilState(todayDiaryAtom);
   const [initAccount, setAccount] = useRecoilState(accountTableAtom);
   const tempId = localStorage.getItem('tempId') ?? null;
+
   const { data, mutate, isValidating } = useSWR<DiaryStateProps[]>(
     `${END_POINT}/${date}/${tempId}`,
     () => fetcher(`${END_POINT}/${date}`),
