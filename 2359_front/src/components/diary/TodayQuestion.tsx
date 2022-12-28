@@ -59,7 +59,7 @@ function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
         <Question>{diaryMode === DiaryMode.CREATE ? question?.item : qna.question}</Question>
       </Suspense>
       {diaryMode === DiaryMode.READ ? (
-        <div>{qna.answer}</div>
+        <ReadAnswerDiv>{qna.answer}</ReadAnswerDiv>
       ) : (
         <AnswerArea value={qna.answer} onChange={answerChangeHandler} />
       )}
@@ -85,4 +85,17 @@ const AnswerArea = tw.textarea`
   rounded 
   text-grey-darker
   shadow
+`;
+
+const ReadAnswerDiv = tw.div`
+  w-full
+  h-24
+  max-h-36
+  resize-none
+  p-2
+  border 
+  rounded 
+  text-grey-darker
+  shadow
+  bg-primaryLight
 `;
