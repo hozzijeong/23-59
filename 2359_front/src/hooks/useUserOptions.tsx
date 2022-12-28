@@ -30,11 +30,9 @@ function useUserOptions() {
     {
       errorRetryInterval: 1000,
       errorRetryCount: 5,
-      onError: (error) => {
-        console.log(`${error}가 발생했습니다.`);
-      },
       revalidateOnFocus: false,
       dedupingInterval: 6000000000,
+      suspense: true,
     }
   );
 

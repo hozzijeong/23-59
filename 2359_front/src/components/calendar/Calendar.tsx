@@ -105,11 +105,11 @@ function Calendar() {
 export default Calendar;
 
 const CalendarContainer = tw.div`
-bg-white
-rounded-lg 
-shadow 
-overflow-hidden 
-h-full
+  bg-white
+  rounded-lg 
+  shadow 
+  overflow-hidden 
+  h-full
 `;
 const HeaderContainer = tw.div`
 flex 

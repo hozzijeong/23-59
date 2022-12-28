@@ -7,6 +7,7 @@ import { baseAxios } from 'api';
 import { useInitializeDiaryRecoil } from 'hooks/useInitiallizeDiaryRecoil';
 import { useCalendarSum } from 'hooks/useCalendarSum';
 import { CgSpinner } from 'react-icons/cg';
+import { Loader } from 'components/Loader';
 
 function Home() {
   const { firstLogin, contentOptions, setContentOptions, mutate } = useUserOptions();
@@ -56,16 +57,9 @@ function Home() {
     updateUser().then(() => setShowModal(false));
     mutate();
   };
-
   return (
     <div>
-      {!isLoading ? (
-        <Calendar />
-      ) : (
-        <div className="flex justify-center h-full">
-          <CgSpinner className="animate-spin" size={30} />
-        </div>
-      )}
+      <Calendar />
       {showModal && (
         <ModalBasic
           title="옵션 설정하기"

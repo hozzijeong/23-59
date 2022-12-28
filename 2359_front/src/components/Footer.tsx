@@ -20,7 +20,7 @@ function Footer() {
 
 export default Footer;
 
-const FooterContainer = tw.div`
+export const FooterContainer = tw.div`
   w-full
   h-[115px]
   bg-primaryDeepDark
@@ -28,9 +28,9 @@ const FooterContainer = tw.div`
 `;
 
 const Container = tw.div`
-flex
-justify-center
-items-center
+  flex
+  justify-center
+  items-center
 `;
 
 const TeamName = tw.div`

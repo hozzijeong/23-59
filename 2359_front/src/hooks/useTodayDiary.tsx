@@ -22,11 +22,9 @@ function useTodayDiary(date: string) {
   const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);
 
   const { data, mutate } = useSWR<DiaryStateProps[]>(`${END_POINT}/${date}`, fetcher, {
-    onError: (error) => {
-      console.log(error, 'error on api/contents/date');
-    },
     revalidateOnFocus: false,
     dedupingInterval: 6000000000,
+    suspense: true,
   });
 
   const [initTodo, setTodo] = useRecoilState(todayTodo);
