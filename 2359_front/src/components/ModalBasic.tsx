@@ -120,7 +120,7 @@ flex
 items-start 
 justify-between 
 p-5 
-border-b 
+
 border-solid 
 border-gray-200 
 rounded-t
@@ -133,6 +133,8 @@ font-semibold
 
 const ModalContent = tw.div`
 relative
+border-t 
+border-b 
 p-6 
 flex-auto
 `;
@@ -142,7 +144,7 @@ flex
 items-center 
 justify-end
 p-5 
-border-t 
+
 border-solid 
 border-slate-200 
 rounded-b

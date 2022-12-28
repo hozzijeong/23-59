@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalBasic from 'components/ModalBasic';
 import useSWR from 'swr';
-import { useNavigate } from 'react-router-dom';
 import useUserDelete from 'hooks/useUserDelete';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { UpdateFormValue } from '../../types/interfaces';
@@ -16,13 +15,12 @@ import {
   DeleteTag,
 } from '../signup/FormStyled';
 import useUserUpdate from '../../hooks/useUserUpdate';
-import { baseAxios, headerAxios } from '../../api';
+import { headerAxios } from '../../api';
 import { EMAIL_REGEX } from '../../utilities/regex';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function UserInfo() {
   const [showModal, setShowModal] = useState(false);
-  const navigation = useNavigate();
   const { userUpdateRequest } = useUserUpdate();
   const { userDelete } = useUserDelete();
 

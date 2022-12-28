@@ -21,33 +21,45 @@ function useTodayDiary(date: string) {
   // 유저들 옵션 처리, 이게 CREATE일 때만 값을 불러오면 됨.
   const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);
 
-  const { data, mutate } = useSWR<DiaryStateProps[]>(`${END_POINT}/${date}`, fetcher, {
-    revalidateOnFocus: false,
-    dedupingInterval: 6000000000,
-    suspense: true,
-  });
-
   const [initTodo, setTodo] = useRecoilState(todayTodo);
   const [initQna, setQna] = useRecoilState(questionAtom);
   const [initEmotion, setEmotion] = useRecoilState(emotionAtom);
   const [initDiary, setDiary] = useRecoilState(todayDiaryAtom);
   const [initAccount, setAccount] = useRecoilState(accountTableAtom);
 
+  const { data, mutate, isValidating } = useSWR<DiaryStateProps[]>(`${END_POINT}/${date}`, fetcher, {
+    revalidateOnFocus: false,
+    dedupingInterval: 600000000000000,
+    suspense: true,
+    onSuccess: (data) => {
+      const info = data[0] ?? null;
+      if (info === null) {
+        setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
+      } else {
+        const { todo, qna, emotion, diary, account } = info;
+        setTodo(todo ?? initTodo);
+        setQna(qna ?? initQna);
+        setEmotion(emotion ?? initEmotion);
+        setDiary(diary ?? initDiary);
+        setAccount(account ?? initAccount);
+        setTodayDiary({ diaryInfo: info, diaryMode: DiaryMode.READ });
+      }
+    },
+  });
+
   useEffect(() => {
-    if (!data) return;
+    if (data === undefined) return;
     const info = data[0] ?? null;
-    if (info === null) {
-      setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
-    } else {
-      const { todo, qna, emotion, diary, account } = info;
-      setTodo(todo ?? initTodo);
-      setQna(qna ?? initQna);
-      setEmotion(emotion ?? initEmotion);
-      setDiary(diary ?? initDiary);
-      setAccount(account ?? initAccount);
-      setTodayDiary({ diaryInfo: info, diaryMode: DiaryMode.READ });
-    }
-  }, [data]);
+    if (!info) return;
+
+    const { todo, qna, emotion, diary, account } = info;
+    setTodo(todo ?? initTodo);
+    setQna(qna ?? initQna);
+    setEmotion(emotion ?? initEmotion);
+    setDiary(diary ?? initDiary);
+    setAccount(account ?? initAccount);
+    setTodayDiary({ diaryInfo: info, diaryMode: DiaryMode.READ });
+  }, []);
 
   useEffect(() => {
     if (todayDiary.diaryMode !== DiaryMode.CREATE) {
@@ -62,6 +74,7 @@ function useTodayDiary(date: string) {
     setContentOptions,
     mutate,
     initOptions: initData,
+    isValidating,
   };
 }
 
