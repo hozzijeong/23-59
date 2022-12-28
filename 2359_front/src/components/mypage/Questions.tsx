@@ -23,14 +23,14 @@ type SelectedProps = {
 };
 
 function Questions() {
-  const initialData: IData[] = []; // 서버에서 받아오는 초기 값 (배열안에 IData)
-  const tags: string[] = []; // 태그들 (배열안에 string)
+  const initialData: IData[] = [];
+  const tags: string[] = [];
   const newData: any = [];
   const tagSelectedAnswer: object[] = [];
 
-  const [qnaList, setQnaList] = useState(initialData); // 서버에서 받아오는 list
-  const [tagList, setTagList] = useState(tags); // 태그들만 뽑아온 배열
-  const [isSelect, setIsSelect] = useState(newData); // 태그들을 string: boolean 으로 바꿔줌
+  const [qnaList, setQnaList] = useState(initialData);
+  const [tagList, setTagList] = useState(tags);
+  const [isSelect, setIsSelect] = useState(newData);
   const [resultAnswer, setResultAnswer] = useState(tagSelectedAnswer);
   const [page, setPage] = useState(1);
   const [pageList, setPageList] = useState(tagSelectedAnswer);
@@ -58,7 +58,6 @@ function Questions() {
     });
     const data = await res.data;
 
-    // TODO: 오브젝트 타입 설정 필수
     const tmp = data.map((item: any) => item.qna.tag);
     const tmpTagList = tmp
       .filter((value: string, idx: number) => tmp.indexOf(value) === idx)
@@ -78,7 +77,6 @@ function Questions() {
       if (trueKey.length !== 0) {
         const tmpArr: object[] = [];
         for (let i = 0; i < trueKey.length; i += 1) {
-          // TODO: qna 가 객체안의 객체 형태
           tmpArr.push(qnaList.filter((ele: IData) => trueKey[i] === ele.qna.tag));
         }
         const reducedArr: any = tmpArr.reduce((acc: any, cur: any) => {
@@ -189,9 +187,7 @@ function Questions() {
         <AnswerUl>
           {pageList.length !== 0 ? (
             pageList.map((ele: any) => (
-              // TODO: 배열안에 객체 interface 설정
               <AnswerList
-                // ele.selectedDate
                 key={uuid()}
                 onClick={() => {
                   setCurrentList(ele);

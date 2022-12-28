@@ -21,7 +21,7 @@ function AccountStatistics() {
 
   async function getFilterIncome() {
     try {
-      const incomeResponse = await axios.get(`/api/contents/filterCls/${monthDate}}`, {
+      const incomeResponse = await axios.get(`/api/contents/filterCls/${monthDate}`, {
         headers: {
           authorization: `Bearer ${localStorage.getItem('token')}`,
         },
