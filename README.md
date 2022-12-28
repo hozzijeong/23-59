@@ -120,8 +120,8 @@
 ## 5. 실행 방법
 - 백엔드:
   ```bash
-  1. mongodb 실행
-  2. 디렉토리 이동 2359_back
+  1. 디렉토리 이동 2359_back
+  2. npm install
   3. npm start
   ```
 - 프론트엔드:
