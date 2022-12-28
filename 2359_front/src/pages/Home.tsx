@@ -5,12 +5,9 @@ import { useUserOptions } from 'hooks/useUserOptions';
 import { TutorialOption } from 'components/tutorial/TutorialOption';
 import { baseAxios } from 'api';
 import { useInitializeDiaryRecoil } from 'hooks/useInitiallizeDiaryRecoil';
-import { useCalendarSum } from 'hooks/useCalendarSum';
-import { CgSpinner } from 'react-icons/cg';
 
 function Home() {
   const { firstLogin, contentOptions, setContentOptions, mutate } = useUserOptions();
-  const { isLoading } = useCalendarSum();
   const [showModal, setShowModal] = useState(firstLogin);
   const { initilizeSetRecoilState } = useInitializeDiaryRecoil();
 
@@ -23,7 +20,6 @@ function Home() {
     initilizeSetRecoilState();
   }, [firstLogin]);
 
-  // option 설정
   const title = contentOptions.map((option) => {
     return option.title;
   });
@@ -56,16 +52,9 @@ function Home() {
     updateUser().then(() => setShowModal(false));
     mutate();
   };
-
   return (
     <div>
-      {!isLoading ? (
-        <Calendar />
-      ) : (
-        <div className="flex justify-center h-full">
-          <CgSpinner className="animate-spin" size={30} />
-        </div>
-      )}
+      <Calendar />
       {showModal && (
         <ModalBasic
           title="옵션 설정하기"
