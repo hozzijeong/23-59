@@ -6,19 +6,12 @@
 
 ### 🛠️ 기술 스택
 
-<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=black">
-<img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
-<img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white">
-<img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=mongoDB&logoColor=black">
-<img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=Express&logoColor=white">
-<br/>
-<img src="https://img.shields.io/badge/tailwind css-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
-<img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=black">   
-<img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=black">   
-<img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=black">
-
-- 전역 상태관리 : `recoil`
-- 서버 상태관리 : `SWR`
+| 구분        | 사용 스택                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 프론트 엔드 | <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=black"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/tailwind css-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"> <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=black"> |
+| 백엔드      | <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=black"> <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"> <img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=mongoDB&logoColor=black"> <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=Express&logoColor=white">                          |
+| 디자인      | <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=black">                                                                                                                                                                                                                                                                                                                                                               |
+| 버전 관리   | <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=black">                                                                                                                                                                                                                                                                                                                                                             |
 
 ### 👀 웹서비스 개요
 
@@ -125,9 +118,9 @@
 <details>
 <summary>정호진: 프론트엔드 담당</summary>
   <ul>
- <li>기획 단계: </li>
-<li>개발 단계:  </li>   
- <li>수정 단계: </li> 
+  <li>기획 단계: 아이디어 도출 및 FE work flow 및 와이어프레임 작성</li>
+  <li>개발 단계: work flow 및 와이어 프레임 기준으로 작성 페이지 CRUD 구현</li>   
+  <li>수정 단계: 피드백 및 오류 수정해서 작성 페이지 수정</li> 
 </ul>   
 </details>
 <details>
