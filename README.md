@@ -9,9 +9,10 @@
 | 구분        | 사용 스택                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 프론트 엔드 | <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=black"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/tailwind css-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"> <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=black"> |
-| 백엔드      | <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=black"> <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"> <img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=mongoDB&logoColor=black"> <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=Express&logoColor=white">                          |
+| 백엔드      | <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=black"> <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"> <img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=mongoDB&logoColor=black"> <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=Express&logoColor=white">  |
 | 디자인      | <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=black">                                                                                                                                                                                                                                                                                                                                                               |
 | 버전 관리   | <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=black">                                                                                                                                                                                                                                                                                                                                                             |
+| 배포   | <img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=black">                                                                                                                                                                                                                                                                                                                                                             |
 
 ### 👀 웹서비스 개요
 
@@ -70,9 +71,7 @@
 
 ### 🎨와이어프레임
 
-![2359_피그마](/uploads/06cf254d69be8d00923507fa95f1f7c6/2359_피그마.png)
-
-👉[피그마 자세히 보기](https://www.figma.com/file/weAyFeVUqDEUxBhpiWEe8W/23%3A59?node-id=0%3A1&t=0lGAFZpWEHLHBfqr-1)
+👉[피그마 보기](https://www.figma.com/file/weAyFeVUqDEUxBhpiWEe8W/23%3A59?node-id=0%3A1&t=0lGAFZpWEHLHBfqr-1)
 
 ### 📋API 명세
 
