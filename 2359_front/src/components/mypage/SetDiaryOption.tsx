@@ -10,10 +10,8 @@ type DiaryProps = {
 };
 
 function SetDiaryOption() {
-  // const checkStaticData: DiaryProps[] = [];
   const initialData = {} as DiaryProps;
   const [data, setData] = useState(initialData);
-  // const [isChecked, setIsChecked] = useState<DiaryProps[]>(checkStaticData);
   const { mutate } = useUserOptions();
 
   let optionData: DiaryProps;

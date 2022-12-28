@@ -9,43 +9,51 @@ import { converUserOptionToContent } from 'utilities/utils';
 import { useRecoilState } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 import { useUserOptions } from './useUserOptions';
+import { useRandomQuestion } from './useRandomQuestion';
 
 const END_POINT = '/api/contents/date';
 
-const initialDiary = {
-  diaryInfo: INITIAL_DIARY_INFO,
-  diaryMode: DiaryMode.CREATE,
-};
 function useTodayDiary(date: string) {
   const { contentOptions, setContentOptions, initData } = useUserOptions();
-  // 유저들 옵션 처리, 이게 CREATE일 때만 값을 불러오면 됨.
-  const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>(initialDiary);
+  const { data: question } = useRandomQuestion();
+  const [todayDiary, setTodayDiary] = useState<TodayDiaryProps>({
+    diaryInfo: {
+      ...INITIAL_DIARY_INFO,
+      qna: { questionId: question?._id ?? '', question: question?.item ?? '', answer: '' },
+    },
+    diaryMode: DiaryMode.CREATE,
+  });
 
   const [initTodo, setTodo] = useRecoilState(todayTodo);
   const [initQna, setQna] = useRecoilState(questionAtom);
   const [initEmotion, setEmotion] = useRecoilState(emotionAtom);
   const [initDiary, setDiary] = useRecoilState(todayDiaryAtom);
   const [initAccount, setAccount] = useRecoilState(accountTableAtom);
+  const tempId = localStorage.getItem('tempId') ?? null;
 
-  const { data, mutate, isValidating } = useSWR<DiaryStateProps[]>(`${END_POINT}/${date}`, fetcher, {
-    revalidateOnFocus: false,
-    dedupingInterval: 600000000000000,
-    suspense: true,
-    onSuccess: (data) => {
-      const info = data[0] ?? null;
-      if (info === null) {
-        setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
-      } else {
-        const { todo, qna, emotion, diary, account } = info;
-        setTodo(todo ?? initTodo);
-        setQna(qna ?? initQna);
-        setEmotion(emotion ?? initEmotion);
-        setDiary(diary ?? initDiary);
-        setAccount(account ?? initAccount);
-        setTodayDiary({ diaryInfo: info, diaryMode: DiaryMode.READ });
-      }
-    },
-  });
+  const { data, mutate, isValidating } = useSWR<DiaryStateProps[]>(
+    `${END_POINT}/${date}/${tempId}`,
+    () => fetcher(`${END_POINT}/${date}`),
+    {
+      revalidateOnFocus: false,
+      dedupingInterval: 600000000000000,
+      suspense: true,
+      onSuccess: (data) => {
+        const info = data[0] ?? null;
+        if (info === null) {
+          setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.CREATE }));
+        } else {
+          const { todo, qna, emotion, diary, account } = info;
+          setTodo(todo ?? initTodo);
+          setQna(qna ?? initQna);
+          setEmotion(emotion ?? initEmotion);
+          setDiary(diary ?? initDiary);
+          setAccount(account ?? initAccount);
+          setTodayDiary({ diaryInfo: info, diaryMode: DiaryMode.READ });
+        }
+      },
+    }
+  );
 
   useEffect(() => {
     if (data === undefined) return;
@@ -59,7 +67,7 @@ function useTodayDiary(date: string) {
     setDiary(diary ?? initDiary);
     setAccount(account ?? initAccount);
     setTodayDiary({ diaryInfo: info, diaryMode: DiaryMode.READ });
-  }, []);
+  }, [data]);
 
   useEffect(() => {
     if (todayDiary.diaryMode !== DiaryMode.CREATE) {
