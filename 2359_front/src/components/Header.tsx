@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { userLogin } from 'recoil/userAtom';
 import tw from 'tailwind-styled-components';
 import styled from 'styled-components';
 import { VscAccount } from 'react-icons/vsc';
 import { SlLogin, SlLogout } from 'react-icons/sl';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import UserAttribute from '../utilities/UserLoginAttribute';
 
 function Header() {
   const { logoClickHandler, handleLoginClick } = UserAttribute();
-  const [loginState, setLoginState] = useRecoilState(userLogin);
+  const [loginState, setLoginState] = useState(false);
   const getToken = localStorage.getItem('token') ? true : null;
 
   useEffect(() => {
@@ -19,7 +17,7 @@ function Header() {
     } else {
       setLoginState(false);
     }
-  });
+  }, [getToken]);
 
   return (
     <HeaderContainer>

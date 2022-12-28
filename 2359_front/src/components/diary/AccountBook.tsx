@@ -132,7 +132,7 @@ function AccountBook({ todayDiary }: DiaryComponentPrpos) {
                   min={0}
                   placeholder="금액"
                   name="amount"
-                  defaultValue={todayAccountInfo.amount}
+                  value={todayAccountInfo.amount}
                   style={{ width: '85%' }}
                 />
                 <span>원</span>
@@ -142,7 +142,7 @@ function AccountBook({ todayDiary }: DiaryComponentPrpos) {
               type="text"
               placeholder="메모를 입력해주세요"
               name="memo"
-              defaultValue={todayAccountInfo.memo}
+              value={todayAccountInfo.memo}
               onKeyDown={(e) => handleOnKeyDown(e, appendAccountInfoHandler)}
             />
             <AppendButton type="button" onClick={appendAccountInfoHandler}>

@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { getRandomQuestion } from 'api';
-import React, { useCallback } from 'react';
+import React, { useCallback, Suspense } from 'react';
 import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { questionAtom } from 'recoil/diaryAtom';
@@ -19,6 +19,7 @@ function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,
+    suspense: true,
     onSuccess: (data) => {
       // 새로고침 했을 때 새로운 값을 불러오게됨.
       // MODE가 CREATE인 경우에는 data.item을 갖는데, 그게 아니면 이전에 있던 question을 얻는데 여긴 왜그럴까
@@ -52,13 +53,13 @@ function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
     [diaryMode, question, setQna]
   );
 
-  if (isLoading) return <div className="w-full bg-primaryDark opacity-20 animate-pulse" />;
-
   return (
     <div>
-      {question && <Question>{diaryMode === DiaryMode.CREATE ? question.item : qna.question}</Question>}
+      <Suspense fallback={<div className="w-full bg-primaryDark opacity-20 animate-pulse" />}>
+        <Question>{diaryMode === DiaryMode.CREATE ? question?.item : qna.question}</Question>
+      </Suspense>
       {diaryMode === DiaryMode.READ ? (
-        <div>{qna.answer}</div>
+        <ReadAnswerDiv>{qna.answer}</ReadAnswerDiv>
       ) : (
         <AnswerArea value={qna.answer} onChange={answerChangeHandler} />
       )}
@@ -84,4 +85,17 @@ const AnswerArea = tw.textarea`
   rounded 
   text-grey-darker
   shadow
+`;
+
+const ReadAnswerDiv = tw.div`
+  w-full
+  h-24
+  max-h-36
+  resize-none
+  p-2
+  border 
+  rounded 
+  text-grey-darker
+  shadow
+  bg-primaryLight
 `;

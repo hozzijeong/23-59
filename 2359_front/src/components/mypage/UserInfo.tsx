@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalBasic from 'components/ModalBasic';
 import useSWR from 'swr';
 import { useNavigate } from 'react-router-dom';
@@ -16,15 +16,19 @@ import {
   DeleteTag,
 } from '../signup/FormStyled';
 import useUserUpdate from '../../hooks/useUserUpdate';
-import { baseAxios, headerAxios } from '../../api';
+import { headerAxios } from '../../api';
 import { EMAIL_REGEX } from '../../utilities/regex';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function UserInfo() {
+  const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
-  const navigation = useNavigate();
-  const { userUpdateRequest } = useUserUpdate();
-  const { userDelete } = useUserDelete();
+  const { userUpdateRequest, setIsOk, isOk, error, isModal, setIsModal } = useUserUpdate();
+  const { userDelete, setIsDel, isDel } = useUserDelete();
+  const cancelModalHandler = () => {
+    setIsDel(false);
+    navigate('/login');
+  };
 
   const {
     register,
@@ -116,15 +120,26 @@ function UserInfo() {
       </Form>
       {showModal && (
         <ModalBasic
-          title="회원 탈퇴"
+          title="정말 탈퇴 하시겠습니까?"
           closeText="취소"
-          submitText="탈퇴"
+          submitText="확인"
           cancelHandler={() => setShowModal(false)}
           submitHandler={userDelete}
-        >
-          정말 탈퇴 하시겠습니까..?
-        </ModalBasic>
+        />
       )}
+      {isOk ? (
+        <ModalBasic
+          title="수정 완료 됐습니다"
+          closeText="확인"
+          cancelHandler={() => {
+            setIsOk(false);
+          }}
+        />
+      ) : null}
+      {isModal ? (
+        <ModalBasic title={`${error?.reason}`} closeText="닫기" cancelHandler={() => setIsModal(false)} />
+      ) : null}
+      {isDel ? <ModalBasic title="탈퇴 완료 됐습니다" closeText="확인" cancelHandler={cancelModalHandler} /> : null}
     </Container>
   );
 }

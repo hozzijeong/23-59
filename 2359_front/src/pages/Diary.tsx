@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-globals */
 /* eslint-disable no-alert */
 /* eslint-disable no-underscore-dangle */
-import React, { useMemo, useState, ReactNode, useEffect, useCallback } from 'react';
+import React, { useMemo, useState, ReactNode, useEffect, useCallback, Suspense } from 'react';
 import { AccountBook } from 'components/diary/AccountBook';
 import { DiaryComponentsLayout } from 'components/diary/Layout/DiaryComponentsLayout';
 import { Emotion } from 'components/diary/Emotion';
@@ -23,6 +23,8 @@ import { DiaryBodyProps } from 'types/interfaces';
 import { INITIAL_BODY, INITIAL_DIARY_INFO } from 'utilities/initialValues';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
+import { DiarySkeleton } from 'components/skeleton/DiarySkeleton';
+import { DeferredComponent } from 'components/skeleton/DeferredComponent';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -36,7 +38,7 @@ function Diary() {
   const [date, setDate] = useState(id);
   const { mutate } = useSWRConfig();
   const [showModal, setShowModal] = useState(false);
-  const [modalProps, setModalProps] = useState<ModalBasicProps>({ title: '' });
+  const [modalProps, setModalProps] = useState<ModalBasicProps>({ title: '', closeText: '닫기', submitText: '예' });
 
   useEffect(() => {
     if (id === undefined) {
@@ -64,7 +66,7 @@ function Diary() {
   const account = useRecoilValue(accountTableAtom);
 
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
-
+  console.log(diaryMode, 'MODE');
   const diaryContents = useMemo(() => {
     if (diaryMode === (DiaryMode.UPDATE || DiaryMode.CREATE) && everyUnChecked) {
       return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
@@ -147,16 +149,33 @@ function Diary() {
       }
     }, setInitialBodySelectedDate(isCreateMode ? id ?? '' : selectedDate));
 
+    const initialDiary = { diaryInfo: { ...diaryInfo, ...body, qna }, diaryMode: DiaryMode.READ };
     try {
       if (isCreateMode) {
-        await mutate('/api/contents', createDiary(body)).then((res) => {
-          diaryMutate();
-        });
-        return;
+        await mutate('/api/contents', createDiary(body)).then(() => diaryMutate());
+        const title = `일일 결산 등록을 완료했습니다.`;
+        setModalProps((prev) => ({
+          ...prev,
+          title,
+          submitText: '홈으로',
+          submitHandler: () => {
+            toggleModal();
+            navigation('/');
+          },
+          closeText: '머무르기',
+          cancelHandler: () => {
+            setTodayDiary(initialDiary);
+            toggleModal();
+          },
+        }));
+
+        toggleModal();
+      } else {
+        await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then(() => diaryMutate());
+        setTodayDiary(initialDiary);
       }
 
-      await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate());
-      setTodayDiary({ diaryInfo: { ...diaryInfo, ...body, qna }, diaryMode: DiaryMode.READ });
+      // 수정 완료
     } catch (e) {
       throw Error(`errorOccure ${e}`);
     }
@@ -201,10 +220,10 @@ function Diary() {
     <DiarySection>
       {showModal && (
         <ModalBasic
-          closeText="닫기"
+          closeText={modalProps.closeText}
           cancelHandler={toggleModal}
           title={modalProps.title}
-          submitText="예"
+          submitText={modalProps.submitText}
           submitHandler={modalProps.submitHandler}
         />
       )}
@@ -228,20 +247,29 @@ function Diary() {
         </UpdateDiv>
         <ContentOptions state={contentOptions} setState={setContentOptions} diaryMode={diaryMode} />
       </HeadContent>
-      <Content>
-        {diaryContents}
-        {diaryMode !== DiaryMode.READ &&
-          (everyUnChecked ? null : (
-            <SubmitContainer>
-              <Button onClick={cancelModalHandler} btntype="cancel">
-                취소하기
-              </Button>
-              <Button onClick={submitHandler} btntype="save">
-                {diaryMode === DiaryMode.CREATE ? '작성하기' : '수정하기'}
-              </Button>
-            </SubmitContainer>
-          ))}
-      </Content>
+
+      <Suspense
+        fallback={
+          <DeferredComponent>
+            <DiarySkeleton stateLength={contentOptions.filter(({ isChecked }) => isChecked).length} />
+          </DeferredComponent>
+        }
+      >
+        <Content>
+          {diaryContents}
+          {diaryMode !== DiaryMode.READ &&
+            (everyUnChecked ? null : (
+              <SubmitContainer>
+                <Button onClick={cancelModalHandler} btntype="cancel">
+                  취소하기
+                </Button>
+                <Button onClick={submitHandler} btntype="save">
+                  {diaryMode === DiaryMode.CREATE ? '작성하기' : '수정하기'}
+                </Button>
+              </SubmitContainer>
+            ))}
+        </Content>
+      </Suspense>
     </DiarySection>
   );
 }
@@ -275,7 +303,7 @@ const UpdateButton = tw.button`
   hover:text-primaryDeepDark
 `;
 
-const Content = tw.div`
+export const Content = tw.div`
   max-w-screen-md
   mt-[3rem]
   md-0
