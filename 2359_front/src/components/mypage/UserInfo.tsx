@@ -120,14 +120,12 @@ function UserInfo() {
       </Form>
       {showModal && (
         <ModalBasic
-          title="회원 탈퇴"
+          title="정말 탈퇴 하시겠습니까?"
           closeText="취소"
-          submitText="탈퇴"
+          submitText="확인"
           cancelHandler={() => setShowModal(false)}
           submitHandler={userDelete}
-        >
-          정말 탈퇴 하시겠습니까..?
-        </ModalBasic>
+        />
       )}
       {isOk ? (
         <ModalBasic
