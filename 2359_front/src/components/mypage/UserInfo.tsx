@@ -44,7 +44,7 @@ function UserInfo() {
     return res.data;
   };
 
-  const { data } = useSWR(`/api/user/info`, fetcher);
+  const { data, mutate } = useSWR(`/api/user/info`, fetcher);
 
   useEffect(() => {
     if (data) {
@@ -56,6 +56,7 @@ function UserInfo() {
 
   const onSubmit: SubmitHandler<UpdateFormValue> = (data) => {
     userUpdateRequest(data);
+    mutate(undefined, false);
     setValue('password', '');
     setValue('currentPassword', '');
   };
