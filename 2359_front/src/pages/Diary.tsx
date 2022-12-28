@@ -192,7 +192,17 @@ function Diary() {
       submitHandler: () => {
         mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id)).then((res) => {
           if (!initOptions) return;
-          diaryMutate([{ ...INITIAL_DIARY_INFO, checkOption: initOptions }]);
+          diaryMutate([
+            {
+              ...INITIAL_DIARY_INFO,
+              qna: {
+                questionId: qna.questionId,
+                answer: '',
+                question: qna.question,
+              },
+              checkOption: initOptions,
+            },
+          ]);
         });
         toggleModal();
         navigation('/');
