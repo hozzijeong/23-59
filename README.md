@@ -76,12 +76,13 @@
 <img src="https://kdt-gitlab.elice.io/honghwanak/initialization/uploads/dd9d07cd3fb8f29823d6c8e94c902cd5/%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B5%AC%EC%A1%B0%EB%8F%84.png" width="500"/>
 
 ### 🎨와이어프레임
+![2359_피그마](/uploads/06cf254d69be8d00923507fa95f1f7c6/2359_피그마.png)
 
-👉[23:59 피그마 보기](https://www.figma.com/file/weAyFeVUqDEUxBhpiWEe8W/23%3A59?node-id=0%3A1&t=0lGAFZpWEHLHBfqr-1)
+👉[피그마 자세히 보기](https://www.figma.com/file/weAyFeVUqDEUxBhpiWEe8W/23%3A59?node-id=0%3A1&t=0lGAFZpWEHLHBfqr-1)
 
 ### 📋API 명세
 
-👉[23:59 API 명세](https://surgedev.notion.site/DB-API-3c9c7cdb822f4dd080dcdb45fb8e3de2)
+👉[API 명세 보기](https://surgedev.notion.site/DB-API-3c9c7cdb822f4dd080dcdb45fb8e3de2)
 
 ## 4. 프로젝트 팀원 역할 분담
 
@@ -96,41 +97,54 @@
 
 ### 🏋️멤버별 responsibility
 
-1. 박우찬: 팀장/프론트엔드 담당
-
-- 기획 단계: 구체적인 설계, 와이어프레임 작성 및 팀원간 의견 조율
-- 개발 단계: 와이어프레임 기반으로 마이페이지 구현 담당
-- 수정 단계: 스크럼 및 회의 진행, 팀 구체적인 목표 설계, 발표 진행
-
-2. 김혜민: 백엔드 담당
-
-- 기획 단계: 큰 주제에서 문제 해결 아이디어 도출, 와이어프레임 작성
-- 개발 단계: 와이어프레임을 기반으로 API 완성
-- 수정 단계: 피드백 반영해서 백엔드 설계 수정
-
-3. 정지헌: 백엔드 담당
-
-- 기획 단계: 큰 주제에서 문제 해결 아이디어 도출, 와이어프레임 작성
-- 개발 단계: 와이어프레임을 기반으로 API 완성
-- 수정 단계: 피드백 반영해서 백엔드 설계 수정
-
-4. 정호진: 프론트엔드 담당
-
-- 기획 단계: 큰 주제에서 문제 해결 아이디어 도출, 와이어프레임 작성
-- 개발 단계: 와이어프레임을 기반으로 API 완성
-- 수정 단계: 피드백 반영해서 백엔드 설계 수정
-
-5. 홍화낙: 프론트엔드 담당
-
-- 기획 단계: 큰 주제에서 문제 해결 아이디어 도출, 와이어프레임 작성
-- 개발 단계: 와이어프레임을 기반으로 API 완성
-- 수정 단계: 피드백 반영해서 백엔드 설계 수정
-
-6. 설지윤: 프론트엔드 담당
-
-- 기획 단계: 와이어프레임 작성
-- 개발 단계: 와이어프레임을 기반으로 홈페이지 담당
-- 수정 단계: 피드백 반영하여 UX, UI개선
+<details>
+  <summary>박우찬: 팀장/프론트엔드 담당</summary>
+  <ul>
+ <li>기획 단계: 구체적인 설계, 와이어프레임 작성 및 팀원간 의견 조율</li>
+<li>개발 단계: 와이어프레임 기반으로 마이페이지 구현 담당</li>   
+ <li>수정 단계: 스크럼 및 회의 진행, 팀 구체적인 목표 설계, 발표 진행</li> 
+</ul>   
+</details>
+<details>
+  <summary>김혜민: 백엔드 담당</summary>
+  <ul>
+ <li>기획 단계: 큰 주제에서 문제 해결 아이디어 도출, 와이어프레임 작성</li>
+<li>개발 단계:  와이어프레임을 기반으로 API 완성</li>   
+ <li>수정 단계: 피드백 반영해서 백엔드 설계 수정</li> 
+</ul>   
+</details>
+<details>
+<summary>정지헌: 백엔드 담당</summary>
+  <ul>
+ <li>기획 단계: </li>
+<li>개발 단계:  </li>   
+ <li>수정 단계: </li> 
+</ul>   
+</details>
+<details>
+<summary>정호진: 프론트엔드 담당</summary>
+  <ul>
+ <li>기획 단계: </li>
+<li>개발 단계:  </li>   
+ <li>수정 단계: </li> 
+</ul>   
+</details>
+<details>
+<summary>홍화낙: 프론트엔드 담당</summary>
+  <ul>
+ <li>기획 단계: </li>
+<li>개발 단계:  </li>   
+ <li>수정 단계: </li> 
+</ul>   
+</details>
+<details>
+<summary>설지윤: 프론트엔드 담당</summary>
+  <ul>
+ <li>기획 단계: 와이어프레임 작성</li>
+<li>개발 단계:  와이어프레임을 기반으로 홈페이지 담당</li>   
+ <li>수정 단계: 피드백 반영하여 UX, UI개선</li> 
+</ul>   
+</details>
 
 ## 5. 실행 방법
 
