@@ -1,4 +1,4 @@
-import { Schema, model, connect } from 'mongoose';
+import { Schema } from 'mongoose';
 
 interface IQuestion {
   _id: Schema.Types.ObjectId;
