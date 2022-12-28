@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
 import { getRandomQuestion } from 'api';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useSetRecoilState } from 'recoil';
 import { questionAtom } from 'recoil/diaryAtom';
@@ -21,6 +21,11 @@ function useRandomQuestion() {
       setQna((prev) => ({ ...prev, questionId: data._id, question: data.item }));
     },
   });
+
+  useEffect(() => {
+    if (!data) return;
+    setQna((prev) => ({ ...prev, questionId: data._id, question: data.item }));
+  }, [data]);
 
   return { data };
 }
