@@ -7,7 +7,7 @@ import tw from 'tailwind-styled-components';
 import { EXPENSE_CATEGORY, INCOME_CATEGORY, CLS } from 'types/enumConverter';
 import { expense as EXPENSE, income as INCOME, cls as MONEY, diaryMode as DiaryMode } from 'types/enums';
 import { AccountTableRow, DiaryComponentPrpos } from 'types/interfaces';
-import { getCurrentDate } from 'utilities/getCurrentDate';
+import { getCurrentDate } from 'utilities/date';
 import { INITIAL_ACCOUNT_INFO } from 'constant/initialValues';
 import { handleOnKeyDown } from 'utilities/utils';
 import { Question } from './TodayQuestion';

@@ -3,7 +3,7 @@ import React from 'react';
 import { useRecoilState } from 'recoil';
 import { calendarPage } from 'recoil/calendarAtom';
 import useSWR, { useSWRConfig } from 'swr';
-import { getMonthDate } from 'utilities/getMonthDate';
+import { getMonthDate } from 'utilities/date';
 
 function useCalendarSum() {
   const [currentDate, setCurrentDate] = useRecoilState(calendarPage);

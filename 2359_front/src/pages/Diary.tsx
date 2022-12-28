@@ -18,7 +18,7 @@ import { diaryMode as DiaryMode, option as OPTION } from 'types/enums';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
-import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
+import { convertDiaryTitleToKor } from 'utilities/utils';
 import { DiaryBodyProps } from 'types/interfaces';
 import { INITIAL_BODY, INITIAL_DIARY_INFO } from 'constant/initialValues';
 import { useRecoilValue } from 'recoil';

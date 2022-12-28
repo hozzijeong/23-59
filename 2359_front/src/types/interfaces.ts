@@ -128,6 +128,10 @@ interface errorData {
   result: string;
 }
 
+interface PrivateRouteProps {
+  authentication: boolean;
+}
+
 export type {
   OptionProps,
   ContentOptionProps,
@@ -150,4 +154,5 @@ export type {
   RandomQuestionProps,
   EmotionType,
   errorData,
+  PrivateRouteProps,
 };

@@ -4,7 +4,7 @@ import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
 import { emotion } from 'types/enums';
 import { EMOTIONS } from 'types/enumConverter';
-import { getMonthDate } from 'utilities/getMonthDate';
+import { getMonthDate } from 'utilities/date';
 import { EmotionStaticProps } from 'types/interfaces';
 import { NoAnswer } from './Questions';
 

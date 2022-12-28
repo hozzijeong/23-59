@@ -5,7 +5,7 @@ import { ResponsivePie } from '@nivo/pie';
 import { expense, income } from 'types/enums';
 import { EXPENSE_CATEGORY, INCOME_CATEGORY } from 'types/enumConverter';
 import { CategoriesStaticProps } from 'types/interfaces';
-import { getMonthDate } from 'utilities/getMonthDate';
+import { getMonthDate } from 'utilities/date';
 import { StatisticsScript, Container, BarChartContainer } from './EmotionStatistics';
 import { NoAnswer } from './Questions';
 
