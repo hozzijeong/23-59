@@ -1,34 +1,28 @@
 import React, { useCallback, useMemo } from 'react';
-// import { useRecoilState } from 'recoil';
-// import { emotionAtom } from 'recoil/diaryAtom';
 import { EMOTIONS } from 'types/enumConverter';
 import { DiaryMode, emotionEnums as EMOTION } from 'types/enums';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
 import { DiaryComponentPrpos } from 'types/interfaces';
+import { useRecoilState } from 'recoil';
+import { emotionAtom } from 'recoil/diaryAtom';
 import { Question } from './TodayQuestion';
 
 const EMOTION_STATE = Object.values(EMOTION);
 
-function Emotion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
-  // const [{ emotion }, setEmotion] = useRecoilState(emotionAtom);
-  const { diaryInfo, diaryMode } = todayDiary;
+function Emotion({ todayDiary }: DiaryComponentPrpos) {
+  const { diaryMode } = todayDiary;
+  const [emotion, setEmotion] = useRecoilState(emotionAtom);
 
   const emotionChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { target } = event;
 
       if (target.type === 'radio') {
-        setTodayDiary((prev) => ({
-          ...prev,
-          diaryInfo: {
-            ...prev.diaryInfo,
-            emotion: target.value as EMOTION,
-          },
-        }));
+        setEmotion(target.value as EMOTION);
       }
     },
-    [setTodayDiary]
+    [setEmotion]
   );
 
   const readMode = diaryMode === DiaryMode.READ;
@@ -37,9 +31,9 @@ function Emotion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
     () =>
       EMOTION_STATE.map((state) => {
         return (
-          <li key={uuid()}>
-            <input
-              checked={diaryInfo.emotion === state}
+          <EmotionLi key={uuid()}>
+            <EmotionInput
+              checked={emotion === state}
               id={state}
               type="radio"
               name="emotion"
@@ -47,11 +41,11 @@ function Emotion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
               onChange={emotionChangeHandler}
               disabled={readMode}
             />
-            <label htmlFor={state}>{EMOTIONS[state]}</label>
-          </li>
+            <EmotionLabel htmlFor={state}>{EMOTIONS[state]}</EmotionLabel>
+          </EmotionLi>
         );
       }),
-    [diaryInfo.emotion, readMode, emotionChangeHandler]
+    [emotion, readMode, emotionChangeHandler]
   );
 
   return (
@@ -67,4 +61,17 @@ export { Emotion };
 const EmotionUl = tw.ul`
   flex
   justify-between
+`;
+
+const EmotionLi = tw.li`
+  hover:font-semibold
+`;
+
+const EmotionInput = tw.input`
+  mr-1
+  hover:cursor-pointer
+`;
+
+const EmotionLabel = tw.label`
+  hover:cursor-pointer
 `;

@@ -9,6 +9,7 @@ import { expenseEnums as EXPENSE, incomeEnums as INCOME, clsEnums as MONEY, Diar
 import { AccountTableRow, DiaryComponentPrpos } from 'types/interfaces';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 import { INITIAL_ACCOUNT_INFO } from 'utilities/initialValues';
+import { handleOnKeyDown } from 'utilities/utils';
 import { Question } from './TodayQuestion';
 import { Button } from './ToDoList';
 
@@ -16,10 +17,10 @@ const EXPENSE_STATE = Object.values(EXPENSE);
 const INCOME_STATE = Object.values(INCOME);
 const MONEY_STATE = Object.values(MONEY);
 
-function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
+function AccountBook({ todayDiary }: DiaryComponentPrpos) {
   const [todayAccountInfo, setTodatAccountInfo] = useState<AccountTableRow>(INITIAL_ACCOUNT_INFO);
   const [accountTable, setAccountTable] = useRecoilState<AccountTableRow[]>(accountTableAtom);
-  const { diaryInfo, diaryMode } = todayDiary;
+  const { diaryMode } = todayDiary;
 
   const readMode = diaryMode === DiaryMode.READ;
 
@@ -37,29 +38,16 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
   };
 
   const appendAccountInfoHandler = () => {
-    // setAccountTable((prev) => [...prev, { ...todayAccountInfo, id: getCurrentDate() }]);
-    setTodayDiary((prev) => ({
-      ...prev,
-      diaryInfo: {
-        ...prev.diaryInfo,
-        account: [...prev.diaryInfo.account, { ...todayAccountInfo, id: getCurrentDate() }],
-      },
-    }));
+    setAccountTable((prev) => [...prev, { ...todayAccountInfo, id: getCurrentDate() }]);
+
     setTodatAccountInfo(INITIAL_ACCOUNT_INFO);
   };
 
   const deleteTableInfoHandler = useCallback(
     (_event: React.MouseEvent<HTMLButtonElement>, id: string) => {
-      setTodayDiary((prev) => ({
-        ...prev,
-        diaryInfo: {
-          ...prev.diaryInfo,
-          account: [...prev.diaryInfo.account].filter((row) => row.id !== id),
-        },
-      }));
-      // setAccountTable((cur) => [...cur].filter((row) => row.id !== id));
+      setAccountTable((cur) => [...cur].filter((row) => row.id !== id));
     },
-    [setTodayDiary]
+    [setAccountTable]
   );
 
   const moneyFlowOptions = useMemo(
@@ -95,7 +83,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
 
   const tableInfo = useMemo(
     () =>
-      diaryInfo.account.map(({ id, cls, category, amount, memo }) => (
+      accountTable.map(({ id, cls, category, amount, memo }) => (
         <TableRow key={uuid()}>
           <Td scope="row">{CLS[cls]}</Td>
           <Td scope="row">
@@ -103,23 +91,25 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
           </Td>
           <Td scope="row">{`${Number(amount).toLocaleString('ko-KR')}`}원</Td>
           <Td scope="row">{memo}</Td>
-          <Td scope="row">
-            <button type="button" onClick={(e) => deleteTableInfoHandler(e, id)}>
-              삭제하기
-            </button>
-          </Td>
+          {!readMode && (
+            <Td scope="row">
+              <button type="button" onClick={(e) => deleteTableInfoHandler(e, id)}>
+                삭제하기
+              </button>
+            </Td>
+          )}
         </TableRow>
       )),
-    [deleteTableInfoHandler, diaryInfo.account]
+    [deleteTableInfoHandler, accountTable, readMode]
   );
 
   const totalAmount = useMemo(
     () =>
-      diaryInfo.account.reduce(
+      accountTable.reduce(
         (acc, { amount, cls }) => (cls === MONEY.EXPENSE ? acc - Number(amount) : acc + Number(amount)),
         0
       ),
-    [diaryInfo.account]
+    [accountTable]
   );
 
   return (
@@ -127,7 +117,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
     <div>
       <HeadContainer>
         <Question>오늘 수입/지출을 알려주세요</Question>
-        {readMode ? null : (
+        {!readMode && (
           <InputContainer onChange={todayAccountInfoChangeHandler}>
             <select name="cls" value={todayAccountInfo.cls}>
               {moneyFlowOptions}
@@ -140,7 +130,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
                 <input
                   type="number"
                   min={0}
-                  placeholder="금액을 입력해주세요"
+                  placeholder="금액"
                   name="amount"
                   value={todayAccountInfo.amount}
                   style={{ width: '85%' }}
@@ -148,7 +138,13 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
                 <span>원</span>
               </label>
             </div>
-            <input type="text" placeholder="메모를 입력해주세요" name="memo" value={todayAccountInfo.memo} />
+            <input
+              type="text"
+              placeholder="메모를 입력해주세요"
+              name="memo"
+              value={todayAccountInfo.memo}
+              onKeyDown={(e) => handleOnKeyDown(e, appendAccountInfoHandler)}
+            />
             <AppendButton type="button" onClick={appendAccountInfoHandler}>
               추가하기
             </AppendButton>
@@ -162,7 +158,7 @@ function AccountBook({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
             <Th scope="col">카테고리</Th>
             <Th scope="col">금액</Th>
             <Th scope="col">메모</Th>
-            <Th scope="col"> </Th>
+            {!readMode && <Th scope="col"> </Th>}
           </TableRow>
         </TableHead>
         <tbody>{tableInfo}</tbody>

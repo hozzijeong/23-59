@@ -1,4 +1,6 @@
 import questionModel from '../db/models/question-model';
+import { ObjectId } from 'mongoose';
+import { isEmpty } from '../middlewares/is-empty';
 
 class QuestionService {
   questionModel;
@@ -23,13 +25,15 @@ class QuestionService {
 
   // id로 질문 조회
   async getQuestionById(id: string) {
-    let question = await this.questionModel.findQuestionById(id);
+    const question = await this.questionModel.findQuestionById(id);
     if (!question) {
       console.log('해당 id의 질문이 없습니다.');
     }
-    if (id === '') {
-      return 0;
-    }
+    // console.log('id', id);
+    // console.log('q ', question);
+    // if (isEmpty(question)) {
+    //   return 0;
+    // }
     //const filtered = question.map((obj: any) => obj.item);
     //console.log('filtered ', filtered[0]);
     //return question[0].item;
@@ -61,23 +65,20 @@ class QuestionService {
   async randomQuestion() {
     const questions = await this.questionModel.findQuestions();
     //console.log('item ', questions);
-    const questionArr = questions.map((obj: any) => obj.item);
-    console.log('questionArr: ', questionArr);
-    const random = questionArr[Math.floor(Math.random() * questionArr.length)];
-    console.log('random ', random);
+    const random = questions[Math.floor(Math.random() * questions.length)];
     return random;
   }
 
   // 랜덤 질문
-  async randomQuestionId() {
-    const questions = await this.questionModel.findQuestions();
-    //console.log('item ', questions);
-    const questionArr = questions.map((obj: any) => obj);
-    console.log('questionArr: ', questionArr);
-    const random = questionArr[Math.floor(Math.random() * questionArr.length)];
-    console.log('random ', random);
-    return random;
-  }
+  // async randomQuestionId() {
+  //   const questions = await this.questionModel.findQuestions();
+  //   //console.log('item ', questions);
+  //   const questionArr = questions.map((obj: any) => obj);
+  //   console.log('questionArr: ', questionArr);
+  //   const random = questionArr[Math.floor(Math.random() * questionArr.length)];
+  //   console.log('random ', random);
+  //   return random;
+  // }
 }
 
 const questionService = new QuestionService(questionModel);

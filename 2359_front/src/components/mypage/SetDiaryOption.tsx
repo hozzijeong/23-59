@@ -1,31 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import axios from 'axios';
-// import { baseAxios } from 'api';
-import { OptionEnums } from 'types/enums';
 import { baseAxios } from 'api';
+import { OptionEnums } from 'types/enums';
+import { useUserOptions } from 'hooks/useUserOptions';
 
-// {
-//   ACCOUNT_BOOK: false,
-//   DIARY: false,
-//   EMOTION: false,
-//   TODAY_QUESTION: false,
-//   TODO_LIST: false,
-// }
+type DiaryProps = {
+  [key in OptionEnums]: boolean;
+};
 
 function SetDiaryOption() {
-  // Record<OptionEnums, boolean>[]
-  const initialData: any = [];
+  const initialData = {} as DiaryProps;
   const [data, setData] = useState(initialData);
-  const [isChecked, setIsChecked] = useState({
-    ACCOUNT_BOOK: false,
-    DIARY: false,
-    EMOTION: false,
-    TODAY_QUESTION: false,
-    TODO_LIST: false,
-  });
+  const { mutate } = useUserOptions();
 
-  let optionData: any = {};
+  let optionData: DiaryProps;
   async function getOptionsData() {
     const res = await axios.get('/api/user/option', {
       headers: {
@@ -39,10 +28,12 @@ function SetDiaryOption() {
   useEffect(() => {
     getOptionsData();
   }, []);
-  console.log('여기임', data);
-  console.log('hey!', data.TODO_LIST);
 
-  async function patchCheckData(obj: Record<string, boolean>) {
+  useEffect(() => {
+    mutate();
+  }, [data]);
+
+  async function patchCheckData(obj: DiaryProps) {
     const data = {
       firstLogin: false,
       createOption: obj,
@@ -62,24 +53,50 @@ function SetDiaryOption() {
   const checkedHandler = (e: OptionEnums) => {
     const newData = { ...data };
     newData[e] = !newData[e];
-    setIsChecked(newData);
+    // setIsChecked(newData);
+    patchCheckData(newData);
+  };
+
+  const checkAll = () => {
+    const newData = { ...data };
+    for (const key in newData) {
+      if (newData[key as keyof DiaryProps] === false) {
+        newData[key as keyof DiaryProps] = true;
+      }
+    }
+    setData(newData);
+    patchCheckData(newData);
+  };
+
+  const unCheckAll = () => {
+    const newData = { ...data };
+    for (const key in newData) {
+      if (newData[key as keyof DiaryProps] === true) {
+        newData[key as keyof DiaryProps] = false;
+      }
+    }
+    setData(newData);
     patchCheckData(newData);
   };
 
   return (
     <Container>
-      <div className="justify-self-start">작성페이지 옵션 설정</div>
       <ScriptArea>
         <Script>1. 일일 결산을할 때 고정적으로 적용할 옵션을 설정하는 페이지 입니다.</Script>
         <Script>2. 원하는 옵션을 체크하고 자신만의 결산 템플릿을 만들어 보세요!</Script>
       </ScriptArea>
       <CheckboxArea>
         <div>
+          <SelectBox>
+            <div onClick={() => checkAll()}>전체 선택</div>
+            <div>|</div>
+            <div onClick={() => unCheckAll()}>전체 해제</div>
+          </SelectBox>
           <CheckLabel htmlFor="todoCheck">
             <CheckInput
               type="checkbox"
               id="todoCheck"
-              checked={data.TODO_LIST}
+              checked={data.TODO_LIST ?? ''}
               onChange={() => {
                 checkedHandler(OptionEnums.TODO_LIST);
               }}
@@ -93,7 +110,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="questionCheck"
-              checked={data.TODAY_QUESTION}
+              checked={data.TODAY_QUESTION ?? ''}
               onChange={() => {
                 checkedHandler(OptionEnums.TODAY_QUESTION);
               }}
@@ -107,7 +124,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="diaryCheck"
-              checked={data.DIARY}
+              checked={data.DIARY ?? ''}
               onChange={() => {
                 checkedHandler(OptionEnums.DIARY);
               }}
@@ -121,7 +138,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="emotionCheck"
-              checked={data.EMOTION}
+              checked={data.EMOTION ?? ''}
               onChange={() => {
                 checkedHandler(OptionEnums.EMOTION);
               }}
@@ -135,7 +152,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="accountCheck"
-              checked={data.ACCOUNT_BOOK}
+              checked={data.ACCOUNT_BOOK ?? ''}
               onChange={() => {
                 checkedHandler(OptionEnums.ACCOUNT_BOOK);
               }}
@@ -175,6 +192,14 @@ const ScriptArea = tw.div`
 const Script = tw.div`
   text-lg
   text-bold
+`;
+
+const SelectBox = tw.div`
+  flex
+  w-[55%]
+  justify-between  
+  cursor-pointer
+  mb-5
 `;
 
 const CheckboxArea = tw.div`

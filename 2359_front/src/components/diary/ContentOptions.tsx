@@ -8,7 +8,6 @@ import { DiaryContentOptionsProps } from 'types/interfaces';
 import { DiaryCheckOptionLayout } from './Layout/DiaryCheckOptionLayout';
 
 function ContentOptions({ state, setState, diaryMode }: DiaryContentOptionsProps) {
-  // option Handler 추가로 구현하기.
   const optionHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { id } = event.target;
@@ -37,7 +36,7 @@ function ContentOptions({ state, setState, diaryMode }: DiaryContentOptionsProps
 
   return (
     <RelativeDiv>
-      {diaryMode === DiaryMode.UPDATE && <DiaryCheckOptionLayout isleft component={contentCheckBox} />}
+      {diaryMode !== DiaryMode.READ && <DiaryCheckOptionLayout isleft component={contentCheckBox} />}
       <DiaryCheckOptionLayout isleft={false} component={tableContents} />
     </RelativeDiv>
   );

@@ -1,13 +1,13 @@
-import axios from 'axios';
 import { baseAxios } from 'api';
 import { useNavigate } from 'react-router-dom';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 const useUserDelete = () => {
-  const navigate = useNavigate();
+  const [isDel, setIsDel] = useState<boolean>(false);
+
   const userDelete = useCallback(() => {
     baseAxios
       .delete(`/api/user/delete`, {
@@ -16,15 +16,14 @@ const useUserDelete = () => {
         },
       })
       .then((res) => {
-        localStorage.removeItem('token');
-        alert('이용해주셔서 감사합니다.');
-        navigate('/login');
+        localStorage.clear();
+        setIsDel(true);
       })
       .catch((err) => {
-        alert(err);
+        alert(err.response.data.reason);
       });
   }, []);
-  return { userDelete };
+  return { userDelete, isDel, setIsDel };
 };
 
 export default useUserDelete;

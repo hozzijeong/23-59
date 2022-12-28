@@ -11,7 +11,7 @@ interface AccountTableRow {
   id: string;
   cls: clsEnums;
   category: EXPENSE | INCOME;
-  amount: number;
+  amount: string;
   memo: string;
 }
 
@@ -28,19 +28,21 @@ interface DiaryProps {
 
 interface QuestionAnswerProps {
   question: string;
-  tag: string;
   answer: string;
+  questionId: string;
 }
+
+type EmotionType = EMOTION | null;
 
 interface DiaryStateProps {
   _id: string;
   selectedDate: string;
   todo: TodoListProps[];
   qna: QuestionAnswerProps;
-  emotion: EMOTION;
+  emotion: EmotionType;
   diary: DiaryProps;
   account: AccountTableRow[];
-  contentOptions: OptionCheckedProps;
+  checkOption: OptionCheckedProps;
 }
 
 interface OptionProps {
@@ -62,7 +64,7 @@ interface TodayDiaryProps {
 
 interface DiaryComponentPrpos {
   todayDiary: TodayDiaryProps;
-  setTodayDiary: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
+  setTodayDiary?: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
 }
 
 interface ContentOptionsProps {
@@ -95,12 +97,35 @@ interface LoginFormValue {
 
 interface DiaryBodyProps {
   selectedDate: string;
-  emotion: EMOTION;
+  emotion: EmotionType;
   diary: DiaryProps;
-  qna: QuestionAnswerProps;
+  qna: {
+    questionId: string;
+    answer: string;
+  };
   todo: TodoListProps[];
   account: AccountTableRow[];
   checkOption: OptionCheckedProps;
+}
+
+interface EmotionStaticProps {
+  [key: string]: number | string;
+}
+
+interface CategoriesStaticProps {
+  id: string;
+  label: string;
+  value: number;
+}
+
+interface RandomQuestionProps {
+  _id: string;
+  item: string;
+}
+
+interface errorData {
+  reason: string;
+  result: string;
 }
 
 export type {
@@ -120,4 +145,9 @@ export type {
   DiaryContentOptionsProps,
   DiaryComponentPrpos,
   DiaryBodyProps,
+  EmotionStaticProps,
+  CategoriesStaticProps,
+  RandomQuestionProps,
+  EmotionType,
+  errorData,
 };

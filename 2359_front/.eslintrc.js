@@ -10,6 +10,7 @@ module.exports = {
     'prettier',
   ],
   rules: {
+    'guard-for-in': 0,
     'linebreak-style': 0,
     'import/prefer-default-export': 0,
     'jsx-a11y/click-events-have-key-events': 0, // click이벤트를 다른 element에서도 쓸 수 있게 허용

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import './Paging.css';
+import uuid from 'react-uuid';
+import './Questions.css';
 import axios from 'axios';
 import tw from 'tailwind-styled-components';
 import ModalBasic from 'components/ModalBasic';
@@ -17,16 +18,19 @@ interface IData {
   qna: IQnaProps;
 }
 
+type SelectedProps = {
+  [key: string]: boolean;
+};
+
 function Questions() {
-  // 배열 > 객체 > 객체 ?  Record<string, string | IQna> ?  Record<IData, string | undefined> ?
-  const initialData: any = [];
+  const initialData: IData[] = [];
+  const tags: string[] = [];
   const newData: any = [];
-  const tagData: string[] = [];
   const tagSelectedAnswer: object[] = [];
 
   const [qnaList, setQnaList] = useState(initialData);
+  const [tagList, setTagList] = useState(tags);
   const [isSelect, setIsSelect] = useState(newData);
-  const [tagList, setTagList] = useState(tagData);
   const [resultAnswer, setResultAnswer] = useState(tagSelectedAnswer);
   const [page, setPage] = useState(1);
   const [pageList, setPageList] = useState(tagSelectedAnswer);
@@ -39,6 +43,12 @@ function Questions() {
       tag: '',
     },
   });
+  const [enabled, setEnabled] = useState(true);
+
+  const currentDate = currentList.selectedDate;
+  const year = currentDate.slice(0, 4);
+  const month = currentDate.slice(4, 6);
+  const day = currentDate.slice(6);
 
   async function getAllQuestionList() {
     const res = await axios.get('/api/contents/filter/qna', {
@@ -48,7 +58,6 @@ function Questions() {
     });
     const data = await res.data;
 
-    // TODO: 오브젝트 타입 설정 필수
     const tmp = data.map((item: any) => item.qna.tag);
     const tmpTagList = tmp
       .filter((value: string, idx: number) => tmp.indexOf(value) === idx)
@@ -57,6 +66,7 @@ function Questions() {
     tmpTagList.forEach((item: string) => {
       newData[item] = true;
     });
+
     setQnaList(data);
     setTagList(tmpTagList);
   }
@@ -64,26 +74,25 @@ function Questions() {
   function showSelectedAnswers() {
     if (qnaList.length !== 0) {
       const trueKey = Object.keys(isSelect).filter((key) => isSelect[key] === true);
-
-      const tmpArr: any = [];
-      for (let i = 0; i < trueKey.length; i += 1) {
-        // TODO: qna 가 객체안의 객체 형태라서 type지정 필수!
-        tmpArr.push(qnaList.filter((ele: any) => trueKey[i] === ele.qna.tag));
+      if (trueKey.length !== 0) {
+        const tmpArr: object[] = [];
+        for (let i = 0; i < trueKey.length; i += 1) {
+          tmpArr.push(qnaList.filter((ele: IData) => trueKey[i] === ele.qna.tag));
+        }
+        const reducedArr: any = tmpArr.reduce((acc: any, cur: any) => {
+          return [...acc, ...cur];
+        });
+        setResultAnswer(reducedArr);
+      } else {
+        setResultAnswer([]);
       }
-      const reducedArr = tmpArr.reduce((acc: any, cur: any) => {
-        return [...acc, ...cur];
-      });
-
-      setResultAnswer(reducedArr);
     }
   }
-
   const handleTag = (item: string): void => {
     const newSelect = { ...isSelect };
     newSelect[item] = !newSelect[item];
     setIsSelect(newSelect);
   };
-
   const tagBtnClassName = (ele: string): string => {
     if (isSelect[ele]) {
       return selectBtnClass;
@@ -99,26 +108,62 @@ function Questions() {
     setPageList(resultAnswer.slice(8 * (page - 1), 8 * page));
   };
 
-  useEffect(() => {
-    showAnswer();
-  }, [page, resultAnswer]);
+  const selectAllTag = () => {
+    const newSelect = { ...isSelect };
+    for (const key in newSelect) {
+      newSelect[key] = true;
+    }
+    setIsSelect(newSelect);
+  };
+
+  const nonSelectAllTag = () => {
+    const newSelect = { ...isSelect };
+    for (const key in newSelect) {
+      newSelect[key] = false;
+    }
+    setIsSelect(newSelect);
+  };
 
   useEffect(() => {
     getAllQuestionList();
   }, []);
 
   useEffect(() => {
-    showSelectedAnswers();
     showAnswer();
-  }, [qnaList]);
+  }, [page, resultAnswer]);
 
   useEffect(() => {
     showSelectedAnswers();
-  }, [isSelect]);
+    showAnswer();
+  }, [qnaList, isSelect]);
 
   return (
     <Container>
-      <div>오늘의 질문 모아보기</div>
+      <div className="flex justify-end">
+        <ToggleContainer>
+          <div className="flex">
+            <label className="inline-flex relative items-center mr-5 cursor-pointer">
+              <input type="checkbox" className="sr-only peer" checked={enabled} readOnly />
+              <ToggleButton
+                onClick={() => {
+                  setEnabled(!enabled);
+                  if (enabled) {
+                    nonSelectAllTag();
+                  } else {
+                    selectAllTag();
+                  }
+                }}
+              >
+                {null}
+              </ToggleButton>
+              <span className="ml-2 text-sm font-medium text-gray-900">
+                {enabled ? '모든 태그 선택' : '모두 선택 해제'}
+              </span>
+            </label>
+          </div>
+        </ToggleContainer>
+      </div>
+
       <ButtonContainer>
         {tagList
           ? tagList.map((tagItem) => {
@@ -140,32 +185,33 @@ function Questions() {
       </ButtonContainer>
       <AnswerContainer>
         <AnswerUl>
-          {pageList
-            ? pageList.map((ele: any) => (
-                // TODO: 배열안에 객체 interface 설정
-                <AnswerList
-                  key={ele.selectedDate}
-                  onClick={() => {
-                    setCurrentList(ele);
-                    setShowModal(true);
-                  }}
-                >
-                  {ele.qna.question}
-                </AnswerList>
-              ))
-            : null}
+          {pageList.length !== 0 ? (
+            pageList.map((ele: any) => (
+              <AnswerList
+                key={uuid()}
+                onClick={() => {
+                  setCurrentList(ele);
+                  setShowModal(true);
+                }}
+              >
+                {ele.qna.question}
+              </AnswerList>
+            ))
+          ) : (
+            <NoAnswer>선택된 태그가 없어요. 😢</NoAnswer>
+          )}
         </AnswerUl>
       </AnswerContainer>
       <Pagination
         activePage={page}
-        itemsCountPerPage={8} // 9
-        totalItemsCount={resultAnswer.length} // all.length
+        itemsCountPerPage={8}
+        totalItemsCount={resultAnswer.length}
         pageRangeDisplayed={5}
         onChange={handlePageChange}
       />
       {showModal ? (
         <ModalBasic title={currentList.qna.question} closeText="닫기" cancelHandler={() => setShowModal(false)}>
-          <div>작성날짜: {currentList.selectedDate}</div>
+          <div>작성날짜: {`${year}년 ${month}월 ${day}일`}</div>
           <div>답변: {currentList.qna.answer}</div>
         </ModalBasic>
       ) : null}
@@ -234,48 +280,16 @@ const AnswerList = tw.li`
   cursor-pointer
 `;
 
-// // 모달 영역
-// const ModalLayout = tw.div`
-//   justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none
-// `;
+export const NoAnswer = tw.div`
+text-center
+text-xl
+font-bold
+`;
 
-// // 모달 내 영역
-// const ModalContainer = tw.div`
-//   border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none
-// `;
-// // 모달 헤더
-// const ModalHeader = tw.div`
-//   flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t
-// `;
+const ToggleContainer = tw.div`
+  flex flex-col items-center justify-center
+`;
 
-// const ModalTitleH3 = tw.h3`
-//   text-3xl font-semibold
-// `;
-
-// const ModalCloseBtn = tw.button`
-//   p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none
-// `;
-
-// const Close = tw.span`
-//   bg-transparent text-black h-6 w-6 text-2xl block outline-none focus:outline-none
-// `;
-// // 모달 메인
-// const ModalMain = tw.div`
-//   relative p-6 flex-auto
-// `;
-
-// const ModalScript = tw.div`
-//   my-4 text-slate-500 text-lg leading-relaxed
-// `;
-// // 모달 푸터
-// const ModalFooter = tw.div`
-//   flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b
-// `;
-
-// const ModalConfirmBtn = tw.button`
-//   bg-emerald-500 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150
-// `;
-
-// const ModalCancleBtn = tw.button`
-//   text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150
-// `;
+const ToggleButton = tw.div`
+  w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-green-300 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600
+`;

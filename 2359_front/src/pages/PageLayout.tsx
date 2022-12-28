@@ -1,3 +1,4 @@
+import Footer from 'components/Footer';
 import React, { ReactNode } from 'react';
 import tw from 'tailwind-styled-components';
 import Header from '../components/Header';
@@ -9,7 +10,7 @@ function PageLayout({ children }: { children: ReactNode }) {
       <Main>
         <Container>{children}</Container>
       </Main>
-      <footer>푸터입니다.</footer>
+      <Footer />
     </>
   );
 }
@@ -20,6 +21,7 @@ const Container = tw.div`
   max-w-screen-lg
   my-0
   mx-auto
+  py-16
   relative
 `;
 
