@@ -3,7 +3,6 @@ import React, { Suspense } from 'react';
 import Routes from 'Routes';
 import ErrorBoundary from 'ErrorBoundary';
 import { SkeletonLayout } from 'components/skeleton/SkeletonLayout';
-import { DeferredComponent } from 'components/skeleton/DeferredComponent';
 
 export default function App() {
   return (
