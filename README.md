@@ -31,17 +31,20 @@
 
   <details>
   <summary>로그인,회원가입 페이지</summary>
+  ![회원가입_로그인](/uploads/e91c5de429a82a48111ccef3e18d8068/회원가입_로그인.gif)
   1. 이메일, 비밀번호 유효성 체크<br/>   
   2. 이메일 중복 체크   
 </details>
 <details>
   <summary>홈 페이지</summary>
+  ![홈페이지](/uploads/b04450a95ecf622c8cb25aadefb997b7/홈페이지.gif)
   1. 첫 로그인 모달 페이지 기본 옵션 설정 저장<br/>      
-  2. 달력에서 다이어리 요약본 확인   
+  2. 달력에서 다이어리 요약본 확인      
 영상 
 </details>
 <details>
   <summary>작성 페이지</summary>
+  ![작성페이지](/uploads/500bf231a432fe5cecb6e93069b101f2/작성페이지.gif)
   1. 체크박스로 컴포넌트 추가/빼기<br/>      
   2. Todolist, 일기, 오늘의 질문, 감정, 가계부 기록<br/>      
   3. 기록 수정/삭제   
@@ -49,6 +52,8 @@
 </details>
 <details>
   <summary>마이페이지</summary>
+  ![마이페이지1](/uploads/ff1cb47e7e2aab3d513df2bce5600b1c/마이페이지1.gif)
+  ![마이페이지2](/uploads/ecbfe5bedede8313a3977f6c01c78626/마이페이지2.gif)
   1. 회원 정보 수정/탈퇴<br/>     
   2. 감정, 가계부 통계 확인<br/>      
   3. 태그별 오늘의 질문 모아보기   
