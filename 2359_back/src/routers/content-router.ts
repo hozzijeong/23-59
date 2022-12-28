@@ -2,7 +2,8 @@ import { Router } from 'express';
 //import is from '@sindresorhus/is';
 import { check, validationResult } from 'express-validator';
 
-import { contentService } from '../services/content-service';
+import { contentService, questionService } from '../services';
+import { loginRequired } from '../middlewares/login-required';
 
 const contentRouter = Router();
 
@@ -27,10 +28,11 @@ contentRouter.get('/calendar/:selectedDate', async (req, res, next) => {
   }
 });
 // api/contents/monthCalendar/:date
-contentRouter.get('/monthCalendar/:date', async (req, res, next) => {
+//loginRequired
+contentRouter.get('/monthCalendar/:month', async (req, res, next) => {
   try {
-    const { date } = req.params;
-    const splitDate = date.split('-');
+    const { month } = req.params;
+    const splitDate = month.split('-');
     console.log(`prev: ${splitDate[0]}, next: ${splitDate[1]}`);
     const contents = await contentService.getCalendarByMonth(splitDate[0], splitDate[1]);
 
@@ -73,7 +75,8 @@ contentRouter.get('/filterDate/:date', async (req, res, next) => {
     next(error);
   }
 });
-
+// contents create
+//loginRequired
 contentRouter.post('/', async (req, res, next) => {
   try {
     // content-type 을 application/json 로 프론트에서
@@ -84,22 +87,30 @@ contentRouter.post('/', async (req, res, next) => {
     }
     // diary, todo, account, answer
     const { selectedDate, emotion, diary, todo, account, qna } = req.body;
+    const answer = qna;
+    //console.log('qna ', qna.questionId);
+    //console.log('qna ', qna);
+    //const q = await questionService.randomQuestionId();
+    //console.log('q ', q._id);
 
-    const newContent = await contentService.addContent({
-      selectedDate,
-      emotion,
-      diary,
-      todo,
-      account,
-      qna,
-    });
-
+    const newContent = await contentService.addContent(
+      {
+        selectedDate,
+        emotion,
+        diary,
+        todo,
+        account,
+      },
+      answer
+    );
+    console.log('qna ', qna);
     res.status(200).json(newContent);
   } catch (error) {
     next(error);
   }
 });
-
+// contents update
+//loginRequired
 contentRouter.patch('/:contentId', async (req, res, next) => {
   try {
     // content-type 을 application/json 로 프론트에서
@@ -108,7 +119,7 @@ contentRouter.patch('/:contentId', async (req, res, next) => {
     if (!errors.isEmpty()) {
       throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
     }
-    const { contentId, diary, todo, account, answer } = req.body;
+    const { contentId, diary, todo, account, qna } = req.body;
     //const { contentId, selectedDate, answer } = req.body;
     console.log('contentId: ', contentId);
 
@@ -121,7 +132,7 @@ contentRouter.patch('/:contentId', async (req, res, next) => {
       ...(diary && { diary }),
       ...(todo && { todo }),
       ...(account && { account }),
-      ...(answer && { answer }),
+      ...(qna && { qna }),
     };
 
     const updatedContent = await contentService.setContent(contentId, toUpdate);
@@ -131,7 +142,8 @@ contentRouter.patch('/:contentId', async (req, res, next) => {
     next(error);
   }
 });
-
+// contents delete
+//loginRequired
 contentRouter.delete('/:contentId', async (req, res, next) => {
   try {
     const { contentId } = req.params;
@@ -144,6 +156,7 @@ contentRouter.delete('/:contentId', async (req, res, next) => {
 });
 
 // api/filterEmotion/20221201-20221231
+//loginRequired
 contentRouter.get('/filterEmotion/:date', async (req, res, next) => {
   try {
     const { date } = req.params;
@@ -157,6 +170,7 @@ contentRouter.get('/filterEmotion/:date', async (req, res, next) => {
 });
 
 // api/filterCls/20221201-20221231
+//loginRequired
 contentRouter.get('/filterCls/:date', async (req, res, next) => {
   try {
     const { date } = req.params;
@@ -169,7 +183,8 @@ contentRouter.get('/filterCls/:date', async (req, res, next) => {
   }
 });
 
-// api/filterCategory/20221201-20221231
+// api/contents/filterCategory/20221201-20221231
+//loginRequired
 contentRouter.get('/filterCategory/:date', async (req, res, next) => {
   try {
     const { date } = req.params;
@@ -179,6 +194,26 @@ contentRouter.get('/filterCategory/:date', async (req, res, next) => {
     console.log('router-content: ', content);
     //console.log('json-content: ', res.json(content));
     res.status(200).json(content);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// api/contents/qna
+// 오늘의 질문 모아보기
+contentRouter.get('/filter/qna', loginRequired, async (req, res, next) => {
+  try {
+    const qnas = await contentService.filterQna();
+    res.status(200).json(qnas);
+  } catch (error) {
+    next(error);
+  }
+});
+// 미완...
+contentRouter.get('/filter/tag', async (req, res, next) => {
+  try {
+    const tags = await contentService.filterTag();
+    res.status(200).json(tags);
   } catch (error) {
     next(error);
   }

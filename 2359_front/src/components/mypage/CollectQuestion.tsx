@@ -218,6 +218,7 @@ const AnswerList = tw.li`
   shadow-md
   p-3
   m-3
+  bg-gray-100
   hover:bg-gray-200
   active:bg-stone-300
   cursor-pointer

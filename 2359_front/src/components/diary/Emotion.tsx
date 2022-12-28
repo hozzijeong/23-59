@@ -1,26 +1,37 @@
 import React, { useCallback, useMemo } from 'react';
-import { useRecoilState } from 'recoil';
-import { emotionAtom } from 'recoil/diaryAtom';
+// import { useRecoilState } from 'recoil';
+// import { emotionAtom } from 'recoil/diaryAtom';
 import { EMOTIONS } from 'types/enumConverter';
-import { emotionEnums as EMOTION } from 'types/enums';
+import { DiaryMode, emotionEnums as EMOTION } from 'types/enums';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
+import { DiaryComponentPrpos } from 'types/interfaces';
 import { Question } from './TodayQuestion';
 
 const EMOTION_STATE = Object.values(EMOTION);
 
-function Emotion() {
-  const [{ emotion }, setEmotion] = useRecoilState(emotionAtom);
+function Emotion({ todayDiary, setTodayDiary }: DiaryComponentPrpos) {
+  // const [{ emotion }, setEmotion] = useRecoilState(emotionAtom);
+  const { diaryInfo, diaryMode } = todayDiary;
 
   const emotionChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const { target } = event;
+
       if (target.type === 'radio') {
-        setEmotion({ emotion: target.value as EMOTION });
+        setTodayDiary((prev) => ({
+          ...prev,
+          diaryInfo: {
+            ...prev.diaryInfo,
+            emotion: target.value as EMOTION,
+          },
+        }));
       }
     },
-    [setEmotion]
+    [setTodayDiary]
   );
+
+  const readMode = diaryMode === DiaryMode.READ;
 
   const emotionRadio = useMemo(
     () =>
@@ -28,25 +39,25 @@ function Emotion() {
         return (
           <li key={uuid()}>
             <input
-              checked={emotion === state}
+              checked={diaryInfo.emotion === state}
               id={state}
               type="radio"
               name="emotion"
               value={state}
               onChange={emotionChangeHandler}
+              disabled={readMode}
             />
             <label htmlFor={state}>{EMOTIONS[state]}</label>
           </li>
         );
       }),
-    [emotion, emotionChangeHandler]
+    [diaryInfo.emotion, readMode, emotionChangeHandler]
   );
-  const readMode = false;
 
   return (
     <div>
       <Question>오늘 하루 어떠셨는지 감정으로 남겨주세요.</Question>
-      {readMode ? null : <EmotionUl>{emotionRadio}</EmotionUl>}
+      <EmotionUl>{emotionRadio}</EmotionUl>
     </div>
   );
 }

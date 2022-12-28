@@ -1,6 +1,50 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import tw from 'tailwind-styled-components';
 import { useNavigate, Link } from 'react-router-dom';
+
+function Header() {
+  const nav = useNavigate();
+  const [loginState, setLoginState] = useState<boolean>(false);
+  const navigate = useNavigate();
+  const getToken = localStorage.getItem('token');
+
+  const handleLoginClick = () => {
+    if (getToken === null) {
+      setLoginState(true);
+      navigate('/');
+    } else {
+      localStorage.clear();
+      setLoginState(false);
+      navigate('/login');
+    }
+  };
+
+  const logoClickHandler = () => {
+    nav('/user/main');
+  };
+
+  useEffect(() => {
+    if (getToken) {
+      setLoginState(true);
+    } else {
+      setLoginState(false);
+    }
+  });
+
+  return (
+    <HeaderContainer>
+      <HeaderContent>
+        <Logo onClick={logoClickHandler}>Logo</Logo>
+        <HeaderRightContainer>
+          <Link to="/mypage/user">myPage</Link>
+          <GetLog onClick={handleLoginClick}>{getToken === null ? `login` : `logout`}</GetLog>
+        </HeaderRightContainer>
+      </HeaderContent>
+    </HeaderContainer>
+  );
+}
+
+export default Header;
 
 const HeaderContainer = tw.div`
   w-full
@@ -28,30 +72,9 @@ const HeaderRightContainer = tw.div`
   w-[200px]
 `;
 
-function Header() {
-  const nav = useNavigate();
-  const [loginState, setLoginState] = useState<boolean>(false);
-  const handleLogout = () => {
-    localStorage.clear();
-    setLoginState(false);
-  };
-
-  const logoClickHandler = () => {
-    nav('/user/main');
-  };
-
-  return (
-    <HeaderContainer>
-      <HeaderContent>
-        <Logo onClick={logoClickHandler}>Logo</Logo>
-        <HeaderRightContainer>
-          <Link to="/mypage/user">myPage</Link>
-          {/* {loginState ===true ?:} */}
-          <button type="button">logout</button>
-        </HeaderRightContainer>
-      </HeaderContent>
-    </HeaderContainer>
-  );
-}
-
-export default Header;
+const GetLog = tw.div`
+  flex
+  justify-around
+  w-[200px]
+  cursor-pointer
+`;
