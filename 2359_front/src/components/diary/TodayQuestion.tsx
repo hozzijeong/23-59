@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { useRecoilState } from 'recoil';
 import { questionAtom } from 'recoil/diaryAtom';
 import tw from 'tailwind-styled-components';
-import { DiaryMode } from 'types/enums';
+import { diaryMode as DiaryMode } from 'types/enums';
 import { DiaryComponentPrpos } from 'types/interfaces';
 
 function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {

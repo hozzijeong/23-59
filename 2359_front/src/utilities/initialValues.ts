@@ -1,5 +1,5 @@
 import { AccountTableRow, DiaryBodyProps, DiaryProps, OptionCheckedProps } from 'types/interfaces';
-import { expenseEnums as EXPENSE, incomeEnums as INCOME, clsEnums as MONEY, emotionEnums } from 'types/enums';
+import { expense as EXPENSE, cls as MONEY } from 'types/enums';
 import { getCurrentDate } from './getCurrentDate';
 
 const INITIAL_TODAY_DIARY: DiaryProps = {

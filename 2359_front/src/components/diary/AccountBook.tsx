@@ -5,7 +5,7 @@ import { accountTableAtom } from 'recoil/diaryAtom';
 import styled from 'styled-components';
 import tw from 'tailwind-styled-components';
 import { EXPENSE_CATEGORY, INCOME_CATEGORY, CLS } from 'types/enumConverter';
-import { expenseEnums as EXPENSE, incomeEnums as INCOME, clsEnums as MONEY, DiaryMode } from 'types/enums';
+import { expense as EXPENSE, income as INCOME, cls as MONEY, diaryMode as DiaryMode } from 'types/enums';
 import { AccountTableRow, DiaryComponentPrpos } from 'types/interfaces';
 import { getCurrentDate } from 'utilities/getCurrentDate';
 import { INITIAL_ACCOUNT_INFO } from 'utilities/initialValues';

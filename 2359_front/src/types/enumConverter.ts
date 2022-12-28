@@ -1,10 +1,4 @@
-import {
-  expenseEnums as EXPENSE,
-  incomeEnums as INCOME,
-  emotionEnums as EMOTION,
-  clsEnums,
-  OptionEnums as OPTION,
-} from 'types/enums';
+import { expense as EXPENSE, income as INCOME, emotion as EMOTION, cls, option as OPTION } from 'types/enums';
 
 const EMOTIONS = {
   [EMOTION.VERY_BAD]: '매우 안좋음',
@@ -44,8 +38,8 @@ const INCOME_CATEGORY = {
 };
 
 const CLS = {
-  [clsEnums.EXPENSE]: '지출',
-  [clsEnums.INCOME]: '수입',
+  [cls.EXPENSE]: '지출',
+  [cls.INCOME]: '수입',
 };
 
 const CONTENT_OPTION = {

@@ -6,18 +6,18 @@ import Button from 'components/Button';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { calendarPage } from 'recoil/calendarAtom';
-import { clsEnums, emotionEnums } from 'types/enums';
+import { cls, emotion } from 'types/enums';
 import { EMOTIONS } from 'types/enumConverter';
 import { useCalendarSum } from 'hooks/useCalendarSum';
 import ModalBasic from 'components/ModalBasic';
 import { CalendarWeeks, dayColor, emotionEmoji, takeMonth, todayColor } from './Utils';
 
 type AccountProps = {
-  [key in clsEnums]: number;
+  [key in cls]: number;
 };
 interface SumObject {
   date: string;
-  emotion: emotionEnums;
+  emotion: emotion;
   etc: boolean;
   account: AccountProps;
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import { ResponsiveBar } from '@nivo/bar';
 import axios from 'axios';
-import { emotionEnums } from 'types/enums';
+import { emotion } from 'types/enums';
 import { EMOTIONS } from 'types/enumConverter';
 import { getMonthDate } from 'utilities/getMonthDate';
 import { EmotionStaticProps } from 'types/interfaces';
@@ -26,7 +26,7 @@ function EmotionStatistics() {
       const res = await result.data;
 
       const convert: EmotionStaticProps = Object.entries(res).reduce((acc, [key, val]) => {
-        return { ...acc, [EMOTIONS[key as emotionEnums]]: val };
+        return { ...acc, [EMOTIONS[key as emotion]]: val };
       }, {});
 
       convert.name = '감정';

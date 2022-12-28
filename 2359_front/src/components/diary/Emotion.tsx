@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import { EMOTIONS } from 'types/enumConverter';
-import { DiaryMode, emotionEnums as EMOTION } from 'types/enums';
+import { diaryMode as DiaryMode, emotion as EMOTION } from 'types/enums';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
 import { DiaryComponentPrpos } from 'types/interfaces';

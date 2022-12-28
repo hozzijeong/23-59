@@ -1,9 +1,9 @@
 import React from 'react';
-import { OptionEnums } from 'types/enums';
+import { option } from 'types/enums';
 import { OptionCheckedProps } from 'types/interfaces';
 
 const converUserOptionToContent = (options: OptionCheckedProps) => {
-  const optionKeys = Object.keys(options).map((key) => ({ title: key as OptionEnums }));
+  const optionKeys = Object.keys(options).map((key) => ({ title: key as option }));
   return optionKeys.map((data) => ({ ...data, isChecked: options[data.title] }));
 };
 

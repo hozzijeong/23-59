@@ -1,4 +1,4 @@
-enum emotionEnums {
+enum emotion {
   VERY_BAD = 'VERY_BAD',
   BAD = 'BAD',
   SO_SO = 'SO_SO',
@@ -6,7 +6,7 @@ enum emotionEnums {
   VERY_GOOD = 'VERY_GOOD',
 }
 
-enum expenseEnums {
+enum expense {
   FOOD = 'FOOD',
   CAFE = 'CAFE',
   ENTERTAIN = 'ENTERTAIN',
@@ -27,7 +27,7 @@ enum expenseEnums {
   PRESENT = 'PRESENT',
 }
 
-enum incomeEnums {
+enum income {
   PAY = 'PAY',
   POKEY_MONEY = 'POKEY_MONEY',
   FINANCE = 'FINANCE',
@@ -35,12 +35,12 @@ enum incomeEnums {
   ETC = 'ETC',
 }
 
-enum clsEnums {
+enum cls {
   EXPENSE = 'EXPENSE',
   INCOME = 'INCOME',
 }
 
-enum OptionEnums {
+enum option {
   TODO_LIST = 'TODO_LIST',
   TODAY_QUESTION = 'TODAY_QUESTION',
   EMOTION = 'EMOTION',
@@ -48,10 +48,10 @@ enum OptionEnums {
   ACCOUNT_BOOK = 'ACCOUNT_BOOK',
 }
 
-enum DiaryMode {
+enum diaryMode {
   READ = 'READ',
   CREATE = 'CREATE',
   UPDATE = 'UPDATE',
 }
 
-export { incomeEnums, emotionEnums, expenseEnums, clsEnums, OptionEnums, DiaryMode };
+export { income, emotion, expense, cls, option, diaryMode };

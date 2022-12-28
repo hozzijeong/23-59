@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import tw from 'tailwind-styled-components';
 import { ResponsivePie } from '@nivo/pie';
-import { expenseEnums, incomeEnums } from 'types/enums';
+import { expense, income } from 'types/enums';
 import { EXPENSE_CATEGORY, INCOME_CATEGORY } from 'types/enumConverter';
 import { CategoriesStaticProps } from 'types/interfaces';
 import { getMonthDate } from 'utilities/getMonthDate';
@@ -55,7 +55,7 @@ function AccountStatistics() {
 
       const categories: string[] = [];
       Object.keys(tmpPayResult).map((item) =>
-        categories.push(EXPENSE_CATEGORY[item as expenseEnums] || INCOME_CATEGORY[item as incomeEnums])
+        categories.push(EXPENSE_CATEGORY[item as expense] || INCOME_CATEGORY[item as income])
       );
 
       const price: number[] = Object.values(tmpPayResult);

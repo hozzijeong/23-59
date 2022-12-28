@@ -3,7 +3,7 @@ import React, { useMemo, useCallback } from 'react';
 import uuid from 'react-uuid';
 import tw from 'tailwind-styled-components';
 import { CONTENT_OPTION } from 'types/enumConverter';
-import { DiaryMode } from 'types/enums';
+import { diaryMode as DiaryMode } from 'types/enums';
 import { DiaryContentOptionsProps } from 'types/interfaces';
 import { DiaryCheckOptionLayout } from './Layout/DiaryCheckOptionLayout';
 

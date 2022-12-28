@@ -5,7 +5,7 @@ import uuid from 'react-uuid';
 import styled from 'styled-components';
 import { CustomCheckInput } from 'components/ContentOptions';
 import { DiaryComponentPrpos } from 'types/interfaces';
-import { DiaryMode } from 'types/enums';
+import { diaryMode as DiaryMode } from 'types/enums';
 import { useRecoilState } from 'recoil';
 import { todayTodo } from 'recoil/diaryAtom';
 import { handleOnKeyDown } from 'utilities/utils';

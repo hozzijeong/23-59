@@ -14,12 +14,12 @@ import uuid from 'react-uuid';
 import Button from 'components/Button';
 import ModalBasic, { ModalBasicProps } from 'components/ModalBasic';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DiaryMode, OptionEnums as OPTION, OptionEnums } from 'types/enums';
+import { diaryMode as DiaryMode, option as OPTION } from 'types/enums';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
-import { DiaryBodyProps, QuestionAnswerProps } from 'types/interfaces';
+import { DiaryBodyProps } from 'types/interfaces';
 import { INITIAL_BODY, INITIAL_DIARY_INFO } from 'utilities/initialValues';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
@@ -116,28 +116,28 @@ function Diary() {
       const falseOption = { ...acc.checkOption, [title]: false };
 
       switch (title) {
-        case OptionEnums.ACCOUNT_BOOK:
+        case OPTION.ACCOUNT_BOOK:
           if (isChecked && account.length !== 0) {
             return { ...acc, account, checkOption };
           }
           return { ...acc, checkOption: falseOption };
-        case OptionEnums.DIARY:
+        case OPTION.DIARY:
           if (isChecked && diary.title !== '') {
             // 타이틀만은 무조건 받기
             return { ...acc, diary, checkOption };
           }
           return { ...acc, checkOption: falseOption };
-        case OptionEnums.EMOTION:
+        case OPTION.EMOTION:
           if (isChecked && emotion !== null) {
             return { ...acc, emotion, checkOption };
           }
           return { ...acc, checkOption: falseOption };
-        case OptionEnums.TODAY_QUESTION:
+        case OPTION.TODAY_QUESTION:
           if (isChecked && qna.answer !== '') {
             return { ...acc, qna: { questionId, answer }, checkOption };
           }
           return { ...acc, checkOption: falseOption };
-        case OptionEnums.TODO_LIST:
+        case OPTION.TODO_LIST:
           if (isChecked && todo.length !== 0) {
             return { ...acc, todo, checkOption };
           }
