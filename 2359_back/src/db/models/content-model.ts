@@ -29,7 +29,7 @@ const findAll = async () => {
 // 작성자, 날짜 중복 확인
 const findDuplicate = async (authorId: string) => {
   const dates = await Content.find({ author: authorId }).select({ selectedDate: 1, author: 1 });
-  console.log('dates ', dates);
+  //console.log('dates ', dates);
   return dates;
 };
 
@@ -52,9 +52,11 @@ const findById = async (id: string) => {
   return content;
 };
 
-const findBySelectedDate = async (selectedDate: string) => {
-  const content = await Content.find({ selectedDate });
+const findBySelectedDate = async (selectedDate: string, authorId: string) => {
+  const content = await Content.find({ selectedDate, author: authorId });
   //console.log('content: ', content);
+  //console.log('id ', authorId);
+  //console.log('model ', content);
   return content;
 };
 
@@ -116,7 +118,7 @@ const filterByCls = async (prevDate: string, nextDate: string, authorId: string)
   //   account: { $in: ['수입', '지출'] },
   // });
 
-  console.log('model-incomes: ', incomes);
+  //console.log('model-incomes: ', incomes);
   // console.log('model-expenses: ', expenses);
   // console.log('models: ', { incomes, expenses });
   //console.log('model-accounts: ', accounts);
@@ -133,7 +135,7 @@ const filterByCategory = async (prevDate: string, nextDate: string, authorId: st
     'account.category': { $exists: true },
     author: authorId,
   }).select({ selectedDate: 1, account: 1, author: 1 });
-  console.log('model-categories: ', cateogries);
+  //console.log('model-categories: ', cateogries);
   return cateogries;
 };
 // 모든 질문 전체보기
@@ -145,7 +147,7 @@ const findAllQna = async (authorId: string) => {
 // 질문 태그별 통계
 const filterByTag = async () => {
   const tags = await Content.find({ 'qna.tag': { $exists: true } });
-  console.log('tags ', tags);
+  //console.log('tags ', tags);
   return tags;
 };
 // 질문 날짜별 통계

@@ -2,33 +2,25 @@ import React, { useState, useEffect } from 'react';
 import tw from 'tailwind-styled-components';
 import axios from 'axios';
 import { baseAxios } from 'api';
-// import { CONTENT_OPTION } from 'types/enumConverter';
 import { OptionEnums } from 'types/enums';
-// {
-//   ACCOUNT_BOOK: false,
-//   DIARY: false,
-//   EMOTION: false,
-//   TODAY_QUESTION: false,
-//   TODO_LIST: false,
-// }
 
 type DiaryProps = {
   [key in OptionEnums]: boolean;
 };
 
-function SetDiaryOption() {
-  // Record<OptionEnums, boolean>[]
-  const initialData: any = [];
-  const [data, setData] = useState(initialData);
-  const [isChecked, setIsChecked] = useState({
-    ACCOUNT_BOOK: false,
-    DIARY: false,
-    EMOTION: false,
-    TODAY_QUESTION: false,
-    TODO_LIST: false,
-  });
+// 계속 객체로 관리되고있음.
+// 아 문제를 알았다!
+// TODO: 기존의 data는 그냥 객체 형태였다면 {OptionEnums: boolean}
+// 수정후 patch로 보내는 데이터는 {firstLogin: boolean , createOption: {OptionEnums: boolean}} 형태임
+// 둘이 형태가 다르니 계속 충돌날수밖에! ㅇㅋㅇㅋ!
 
-  let optionData: any = {};
+function SetDiaryOption() {
+  const checkStaticData: DiaryProps[] = [];
+  const initialData: any = {};
+  const [data, setData] = useState(initialData);
+  const [isChecked, setIsChecked] = useState<DiaryProps[]>(checkStaticData);
+
+  let optionData: DiaryProps;
   async function getOptionsData() {
     const res = await axios.get('/api/user/option', {
       headers: {
@@ -42,10 +34,8 @@ function SetDiaryOption() {
   useEffect(() => {
     getOptionsData();
   }, []);
-  console.log('여기임', data);
-  console.log('hey!', data.TODO_LIST);
 
-  async function patchCheckData(obj: Record<string, boolean>) {
+  async function patchCheckData(obj: DiaryProps) {
     const data = {
       firstLogin: false,
       createOption: obj,
@@ -82,7 +72,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="todoCheck"
-              checked={data.TODO_LIST || ''}
+              checked={data.TODO_LIST ?? ''}
               onChange={() => {
                 checkedHandler(OptionEnums.TODO_LIST);
               }}
@@ -96,7 +86,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="questionCheck"
-              checked={data.TODAY_QUESTION || ''}
+              checked={data.TODAY_QUESTION ?? ''}
               onChange={() => {
                 checkedHandler(OptionEnums.TODAY_QUESTION);
               }}
@@ -110,7 +100,7 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="diaryCheck"
-              checked={data.DIARY || ''}
+              checked={data.DIARY ?? ''}
               onChange={() => {
                 checkedHandler(OptionEnums.DIARY);
               }}
@@ -124,9 +114,9 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="emotionCheck"
-              checked={data.EMOTION}
+              checked={data.EMOTION ?? ''}
               onChange={() => {
-                checkedHandler(OptionEnums.EMOTION || '');
+                checkedHandler(OptionEnums.EMOTION);
               }}
             />
             하루 감정
@@ -138,9 +128,9 @@ function SetDiaryOption() {
             <CheckInput
               type="checkbox"
               id="accountCheck"
-              checked={data.ACCOUNT_BOOK}
+              checked={data.ACCOUNT_BOOK ?? ''}
               onChange={() => {
-                checkedHandler(OptionEnums.ACCOUNT_BOOK || '');
+                checkedHandler(OptionEnums.ACCOUNT_BOOK);
               }}
             />
             가계부

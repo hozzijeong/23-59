@@ -19,10 +19,11 @@ contentRouter.get('/', async (req, res, next) => {
 });
 // api/contents/calendar/:selectedDate
 // 메인페이지 달력-날짜별(하루) 조회
-contentRouter.get('/calendar/:selectedDate', async (req, res, next) => {
+contentRouter.get('/calendar/:selectedDate', loginRequired, async (req, res, next) => {
   try {
     const { selectedDate } = req.params;
-    const contents = await contentService.getCalendar(selectedDate);
+    const authorId = req.currentUserId;
+    const contents = await contentService.getCalendar(selectedDate, authorId.toString());
 
     res.status(200).json(contents);
   } catch (error) {
@@ -63,14 +64,17 @@ contentRouter.get('/:id', async (req, res, next) => {
 // 컨텐츠 날짜별(하루) 조회
 // api/contents/date/20221225
 // loginRequired?
-contentRouter.get('/date/:selectedDate', async (req, res, next) => {
+contentRouter.get('/date/:selectedDate', loginRequired, async (req, res, next) => {
   try {
     const { selectedDate } = req.params;
-    const content = await contentService.getContentBySelectedDate(selectedDate);
+    const authorId = req.currentUserId;
+    console.log('id ', authorId);
+    const content = await contentService.getContentBySelectedDate(selectedDate, authorId.toString());
     if (!content) {
       res.status(400).json('Bad Request');
       return;
     }
+    console.log('router ', content);
     res.status(200).json(content);
   } catch (error) {
     console.log('err ', error);
@@ -108,7 +112,7 @@ contentRouter.post('/', loginRequired, async (req, res, next) => {
     const answer = qna;
     const author = req.currentUserId;
     const dates = await contentService.checkDuplicate(author.toString());
-    console.log('author ', author);
+    //console.log('author ', author);
     for (let i = 0; i < dates.length; i++) {
       const dateArr = dates[i].selectedDate;
       //const authorArr = dates[i].author;
@@ -148,16 +152,22 @@ contentRouter.patch('/:contentId', loginRequired, async (req, res, next) => {
     if (!errors.isEmpty()) {
       throw new Error('headers의 Content-Type을 application/json으로 설정해주세요');
     }
-    const { contentId, emotion, diary, todo, account, qna } = req.body;
+    const { contentId, emotion, diary, todo, account, qna, checkOption } = req.body;
     //const { contentId, selectedDate, answer } = req.body;
-    console.log('contentId: ', contentId);
-
+    //console.log('contentId: ', contentId);
+    console.log('router-qna ', qna);
+    // const { question, answer, tag } = qna;
+    //qna.question =
+    // console.log('destruct qna ', question, answer, tag);
+    //const questionData = await questionService.getQuestionById(qna.questionId);
+    //console.log('qdata ', questionData);
     const toUpdate = {
       ...(emotion && { emotion }),
       ...(diary && { diary }),
       ...(todo && { todo }),
       ...(account && { account }),
       ...(qna && { qna }),
+      ...(checkOption && { checkOption }),
     };
 
     const updatedContent = await contentService.setContent(contentId, toUpdate);

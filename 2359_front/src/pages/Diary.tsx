@@ -1,5 +1,7 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable no-alert */
 /* eslint-disable no-underscore-dangle */
-import React, { useMemo, useState, ReactNode, useEffect } from 'react';
+import React, { useMemo, useState, ReactNode, useEffect, useCallback } from 'react';
 import { AccountBook } from 'components/diary/AccountBook';
 import { DiaryComponentsLayout } from 'components/diary/Layout/DiaryComponentsLayout';
 import { Emotion } from 'components/diary/Emotion';
@@ -10,14 +12,15 @@ import { ContentOptions } from 'components/diary/ContentOptions';
 import tw from 'tailwind-styled-components';
 import uuid from 'react-uuid';
 import Button from 'components/Button';
+import ModalBasic, { ModalBasicProps } from 'components/ModalBasic';
 import { useNavigate, useParams } from 'react-router-dom';
-import { DiaryMode, OptionEnums as OPTION } from 'types/enums';
+import { DiaryMode, OptionEnums as OPTION, OptionEnums } from 'types/enums';
 import { useTodayDiary } from 'hooks/useTodayDiary';
 import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
-import { OptionCheckedProps } from 'types/interfaces';
-import { INITIAL_CONTENT_OPTIONS } from 'utilities/initialValues';
+import { DiaryBodyProps } from 'types/interfaces';
+import { INITIAL_BODY, INITIAL_DIARY_INFO } from 'utilities/initialValues';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 
@@ -25,11 +28,15 @@ type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
 };
 
+const setInitialBodySelectedDate = (selectedDate: string) => ({ ...INITIAL_BODY, selectedDate });
+
 function Diary() {
   const navigation = useNavigate();
   const { id } = useParams();
   const [date, setDate] = useState(id);
   const { mutate } = useSWRConfig();
+  const [showModal, setShowModal] = useState(false);
+  const [modalProps, setModalProps] = useState<ModalBasicProps>({ title: '' });
 
   useEffect(() => {
     if (id === undefined) {
@@ -40,7 +47,14 @@ function Diary() {
     window.scrollTo(0, 0);
   }, []);
 
-  const { todayDiary, setTodayDiary, contentOptions, setContentOptions, mutate: diaryMutate } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
+  const {
+    todayDiary,
+    setTodayDiary,
+    contentOptions,
+    setContentOptions,
+    mutate: diaryMutate,
+    initOptions,
+  } = useTodayDiary(id ?? ''); // 해당 유저의 날짜 얻기. 이 hooks 안에서 state 정리해서 넘겨줄 것.
   const { diaryInfo, diaryMode } = todayDiary;
 
   const todo = useRecoilValue(todayTodo);
@@ -49,20 +63,9 @@ function Diary() {
   const diary = useRecoilValue(todayDiaryAtom);
   const account = useRecoilValue(accountTableAtom);
 
-  console.log(todo, qna, emotion, diary, account, contentOptions, todayDiary.diaryInfo.checkOption);
-
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
 
   const diaryContents = useMemo(() => {
-    // if (diaryMode === DiaryMode.CREATE)
-    //   return (
-    //     <EmptyContainer>
-    //       <button type="button" onClick={() => setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.UPDATE }))}>
-    //         작성하기
-    //       </button>
-    //     </EmptyContainer>
-    //   );
-
     if (diaryMode === (DiaryMode.UPDATE || DiaryMode.CREATE) && everyUnChecked) {
       return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
     }
@@ -92,53 +95,119 @@ function Diary() {
   }, [contentOptions, diaryMode, everyUnChecked, todayDiary]);
 
   const submitHandler = async () => {
-    const checkOption: OptionCheckedProps = contentOptions.reduce(
-      (acc, { title, isChecked }) => ({ ...acc, [title]: isChecked }),
-      INITIAL_CONTENT_OPTIONS
-    );
+    // 여기서 checkOption을 값을 바꿀 때 isChecked를 false로 해버림
+    const isCreateMode = diaryMode === DiaryMode.CREATE;
+    /**
+     * contentoption이 true인데 값이 없거나
+     * contentOption이 false 라면 무조건 값이 없음.
+     */
     const { _id, selectedDate } = diaryInfo;
-    const body = {
-      selectedDate: selectedDate === '' ? id ?? '' : selectedDate,
-      emotion,
-      diary,
-      qna,
-      todo,
-      account,
-      checkOption,
-    };
 
-    console.log(body, 'Body!!');
+    const body: DiaryBodyProps = contentOptions.reduce((acc, { title, isChecked }) => {
+      const checkOption = { ...acc.checkOption, [title]: isChecked };
+      const falseOption = { ...acc.checkOption, [title]: false };
+      switch (title) {
+        case OptionEnums.ACCOUNT_BOOK:
+          if (isChecked && account.length !== 0) {
+            return { ...acc, account, checkOption };
+          }
+          return { ...acc, checkOption: falseOption };
+        case OptionEnums.DIARY:
+          if (isChecked && diary.title !== '') {
+            // 타이틀만은 무조건 받기
+            return { ...acc, diary, checkOption };
+          }
+          return { ...acc, checkOption: falseOption };
+        case OptionEnums.EMOTION:
+          if (isChecked && emotion !== null) {
+            return { ...acc, emotion, checkOption };
+          }
+          return { ...acc, checkOption: falseOption };
+        case OptionEnums.TODAY_QUESTION:
+          if (isChecked && qna.answer !== '') {
+            return {
+              ...acc,
+              qna: {
+                questionId: qna.questionId,
+                answer: qna.answer,
+              },
+              checkOption,
+            };
+          }
+          return { ...acc, checkOption: falseOption };
+        case OptionEnums.TODO_LIST:
+          if (isChecked && todo.length !== 0) {
+            return { ...acc, todo, checkOption };
+          }
+          return { ...acc, checkOption: falseOption };
 
-    if (diaryMode === DiaryMode.CREATE) {
-      await mutate('/api/contents', createDiary(body)).then((res) => {
-        diaryMutate(res?.data);
-      });
-      return;
+        default: {
+          return { ...acc };
+        }
+      }
+    }, setInitialBodySelectedDate(isCreateMode ? id ?? '' : selectedDate));
+
+    try {
+      if (isCreateMode) {
+        await mutate('/api/contents', createDiary(body)).then((res) => {
+          diaryMutate();
+        });
+        return;
+      }
+
+      await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate());
+      setTodayDiary({ diaryInfo: { ...diaryInfo, ...body, qna }, diaryMode: DiaryMode.READ });
+    } catch (e) {
+      throw Error(`errorOccure ${e}`);
     }
-
-    await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate(res?.data));
-
-    setTodayDiary({ diaryInfo: { ...diaryInfo, ...body }, diaryMode: DiaryMode.READ });
   };
 
-  const cancelHandler = () => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm('정말 취소하시겠습니까?\n작성하신 내용은 저장되지 않습니다.')) {
-      setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
-      // navigation('/');
-    }
+  const toggleModal = useCallback(() => setShowModal((cur) => !cur), []);
+
+  const deleteModalHandler = () => {
+    setModalProps((prev) => ({
+      ...prev,
+      title: '정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.',
+      submitHandler: () => {
+        mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id)).then((res) => {
+          if (!initOptions) return;
+          diaryMutate([{ ...INITIAL_DIARY_INFO, checkOption: initOptions }]);
+        });
+        toggleModal();
+        navigation('/');
+      },
+    }));
+    toggleModal();
   };
 
-  const deleteHandler = () => {
-    // eslint-disable-next-line no-restricted-globals
-    if (confirm('정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.')) {
-      mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id));
-      navigation('/');
-    }
+  const cancelModalHandler = () => {
+    const isCreate = diaryMode === DiaryMode.CREATE;
+    setModalProps((prev) => ({
+      ...prev,
+      title: `정말 취소하시겠습니까?\n작성하신 내용은 저장되지 ${isCreate ? '않고 홈으로 이동합니다' : '않습니다'}.`,
+      submitHandler: () => {
+        if (isCreate) {
+          navigation('/');
+        } else {
+          setTodayDiary((prev) => ({ ...prev, diaryMode: DiaryMode.READ }));
+        }
+        toggleModal();
+      },
+    }));
+    toggleModal();
   };
 
   return (
     <DiarySection>
+      {showModal && (
+        <ModalBasic
+          closeText="닫기"
+          cancelHandler={toggleModal}
+          title={modalProps.title}
+          submitText="예"
+          submitHandler={modalProps.submitHandler}
+        />
+      )}
       <HeadContent>
         <Title isempty={everyUnChecked}>{date}</Title>
         <UpdateDiv>
@@ -152,7 +221,7 @@ function Diary() {
             </UpdateButton>
           )}
           {diaryMode === DiaryMode.READ && (
-            <UpdateButton onClick={deleteHandler} type="button">
+            <UpdateButton onClick={deleteModalHandler} type="button">
               삭제하기
             </UpdateButton>
           )}
@@ -164,11 +233,11 @@ function Diary() {
         {diaryMode !== DiaryMode.READ &&
           (everyUnChecked ? null : (
             <SubmitContainer>
-              <Button onClick={cancelHandler} btntype="cancel">
+              <Button onClick={cancelModalHandler} btntype="cancel">
                 취소하기
               </Button>
               <Button onClick={submitHandler} btntype="save">
-                작성하기
+                {diaryMode === DiaryMode.CREATE ? '작성하기' : '수정하기'}
               </Button>
             </SubmitContainer>
           ))}

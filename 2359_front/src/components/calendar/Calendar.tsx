@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { format, subMonths, addMonths } from 'date-fns';
 import uuid from 'react-uuid';
-import useSWR from 'swr';
 import tw from 'tailwind-styled-components';
 import Button from 'components/Button';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { calendarPage, calendarSummary } from 'recoil/calendarAtom';
-import { getMonthDate } from 'utilities/getMonthDate';
-import { baseAxios } from 'api';
 import { clsEnums, emotionEnums } from 'types/enums';
 import { EMOTIONS } from 'types/enumConverter';
-import { CalendarWeeks, dayColor, takeMonth, todayColor } from './Utils';
+import { useCalendarSum } from 'hooks/useCalendarSum';
+import { CalendarWeeks, dayColor, emotionEmoji, takeMonth, todayColor } from './Utils';
 
 type AccountProps = {
   [key in clsEnums]: number;
@@ -27,24 +25,12 @@ function Calendar() {
   const [currentDate, setCurrentDate] = useRecoilState(calendarPage);
   const [diaryData, setDiaryData] = useRecoilState(calendarSummary);
   const navigate = useNavigate();
-  const MonthDate = getMonthDate(currentDate);
-
-  const userToken = localStorage.getItem('token');
-
-  const fetcher = async (url: string) => {
-    const res = await baseAxios.get(url, {
-      headers: {
-        authorization: `Bearer ${userToken}`,
-      },
-    });
-    return res.data;
-  };
-  const { data } = useSWR(userToken ? `/api/contents/monthCalendar/${MonthDate}` : null, fetcher);
+  const { data, isLoading } = useCalendarSum();
+  console.log('isLoading', isLoading);
 
   useEffect(() => {
-    console.log(data);
     setDiaryData(data);
-  });
+  }, [data]);
 
   const Monthdate = takeMonth(currentDate)();
   const curMonth = () => {
@@ -95,7 +81,7 @@ function Calendar() {
                       <span className="text-xs absolute -top-5 right-0">{item.etc ? '🟢' : null}</span>
                       <div className="flex flex-col justify-around h-full px-1">
                         <div className="flex justify-center">
-                          <span>{EMOTIONS[item.emotion]}</span>
+                          <span className="text-2xl">{emotionEmoji(EMOTIONS[item.emotion])}</span>
                         </div>
                         <div className="flex-col">
                           <span className="flex justify-end">
@@ -119,11 +105,11 @@ function Calendar() {
 export default Calendar;
 
 const CalendarContainer = tw.div`
-bg-white
-rounded-lg 
-shadow 
-overflow-hidden 
-h-full
+  bg-white
+  rounded-lg 
+  shadow 
+  overflow-hidden 
+  h-full
 `;
 const HeaderContainer = tw.div`
 flex 

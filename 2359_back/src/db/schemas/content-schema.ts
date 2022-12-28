@@ -33,7 +33,7 @@ interface IAccount {
 }
 
 interface IQnA {
-  //questionId: object;
+  questionId: object;
   question: string;
   answer: string;
   tag: string;
@@ -85,6 +85,10 @@ const accountSchema = new Schema<IAccount>({
 });
 
 const qnaSchema = new Schema<IQnA>({
+  questionId: {
+    type: Schema.Types.ObjectId,
+    ref: 'questions',
+  },
   question: {
     type: String,
   },
@@ -96,24 +100,30 @@ const qnaSchema = new Schema<IQnA>({
   },
 });
 
+const checkOpotionSchema = new Schema<ICheckOption>(
+  {
+    TODO_LIST: Boolean,
+    TODAY_QUESTION: Boolean,
+    DIARY: Boolean,
+    EMOTION: Boolean,
+    ACCOUNT_BOOK: Boolean,
+  },
+  {
+    _id: false,
+  }
+);
+
 const ContentSchema = new Schema<IContent>(
   {
     selectedDate: {
       type: String,
       required: true,
     },
-    // month: {
-    //   type: String,
-    //   required: true,
-    // },
     author: {
       type: Schema.Types.ObjectId,
       ref: 'users',
       required: true,
     },
-    // author: {
-    //   type: String,
-    // },
     emotion: {
       type: String,
     },
@@ -130,18 +140,7 @@ const ContentSchema = new Schema<IContent>(
       type: qnaSchema,
     },
     checkOption: {
-      type: new Schema(
-        {
-          TODO_LIST: Boolean,
-          TODAY_QUESTION: Boolean,
-          DIARY: Boolean,
-          EMOTION: Boolean,
-          ACCOUNT_BOOK: Boolean,
-        },
-        {
-          _id: false,
-        }
-      ),
+      type: checkOpotionSchema,
       default: {
         TODO_LIST: false,
         TODAY_QUESTION: false,
@@ -158,21 +157,3 @@ const ContentSchema = new Schema<IContent>(
 );
 
 export { ContentSchema };
-
-// const Content = model<IContent>('User', contentSchema);
-
-// run().catch((err) => console.log(err));
-
-// async function run() {
-//   // 4. Connect to MongoDB
-//   await connect('mongodb://localhost:27017/test');
-
-//   const content = new Content({
-//     email: 'abc@cc.com',
-//     password: 'abc123',
-//     nickname: 'st',
-//   });
-//   await content.save();
-
-//   console.log(content);
-// }

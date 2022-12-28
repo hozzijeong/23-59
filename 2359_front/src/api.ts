@@ -6,22 +6,39 @@ const baseAxios = axios.create({
   withCredentials: true,
 });
 
-const headerAxios = axios.create({
-  baseURL: 'http://localhost:8000',
-  withCredentials: true,
-  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-});
+const headerAxios = (token: string) => {
+  return axios.create({
+    baseURL: 'http://localhost:8000',
+    withCredentials: true,
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
 
-const updateDiary = ({ _id, body }: { _id: string; body: DiaryBodyProps }) =>
-  headerAxios.patch(`/api/contents/${_id}`, { ...body, contentId: _id });
+const updateDiary = ({ _id, body }: { _id: string; body: DiaryBodyProps }) => {
+  const token = localStorage.getItem('token') ?? '';
+  return headerAxios(token).patch(`/api/contents/${_id}`, { ...body, contentId: _id });
+};
 
-const createDiary = (body: DiaryBodyProps) => headerAxios.post(`/api/contents`, body);
+const createDiary = (body: DiaryBodyProps) => {
+  const token = localStorage.getItem('token') ?? '';
+  return headerAxios(token).post(`/api/contents`, body);
+};
 
-const deleteDiary = (_id: string) =>
-  headerAxios.delete(`/api/contents/${_id}`, {
+const deleteDiary = (_id: string) => {
+  const token = localStorage.getItem('token') ?? '';
+
+  return headerAxios(token).delete(`/api/contents/${_id}`, {
     data: {
       contentId: _id,
     },
   });
+};
 const getRandomQuestion = () => baseAxios.get('/api/questions/random').then((res) => res.data);
-export { baseAxios, updateDiary, createDiary, deleteDiary, getRandomQuestion };
+
+const fetcher = async (url: string) => {
+  const token = localStorage.getItem('token') ?? '';
+  const res = await headerAxios(token).get(url);
+  return res.data;
+};
+
+export { headerAxios, baseAxios, updateDiary, createDiary, deleteDiary, getRandomQuestion, fetcher };

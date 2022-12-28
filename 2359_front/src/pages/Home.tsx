@@ -4,11 +4,16 @@ import ModalBasic from 'components/ModalBasic';
 import { useUserOptions } from 'hooks/useUserOptions';
 import { TutorialOption } from 'components/tutorial/TutorialOption';
 import { baseAxios } from 'api';
+import { useInitializeDiaryRecoil } from 'hooks/useInitiallizeDiaryRecoil';
+import { useCalendarSum } from 'hooks/useCalendarSum';
+import { CgSpinner } from 'react-icons/cg';
+import { Loader } from 'components/Loader';
 
 function Home() {
   const { firstLogin, contentOptions, setContentOptions, mutate } = useUserOptions();
-  // console.log(firstLogin, contentOptions, '수정 전');
+  const { isLoading } = useCalendarSum();
   const [showModal, setShowModal] = useState(firstLogin);
+  const { initilizeSetRecoilState } = useInitializeDiaryRecoil();
 
   useEffect(() => {
     if (firstLogin === true) {
@@ -16,6 +21,7 @@ function Home() {
     } else if (firstLogin === false) {
       setShowModal(false);
     }
+    initilizeSetRecoilState();
   }, [firstLogin]);
 
   // option 설정
@@ -50,16 +56,7 @@ function Home() {
     setContentOptions(contentOptions);
     updateUser().then(() => setShowModal(false));
     mutate();
-    // console.log(firstLogin, contentOptions, '수정 후');
   };
-
-  /**
-   * API 캐싱 이슈..
-   * 일단, 같은 url을 사용하기 때문에 SWR에서 사용되는 key 값이 같음
-   * 이로 인해 서로 다른 계정으로 로그인해도, 이전에 isFirstLogin 되어 있는 값을 받아올 때 캐싱된 데이터를 사용하게 됨.
-   *
-   */
-
   return (
     <div>
       <Calendar />

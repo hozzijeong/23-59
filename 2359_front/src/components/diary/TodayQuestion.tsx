@@ -1,22 +1,36 @@
+/* eslint-disable no-underscore-dangle */
 import { getRandomQuestion } from 'api';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { questionAtom } from 'recoil/diaryAtom';
 import useSWR from 'swr';
 import tw from 'tailwind-styled-components';
 import { DiaryMode } from 'types/enums';
-import { DiaryComponentPrpos } from 'types/interfaces';
+import { DiaryComponentPrpos, RandomQuestionProps } from 'types/interfaces';
 
 function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
   const { diaryMode } = todayDiary;
   const [qna, setQna] = useRecoilState(questionAtom);
+  const { id } = useParams();
 
-  const { data: question } = useSWR('/api/questions/random', getRandomQuestion, {
-    revalidateOnMount: false,
+  const { data: question, isLoading } = useSWR<RandomQuestionProps>(`/api/questions/random/${id}`, getRandomQuestion, {
+    // revalidateOnMount: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
     revalidateIfStale: false,
+    onSuccess: (data) => {
+      // 새로고침 했을 때 새로운 값을 불러오게됨.
+      // MODE가 CREATE인 경우에는 data.item을 갖는데, 그게 아니면 이전에 있던 question을 얻는데 여긴 왜그럴까
+      // diaryMode가 CREATE가 된다. 데이터를 처음 render 했을 때 값이 CREATE였기 때문에 그렇게 된 것 같음...
+      // 즉 onSuccess는 제일 처음 들어가자마자 실행하는데,
+      setQna((prev) => ({
+        ...prev,
+        question: diaryMode === DiaryMode.CREATE && prev.questionId === '' ? data.item : prev.question,
+      }));
+    },
   });
+
   /**
    * 렌더링 관련 이슈
    * 전역적으로 사용되는 하나의 상태를 통해 전체 상태를 관리하다보니, 데이터 값이 연속으로 변하는 즉, 렌더링 되는
@@ -27,18 +41,22 @@ function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
   const answerChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       const { value } = event.target;
+      if (!question) return;
       setQna((prev) => ({
-        question: diaryMode === DiaryMode.CREATE ? question : prev.question,
-        tag: '',
+        ...prev,
+        questionId: diaryMode === DiaryMode.CREATE ? question._id : prev.questionId,
+        question: diaryMode === DiaryMode.CREATE ? question.item : prev.question,
         answer: value,
       }));
     },
     [diaryMode, question, setQna]
   );
 
+  if (isLoading) return <div className="w-full bg-primaryDark opacity-20 animate-pulse" />;
+
   return (
     <div>
-      <Question>{diaryMode === DiaryMode.READ ? qna.question : question}</Question>
+      {question && <Question>{diaryMode === DiaryMode.CREATE ? question.item : qna.question}</Question>}
       {diaryMode === DiaryMode.READ ? (
         <div>{qna.answer}</div>
       ) : (

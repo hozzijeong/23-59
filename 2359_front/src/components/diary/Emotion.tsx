@@ -31,8 +31,8 @@ function Emotion({ todayDiary }: DiaryComponentPrpos) {
     () =>
       EMOTION_STATE.map((state) => {
         return (
-          <li key={uuid()}>
-            <input
+          <EmotionLi key={uuid()}>
+            <EmotionInput
               checked={emotion === state}
               id={state}
               type="radio"
@@ -41,8 +41,8 @@ function Emotion({ todayDiary }: DiaryComponentPrpos) {
               onChange={emotionChangeHandler}
               disabled={readMode}
             />
-            <label htmlFor={state}>{EMOTIONS[state]}</label>
-          </li>
+            <EmotionLabel htmlFor={state}>{EMOTIONS[state]}</EmotionLabel>
+          </EmotionLi>
         );
       }),
     [emotion, readMode, emotionChangeHandler]
@@ -61,4 +61,17 @@ export { Emotion };
 const EmotionUl = tw.ul`
   flex
   justify-between
+`;
+
+const EmotionLi = tw.li`
+  hover:font-semibold
+`;
+
+const EmotionInput = tw.input`
+  mr-1
+  hover:cursor-pointer
+`;
+
+const EmotionLabel = tw.label`
+  hover:cursor-pointer
 `;
