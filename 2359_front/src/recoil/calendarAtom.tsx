@@ -7,9 +7,4 @@ const calendarPage = atom({
   default: new Date(),
 });
 
-const calendarSummary = atom({
-  key: `calendarSummary/${uuid()}`,
-  default: [],
-});
-
-export { calendarPage, calendarSummary };
+export { calendarPage };

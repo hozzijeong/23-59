@@ -46,7 +46,7 @@ function Home() {
         },
       });
     } catch (err) {
-      alert('정보를 저장할 수 없습니다');
+      throw new Error();
     }
   }
 

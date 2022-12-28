@@ -5,7 +5,7 @@ import tw from 'tailwind-styled-components';
 import Button from 'components/Button';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { calendarPage, calendarSummary } from 'recoil/calendarAtom';
+import { calendarPage } from 'recoil/calendarAtom';
 import { clsEnums, emotionEnums } from 'types/enums';
 import { EMOTIONS } from 'types/enumConverter';
 import { useCalendarSum } from 'hooks/useCalendarSum';
@@ -24,7 +24,7 @@ interface SumObject {
 
 function Calendar() {
   const [currentDate, setCurrentDate] = useRecoilState(calendarPage);
-  const [diaryData, setDiaryData] = useRecoilState(calendarSummary);
+  const [diaryData, setDiaryData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const { data } = useCalendarSum();

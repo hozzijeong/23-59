@@ -9,17 +9,11 @@ type DiaryProps = {
   [key in OptionEnums]: boolean;
 };
 
-// 계속 객체로 관리되고있음.
-// 아 문제를 알았다!
-// TODO: 기존의 data는 그냥 객체 형태였다면 {OptionEnums: boolean}
-// 수정후 patch로 보내는 데이터는 {firstLogin: boolean , createOption: {OptionEnums: boolean}} 형태임
-// 둘이 형태가 다르니 계속 충돌날수밖에! ㅇㅋㅇㅋ!
-
 function SetDiaryOption() {
-  const checkStaticData: DiaryProps[] = [];
-  const initialData: any = {};
+  // const checkStaticData: DiaryProps[] = [];
+  const initialData = {} as DiaryProps;
   const [data, setData] = useState(initialData);
-  const [isChecked, setIsChecked] = useState<DiaryProps[]>(checkStaticData);
+  // const [isChecked, setIsChecked] = useState<DiaryProps[]>(checkStaticData);
   const { mutate } = useUserOptions();
 
   let optionData: DiaryProps;
@@ -68,8 +62,8 @@ function SetDiaryOption() {
   const checkAll = () => {
     const newData = { ...data };
     for (const key in newData) {
-      if (newData[key] === false) {
-        newData[key] = true;
+      if (newData[key as keyof DiaryProps] === false) {
+        newData[key as keyof DiaryProps] = true;
       }
     }
     setData(newData);
@@ -79,8 +73,8 @@ function SetDiaryOption() {
   const unCheckAll = () => {
     const newData = { ...data };
     for (const key in newData) {
-      if (newData[key] === true) {
-        newData[key] = false;
+      if (newData[key as keyof DiaryProps] === true) {
+        newData[key as keyof DiaryProps] = false;
       }
     }
     setData(newData);
