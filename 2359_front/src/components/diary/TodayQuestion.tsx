@@ -52,7 +52,7 @@ function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
     [diaryMode, question, setQna]
   );
 
-  if (isLoading) return <div>is Loading... </div>;
+  if (isLoading) return <div className="w-full bg-primaryDark opacity-20 animate-pulse" />;
 
   return (
     <div>

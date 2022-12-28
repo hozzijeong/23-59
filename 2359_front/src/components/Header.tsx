@@ -40,7 +40,7 @@ function Header() {
 
 export default Header;
 
-const HeaderContainer = tw.div`
+export const HeaderContainer = tw.div`
   w-full
   h-[100px]
   bg-primaryDeepDark

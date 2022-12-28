@@ -147,8 +147,6 @@ function Diary() {
       }
     }, setInitialBodySelectedDate(isCreateMode ? id ?? '' : selectedDate));
 
-    console.log(body);
-
     try {
       if (isCreateMode) {
         await mutate('/api/contents', createDiary(body)).then((res) => {
