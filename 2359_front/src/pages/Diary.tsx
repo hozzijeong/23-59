@@ -66,7 +66,7 @@ function Diary() {
   const account = useRecoilValue(accountTableAtom);
 
   const everyUnChecked = useMemo(() => contentOptions.every((option) => option.isChecked === false), [contentOptions]);
-  console.log(diaryMode, 'MODE');
+
   const diaryContents = useMemo(() => {
     if (diaryMode === (DiaryMode.UPDATE || DiaryMode.CREATE) && everyUnChecked) {
       return <EmptyContainer>좌측 옵션을 선택해주세요.</EmptyContainer>;
@@ -152,7 +152,7 @@ function Diary() {
     const initialDiary = { diaryInfo: { ...diaryInfo, ...body, qna }, diaryMode: DiaryMode.READ };
     try {
       if (isCreateMode) {
-        await mutate('/api/contents', createDiary(body)).then(() => diaryMutate());
+        await mutate('/api/contents', createDiary(body)).then((res) => diaryMutate([INITIAL_DIARY_INFO]));
         const title = `일일 결산 등록을 완료했습니다.`;
         setModalProps((prev) => ({
           ...prev,
@@ -171,7 +171,9 @@ function Diary() {
 
         toggleModal();
       } else {
-        await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then(() => diaryMutate());
+        await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) =>
+          diaryMutate([INITIAL_DIARY_INFO])
+        );
         setTodayDiary(initialDiary);
       }
 
