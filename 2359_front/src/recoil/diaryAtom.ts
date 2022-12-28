@@ -1,7 +1,7 @@
 import uuid from 'react-uuid';
 import { atom } from 'recoil';
 import { AccountTableRow, DiaryProps, EmotionType, QuestionAnswerProps, TodoListProps } from 'types/interfaces';
-import { INITIAL_TODAY_DIARY, QNA_INNITIAL } from 'utilities/initialValues';
+import { INITIAL_TODAY_DIARY, QNA_INNITIAL } from 'constant/initialValues';
 
 const todayTodo = atom<TodoListProps[]>({
   key: `todayTodoState/${uuid()}`,

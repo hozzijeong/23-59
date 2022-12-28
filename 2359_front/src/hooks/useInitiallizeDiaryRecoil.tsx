@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
-import { INITIAL_TODAY_DIARY, QNA_INNITIAL } from 'utilities/initialValues';
+import { INITIAL_TODAY_DIARY, QNA_INNITIAL } from 'constant/initialValues';
 
 function useInitializeDiaryRecoil() {
   const setTodo = useSetRecoilState(todayTodo);

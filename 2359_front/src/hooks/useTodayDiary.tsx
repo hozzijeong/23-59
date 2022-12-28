@@ -4,7 +4,7 @@ import { fetcher } from 'api';
 import useSWR from 'swr';
 import { DiaryStateProps, TodayDiaryProps } from 'types/interfaces';
 import { diaryMode as DiaryMode } from 'types/enums';
-import { INITIAL_DIARY_INFO } from 'utilities/initialValues';
+import { INITIAL_DIARY_INFO } from 'constant/initialValues';
 import { converUserOptionToContent } from 'utilities/utils';
 import { useRecoilState } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';

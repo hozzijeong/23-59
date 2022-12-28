@@ -20,7 +20,7 @@ import { useSWRConfig } from 'swr';
 import { createDiary, deleteDiary, updateDiary } from 'api';
 import { convertDiaryTitleToKor } from 'utilities/convertDiaryTitle';
 import { DiaryBodyProps } from 'types/interfaces';
-import { INITIAL_BODY, INITIAL_DIARY_INFO } from 'utilities/initialValues';
+import { INITIAL_BODY, INITIAL_DIARY_INFO } from 'constant/initialValues';
 import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 import { DiarySkeleton } from 'components/skeleton/DiarySkeleton';
