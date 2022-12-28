@@ -7,6 +7,7 @@ import { baseAxios } from 'api';
 import { useInitializeDiaryRecoil } from 'hooks/useInitiallizeDiaryRecoil';
 import { CalendarSkeleton } from 'components/skeleton/CalendarSkeleton';
 import { SkeletonLayout } from 'components/skeleton/SkeletonLayout';
+import { DeferredComponent } from 'components/skeleton/DeferredComponent';
 
 function Home() {
   const { firstLogin, contentOptions, setContentOptions, mutate } = useUserOptions();
@@ -55,7 +56,13 @@ function Home() {
     mutate();
   };
   return (
-    <Suspense fallback={<CalendarSkeleton />}>
+    <Suspense
+      fallback={
+        <DeferredComponent>
+          <CalendarSkeleton />
+        </DeferredComponent>
+      }
+    >
       <Calendar />
       {showModal && (
         <ModalBasic

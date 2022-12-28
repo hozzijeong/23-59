@@ -25,6 +25,7 @@ import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 import { DiarySkeleton } from 'components/skeleton/DiarySkeleton';
 import { SkeletonLayout } from 'components/skeleton/SkeletonLayout';
+import { DeferredComponent } from 'components/skeleton/DeferredComponent';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -231,7 +232,13 @@ function Diary() {
         <ContentOptions state={contentOptions} setState={setContentOptions} diaryMode={diaryMode} />
       </HeadContent>
 
-      <Suspense fallback={<DiarySkeleton stateLength={contentOptions.filter(({ isChecked }) => isChecked).length} />}>
+      <Suspense
+        fallback={
+          <DeferredComponent>
+            <DiarySkeleton stateLength={contentOptions.filter(({ isChecked }) => isChecked).length} />
+          </DeferredComponent>
+        }
+      >
         <Content>
           {diaryContents}
           {diaryMode !== DiaryMode.READ &&
