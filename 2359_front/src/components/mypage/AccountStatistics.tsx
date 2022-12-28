@@ -11,12 +11,6 @@ const currentYear = date.getFullYear();
 const currentMonth = date.getMonth() + 1;
 const monthLastDate = lastDay.getDate();
 
-interface Idata {
-  id: string;
-  label: string;
-  value: number;
-}
-
 function AccountStatistics() {
   const initialData: Record<string, string | number>[] = [];
   const [data, setData] = useState(initialData);
@@ -42,7 +36,7 @@ function AccountStatistics() {
 
   async function getFilterPayment() {
     try {
-      const payResponse = await baseAxios.get(
+      const payResponse = await axios.get(
         `/api/contents/filterCategory/${currentYear}${currentMonth}01-${currentYear}${currentMonth}${monthLastDate}`,
         {
           headers: {

@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ModalBasic from 'components/ModalBasic';
-import { useRecoilState } from 'recoil';
-import { showModalPage } from 'recoil/modalAtom';
 import { useNavigate } from 'react-router-dom';
 import useUserDelete from 'hooks/useUserDelete';
 import { useForm, SubmitHandler } from 'react-hook-form';
@@ -13,7 +11,7 @@ import { emailCheck } from '../../utilities/regex';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function UserInfo() {
-  const [showModal, setShowModal] = useRecoilState(showModalPage);
+  const [showModal, setShowModal] = useState(false);
   const navigation = useNavigate();
   const { userUpdateRequest } = useUserUpdate();
   const { userDelete } = useUserDelete();
@@ -128,7 +126,13 @@ function UserInfo() {
         </SC.DeleteTag>
       </SC.Form>
       {showModal && (
-        <ModalBasic title="회원 탈퇴" btnclose="취소" btnsave="탈퇴" saveHandler={userDelete}>
+        <ModalBasic
+          title="회원 탈퇴"
+          closeText="취소"
+          submitText="탈퇴"
+          cancelHandler={() => setShowModal(false)}
+          submitHandler={userDelete}
+        >
           정말 탈퇴 하시겠습니까..?
         </ModalBasic>
       )}

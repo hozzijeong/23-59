@@ -1,14 +1,12 @@
 import { model } from 'mongoose';
 import { ContentSchema } from '../schemas/content-schema';
-import {
-  emotionEnums as EMOTION,
-  incomeEnums as INCOMES,
-  expenseEnums as EXPENSES,
-  clsEnums as CLS,
-} from '../../../../2359_front/src/types/enums';
-// D:\2359\initialization\2359_back\src\db\models\content-model.ts
-// D:\2359\initialization\2359_front\src\types\enums.ts
-// initialization\2359_front\src\types\enums.ts
+// import {
+//   emotionEnums as EMOTION,
+//   incomeEnums as INCOMES,
+//   expenseEnums as EXPENSES,
+//   clsEnums as CLS,
+// } from '../../../../2359_front/src/types/enums';
+
 const Content = model('contents', ContentSchema);
 
 // content CRUD
@@ -26,6 +24,11 @@ const createContent = async (contentData: any) => {
 const findAll = async () => {
   const contents = await Content.find({});
   return contents;
+};
+
+const findDates = async () => {
+  const dates = await Content.find({ selectedDate: { $exists: true } });
+  return dates;
 };
 
 // update 타입 아직 모름
@@ -74,9 +77,9 @@ const filterByEmotion = async (prevDate: string, nextDate: string) => {
   const prev = parseInt(prevDate, 10);
   const next = parseInt(nextDate, 10);
 
-  //const emotions = ['very sad', 'sad', 'soso', 'happy', 'very happy'];
-  const emotions = Object.keys(EMOTION);
-  console.log('EMOTION ', Object.keys(EMOTION));
+  const emotions = ['VERY_BAD', 'BAD', 'SO_SO', 'GOOD', 'VERY_GOOD'];
+  //const emotions = Object.keys(EMOTION);
+  //console.log('EMOTION ', Object.keys(EMOTION));
 
   const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev }, emotion: { $in: emotions } });
   //const filteredContents = await Content.find({ selectedDate: { $lte: next, $gte: prev } }, { diary: { emotion: 1 } });
@@ -91,9 +94,9 @@ const filterByCls = async (prevDate: string, nextDate: string) => {
   const prev = parseInt(prevDate, 10);
   const next = parseInt(nextDate, 10);
 
-  const clsArr = Object.keys(CLS);
-  console.log('clsArr ', clsArr); //  [ 'EXPENSE', 'INCOME' ]
-  console.log(clsArr[1]);
+  // const clsArr = Object.keys(CLS);
+  // console.log('clsArr ', clsArr); //  [ 'EXPENSE', 'INCOME' ]
+  // console.log(clsArr[1]);
   const incomes = await Content.find({
     selectedDate: { $lte: next, $gte: prev },
     'account.cls': 'INCOME',
@@ -146,6 +149,7 @@ const filterByTag = async () => {
 export default {
   createContent,
   findAll,
+  findDates,
   updateContent,
   deleteById,
   findById,
