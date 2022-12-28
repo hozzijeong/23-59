@@ -3,22 +3,16 @@ import tw from 'tailwind-styled-components';
 import axios from 'axios';
 import { baseAxios } from 'api';
 import { OptionEnums } from 'types/enums';
+import { useUserOptions } from 'hooks/useUserOptions';
 
 type DiaryProps = {
   [key in OptionEnums]: boolean;
 };
 
-// 계속 객체로 관리되고있음.
-// 아 문제를 알았다!
-// TODO: 기존의 data는 그냥 객체 형태였다면 {OptionEnums: boolean}
-// 수정후 patch로 보내는 데이터는 {firstLogin: boolean , createOption: {OptionEnums: boolean}} 형태임
-// 둘이 형태가 다르니 계속 충돌날수밖에! ㅇㅋㅇㅋ!
-
 function SetDiaryOption() {
-  const checkStaticData: DiaryProps[] = [];
-  const initialData: any = {};
+  const initialData = {} as DiaryProps;
   const [data, setData] = useState(initialData);
-  const [isChecked, setIsChecked] = useState<DiaryProps[]>(checkStaticData);
+  const { mutate } = useUserOptions();
 
   let optionData: DiaryProps;
   async function getOptionsData() {
@@ -34,6 +28,10 @@ function SetDiaryOption() {
   useEffect(() => {
     getOptionsData();
   }, []);
+
+  useEffect(() => {
+    mutate();
+  }, [data]);
 
   async function patchCheckData(obj: DiaryProps) {
     const data = {
@@ -55,19 +53,45 @@ function SetDiaryOption() {
   const checkedHandler = (e: OptionEnums) => {
     const newData = { ...data };
     newData[e] = !newData[e];
-    setIsChecked(newData);
+    // setIsChecked(newData);
+    patchCheckData(newData);
+  };
+
+  const checkAll = () => {
+    const newData = { ...data };
+    for (const key in newData) {
+      if (newData[key as keyof DiaryProps] === false) {
+        newData[key as keyof DiaryProps] = true;
+      }
+    }
+    setData(newData);
+    patchCheckData(newData);
+  };
+
+  const unCheckAll = () => {
+    const newData = { ...data };
+    for (const key in newData) {
+      if (newData[key as keyof DiaryProps] === true) {
+        newData[key as keyof DiaryProps] = false;
+      }
+    }
+    setData(newData);
     patchCheckData(newData);
   };
 
   return (
     <Container>
-      <div className="justify-self-start">작성페이지 옵션 설정</div>
       <ScriptArea>
         <Script>1. 일일 결산을할 때 고정적으로 적용할 옵션을 설정하는 페이지 입니다.</Script>
         <Script>2. 원하는 옵션을 체크하고 자신만의 결산 템플릿을 만들어 보세요!</Script>
       </ScriptArea>
       <CheckboxArea>
         <div>
+          <SelectBox>
+            <div onClick={() => checkAll()}>전체 선택</div>
+            <div>|</div>
+            <div onClick={() => unCheckAll()}>전체 해제</div>
+          </SelectBox>
           <CheckLabel htmlFor="todoCheck">
             <CheckInput
               type="checkbox"
@@ -168,6 +192,14 @@ const ScriptArea = tw.div`
 const Script = tw.div`
   text-lg
   text-bold
+`;
+
+const SelectBox = tw.div`
+  flex
+  w-[55%]
+  justify-between  
+  cursor-pointer
+  mb-5
 `;
 
 const CheckboxArea = tw.div`

@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { useRecoilState } from 'recoil';
-import { userLogin } from 'recoil/userAtom';
 import tw from 'tailwind-styled-components';
 import styled from 'styled-components';
 import { VscAccount } from 'react-icons/vsc';
 import { SlLogin, SlLogout } from 'react-icons/sl';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import UserAttribute from '../utilities/UserLoginAttribute';
 
 function Header() {
   const { logoClickHandler, handleLoginClick } = UserAttribute();
-  const [loginState, setLoginState] = useRecoilState(userLogin);
+  const [loginState, setLoginState] = useState(false);
   const getToken = localStorage.getItem('token') ? true : null;
 
   useEffect(() => {
@@ -19,7 +17,7 @@ function Header() {
     } else {
       setLoginState(false);
     }
-  });
+  }, [getToken]);
 
   return (
     <HeaderContainer>
@@ -29,9 +27,9 @@ function Header() {
         </Logotest>
         <HeaderRightContainer>
           <Link to="/mypage/user" className="mypage">
-            <VscAccount className="mypageLogo" />
+            <VscAccount className="mypageLogo" size={30} />
           </Link>
-          <GetLog onClick={handleLoginClick}>{loginState ? <SlLogout size={24} /> : <SlLogin size={24} />}</GetLog>
+          <GetLog onClick={handleLoginClick}>{loginState ? <SlLogout size={30} /> : <SlLogin size={30} />}</GetLog>
         </HeaderRightContainer>
       </HeaderContent>
     </HeaderContainer>
@@ -40,7 +38,7 @@ function Header() {
 
 export default Header;
 
-const HeaderContainer = tw.div`
+export const HeaderContainer = tw.div`
   w-full
   h-[100px]
   bg-primaryDeepDark

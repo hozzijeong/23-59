@@ -1,31 +1,14 @@
 /* eslint-disable no-underscore-dangle */
-import { getRandomQuestion } from 'api';
 import React, { useCallback } from 'react';
-import { useParams } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { questionAtom } from 'recoil/diaryAtom';
-import useSWR from 'swr';
 import tw from 'tailwind-styled-components';
 import { DiaryMode } from 'types/enums';
-import { DiaryComponentPrpos, RandomQuestionProps } from 'types/interfaces';
+import { DiaryComponentPrpos } from 'types/interfaces';
 
 function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
   const { diaryMode } = todayDiary;
   const [qna, setQna] = useRecoilState(questionAtom);
-  const { id } = useParams();
-
-  const { data: question, isLoading } = useSWR<RandomQuestionProps>(`/api/questions/random/${id}`, getRandomQuestion, {
-    // revalidateOnMount: false,
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
-    revalidateIfStale: false,
-    onSuccess: (data) => {
-      setQna((prev) => ({
-        ...prev,
-        question: diaryMode === DiaryMode.CREATE ? data.item : prev.question,
-      }));
-    },
-  });
 
   /**
    * 렌더링 관련 이슈
@@ -37,24 +20,19 @@ function TodayQuestion({ todayDiary }: DiaryComponentPrpos) {
   const answerChangeHandler = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       const { value } = event.target;
-      if (!question) return;
       setQna((prev) => ({
         ...prev,
-        _id: diaryMode === DiaryMode.CREATE ? question._id : prev.questionId,
-        question: diaryMode === DiaryMode.CREATE ? question.item : prev.question,
         answer: value,
       }));
     },
-    [diaryMode, question, setQna]
+    [setQna]
   );
-
-  if (isLoading) return <div>is Loading... </div>;
 
   return (
     <div>
-      {question && <Question>{diaryMode === DiaryMode.CREATE ? question.item : qna.question}</Question>}
+      <Question>{qna.question}</Question>
       {diaryMode === DiaryMode.READ ? (
-        <div>{qna.answer}</div>
+        <ReadAnswerDiv>{qna.answer}</ReadAnswerDiv>
       ) : (
         <AnswerArea value={qna.answer} onChange={answerChangeHandler} />
       )}
@@ -80,4 +58,17 @@ const AnswerArea = tw.textarea`
   rounded 
   text-grey-darker
   shadow
+`;
+
+const ReadAnswerDiv = tw.div`
+  w-full
+  h-24
+  max-h-36
+  resize-none
+  p-2
+  border 
+  rounded 
+  text-grey-darker
+  shadow
+  bg-primaryLight
 `;

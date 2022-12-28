@@ -1,6 +1,8 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import ModalBasic from 'components/ModalBasic';
+import tw from 'tailwind-styled-components';
 import { LoginFormValue } from '../../types/interfaces';
 import {
   ErrorMesg,
@@ -17,7 +19,8 @@ import useLogin from '../../hooks/useUserLogin';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function Loginform() {
-  const { loginRequest } = useLogin();
+  const { loginRequest, error, isModal, setIsModal } = useLogin();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -30,6 +33,12 @@ function Loginform() {
 
   return (
     <Container>
+      <WelcomeLogo>
+        <FirstLine>당신의 하루는 어떠셨나요?</FirstLine>
+        <SecondLine>
+          <br /> 하루의 끝, “23:59”
+        </SecondLine>
+      </WelcomeLogo>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <FormTitle>로그인</FormTitle>
         <FormLabel>이메일</FormLabel>
@@ -49,8 +58,30 @@ function Loginform() {
           <Link to="/signup">Signup</Link>
         </SignUpLink>
       </Form>
+      {isModal ? (
+        <ModalBasic title={`${error?.reason}`} closeText="닫기" cancelHandler={() => setIsModal(false)} />
+      ) : null}
     </Container>
   );
 }
 
 export default Loginform;
+
+const WelcomeLogo = tw.span`
+  mb-[20px]
+  animate-pulse	
+  text-primaryLight
+  font-['LABDigital'] 
+  text-bold 
+  italic 
+  text-[black] 
+  text-center
+`;
+
+const FirstLine = tw.span`
+text-[20px]
+`;
+
+const SecondLine = tw.span`
+text-[18px]
+`;

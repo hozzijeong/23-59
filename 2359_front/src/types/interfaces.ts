@@ -123,6 +123,11 @@ interface RandomQuestionProps {
   item: string;
 }
 
+interface errorData {
+  reason: string;
+  result: string;
+}
+
 export type {
   OptionProps,
   ContentOptionProps,
@@ -144,4 +149,5 @@ export type {
   CategoriesStaticProps,
   RandomQuestionProps,
   EmotionType,
+  errorData,
 };

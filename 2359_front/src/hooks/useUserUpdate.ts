@@ -1,13 +1,16 @@
 import { baseAxios } from 'api';
-import axios from 'axios';
-import { useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useCallback, useState } from 'react';
 import { UpdateFormValue } from 'types/interfaces';
+import { errorData } from '../types/interfaces';
 
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 const useUserUpdate = () => {
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [error, setError] = useState<errorData>();
+  const [isOk, setIsOk] = useState<boolean>(false);
+
   const userUpdateRequest = useCallback((data: UpdateFormValue) => {
     baseAxios
       .patch(`/api/user/info`, data, {
@@ -16,13 +19,17 @@ const useUserUpdate = () => {
         },
       })
       .then((res) => {
-        alert('수정 되었습니다');
+        setIsOk(true);
       })
       .catch((err) => {
-        alert(err);
+        setIsModal(true);
+        setError({
+          reason: err.response.data.reason,
+          result: err.response.data.result,
+        });
       });
   }, []);
-  return { userUpdateRequest };
+  return { userUpdateRequest, setIsOk, isOk, error, isModal, setIsModal };
 };
 
 export default useUserUpdate;
