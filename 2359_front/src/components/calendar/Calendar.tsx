@@ -25,8 +25,7 @@ function Calendar() {
   const [currentDate, setCurrentDate] = useRecoilState(calendarPage);
   const [diaryData, setDiaryData] = useRecoilState(calendarSummary);
   const navigate = useNavigate();
-  const { data, isLoading } = useCalendarSum();
-  console.log('isLoading', isLoading);
+  const { data } = useCalendarSum();
 
   useEffect(() => {
     setDiaryData(data);

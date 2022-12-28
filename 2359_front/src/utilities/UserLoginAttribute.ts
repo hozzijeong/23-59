@@ -6,8 +6,7 @@ import { userLogin } from 'recoil/userAtom';
 function UserAttribute() {
   const getToken = localStorage.getItem('token') ? true : null;
   const [loginState, setLoginState] = useRecoilState(userLogin);
-  const { data, mutate } = useCalendarSum();
-  console.log(data, 'data');
+  const { mutate } = useCalendarSum();
 
   const navigate = useNavigate();
   const handleLoginClick = () => {

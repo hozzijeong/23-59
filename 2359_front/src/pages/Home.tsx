@@ -5,13 +5,9 @@ import { useUserOptions } from 'hooks/useUserOptions';
 import { TutorialOption } from 'components/tutorial/TutorialOption';
 import { baseAxios } from 'api';
 import { useInitializeDiaryRecoil } from 'hooks/useInitiallizeDiaryRecoil';
-import { useCalendarSum } from 'hooks/useCalendarSum';
-import { CgSpinner } from 'react-icons/cg';
-import { Loader } from 'components/Loader';
 
 function Home() {
   const { firstLogin, contentOptions, setContentOptions, mutate } = useUserOptions();
-  const { isLoading } = useCalendarSum();
   const [showModal, setShowModal] = useState(firstLogin);
   const { initilizeSetRecoilState } = useInitializeDiaryRecoil();
 
@@ -24,7 +20,6 @@ function Home() {
     initilizeSetRecoilState();
   }, [firstLogin]);
 
-  // option 설정
   const title = contentOptions.map((option) => {
     return option.title;
   });
