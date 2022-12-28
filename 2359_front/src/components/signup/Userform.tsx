@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ModalBasic from 'components/ModalBasic';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { EMAIL_REGEX } from '../../utilities/regex';
@@ -9,7 +10,13 @@ import { RegisterFormValue } from '../../types/interfaces';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function Userform() {
-  const { registerRequest } = useRegister();
+  const { registerRequest, error, isModal, setIsModal, isOk, setIsOk } = useRegister();
+  const navigate = useNavigate();
+
+  const cancelModalHandler = () => {
+    setIsOk(false);
+    navigate('/login');
+  };
 
   const {
     register,
@@ -73,6 +80,10 @@ function Userform() {
         )}
         <SubmitButton type="submit">회원가입</SubmitButton>
       </Form>
+      {isOk ? <ModalBasic title="가입 완료 됐습니다" closeText="확인" cancelHandler={cancelModalHandler} /> : null}
+      {isModal ? (
+        <ModalBasic title={`${error?.reason}`} closeText="닫기" cancelHandler={() => setIsModal(false)} />
+      ) : null}
     </Container>
   );
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import ModalBasic from 'components/ModalBasic';
 import tw from 'tailwind-styled-components';
 import { LoginFormValue } from '../../types/interfaces';
 import {
@@ -18,7 +19,8 @@ import useLogin from '../../hooks/useUserLogin';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function Loginform() {
-  const { loginRequest } = useLogin();
+  const { loginRequest, error, isModal, setIsModal } = useLogin();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -56,6 +58,9 @@ function Loginform() {
           <Link to="/signup">Signup</Link>
         </SignUpLink>
       </Form>
+      {isModal ? (
+        <ModalBasic title={`${error?.reason}`} closeText="닫기" cancelHandler={() => setIsModal(false)} />
+      ) : null}
     </Container>
   );
 }

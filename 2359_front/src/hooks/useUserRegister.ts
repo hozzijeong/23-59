@@ -1,24 +1,28 @@
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { RegisterFormValue } from 'types/interfaces';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { baseAxios } from '../api';
+import { errorData } from '../types/interfaces';
 
 const useRegister = () => {
-  const navigate = useNavigate();
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [error, setError] = useState<errorData>();
+  const [isOk, setIsOk] = useState<boolean>(false);
 
   const registerRequest = useCallback((Data: RegisterFormValue) => {
     baseAxios
       .post(`api/user/register`, Data)
       .then((res) => {
-        alert('가입 완료 됐습니다.');
-        navigate('/login');
+        setIsOk(true);
       })
       .catch((err) => {
-        alert(err.response.data.reason);
+        setIsModal(true);
+        setError({
+          reason: err.response.data.reason,
+          result: err.response.data.result,
+        });
       });
   }, []);
-  return { registerRequest };
+  return { registerRequest, error, isModal, setIsModal, isOk, setIsOk };
 };
 
 export default useRegister;
