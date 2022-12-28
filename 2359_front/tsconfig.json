@@ -23,6 +23,8 @@
     "components/*": ["components/*"],
     "utilities/*": ["utilities/*"],
     "hooks/*": ["hooks/*"],
-    "images/*": ["images/*"]
+    "images/*": ["images/*"],
+    "recoil/*": ["recoil/*"],
+    "types/*": ["types/*"]
   }
 }
