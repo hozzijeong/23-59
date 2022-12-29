@@ -17,7 +17,7 @@ const EXPENSE_STATE = Object.values(EXPENSE);
 const INCOME_STATE = Object.values(INCOME);
 const MONEY_STATE = Object.values(MONEY);
 
-function AccountBook({ todayDiary }: DiaryComponentPrpos) {
+function AccountBook({ todayDiary, setModalProps, toggleModal }: DiaryComponentPrpos) {
   const [todayAccountInfo, setTodatAccountInfo] = useState<AccountTableRow>(INITIAL_ACCOUNT_INFO);
   const [accountTable, setAccountTable] = useRecoilState<AccountTableRow[]>(accountTableAtom);
   const { diaryMode } = todayDiary;
@@ -38,8 +38,23 @@ function AccountBook({ todayDiary }: DiaryComponentPrpos) {
   };
 
   const appendAccountInfoHandler = () => {
-    setAccountTable((prev) => [...prev, { ...todayAccountInfo, id: getCurrentDate() }]);
+    const { amount } = todayAccountInfo;
+    if (Number(amount) < 0) {
+      if (!setModalProps || !toggleModal) return;
+      setModalProps({
+        title: '음수는 임력할 수 없습니다.',
+        submitText: '닫기',
+        submitHandler: () => {
+          console.log(2233);
+          setTodatAccountInfo((prev) => ({ ...prev, amount: '' }));
+          toggleModal();
+        },
+      });
+      toggleModal();
+      return;
+    }
 
+    setAccountTable((prev) => [...prev, { ...todayAccountInfo, id: getCurrentDate() }]);
     setTodatAccountInfo(INITIAL_ACCOUNT_INFO);
   };
 

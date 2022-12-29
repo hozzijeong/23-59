@@ -1,3 +1,4 @@
+import { ModalBasicProps } from 'components/ModalBasic';
 import {
   expense as EXPENSE,
   income as INCOME,
@@ -62,7 +63,12 @@ interface TodayDiaryProps {
   diaryMode: DiaryMode;
 }
 
-interface DiaryComponentPrpos {
+interface ModalComponentProps {
+  setModalProps?: React.Dispatch<React.SetStateAction<ModalBasicProps>>;
+  toggleModal?: () => void;
+}
+
+interface DiaryComponentPrpos extends ModalComponentProps {
   todayDiary: TodayDiaryProps;
   setTodayDiary?: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
 }

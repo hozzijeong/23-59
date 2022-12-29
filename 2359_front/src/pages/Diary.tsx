@@ -51,6 +51,8 @@ function Diary() {
   const [showModal, setShowModal] = useState(false);
   const [modalProps, setModalProps] = useState<ModalBasicProps>({ title: '', closeText: '닫기', submitText: '예' });
 
+  const toggleModal = useCallback(() => setShowModal((cur) => !cur), []);
+
   useEffect(() => {
     if (id === undefined) {
       navigation('/');
@@ -96,7 +98,9 @@ function Diary() {
         [OPTION.TODAY_QUESTION]: <TodayQuestion todayDiary={todayDiary} />,
         [OPTION.EMOTION]: <Emotion todayDiary={todayDiary} />,
         [OPTION.DIARY]: <TodayDiary todayDiary={todayDiary} />,
-        [OPTION.ACCOUNT_BOOK]: <AccountBook todayDiary={todayDiary} />,
+        [OPTION.ACCOUNT_BOOK]: (
+          <AccountBook todayDiary={todayDiary} setModalProps={setModalProps} toggleModal={toggleModal} />
+        ),
       };
 
       return (
@@ -184,8 +188,6 @@ function Diary() {
       toggleModal();
     }
   };
-
-  const toggleModal = useCallback(() => setShowModal((cur) => !cur), []);
 
   const deleteModalHandler = () => {
     setModalProps({
