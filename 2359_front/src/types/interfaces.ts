@@ -1,15 +1,15 @@
 import {
-  expenseEnums as EXPENSE,
-  incomeEnums as INCOME,
-  emotionEnums as EMOTION,
-  clsEnums,
-  OptionEnums as OPTIONS,
-  DiaryMode,
+  expense as EXPENSE,
+  income as INCOME,
+  emotion as EMOTION,
+  cls,
+  option as OPTIONS,
+  diaryMode as DiaryMode,
 } from 'types/enums';
 
 interface AccountTableRow {
   id: string;
-  cls: clsEnums;
+  cls: cls;
   category: EXPENSE | INCOME;
   amount: string;
   memo: string;
@@ -128,6 +128,10 @@ interface errorData {
   result: string;
 }
 
+interface PrivateRouteProps {
+  authentication: boolean;
+}
+
 export type {
   OptionProps,
   ContentOptionProps,
@@ -150,4 +154,5 @@ export type {
   RandomQuestionProps,
   EmotionType,
   errorData,
+  PrivateRouteProps,
 };

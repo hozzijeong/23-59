@@ -1,11 +1,8 @@
 import React, { ReactElement } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
+import { PrivateRouteProps } from 'types/interfaces';
 /* eslint-disable no-useless-escape */
 /* eslint-disable react/jsx-props-no-spreading */
-
-interface PrivateRouteProps {
-  authentication: boolean;
-}
 
 function PrivateRoute({ authentication }: PrivateRouteProps): React.ReactElement | null {
   const isAuthenticated = localStorage.getItem('token');

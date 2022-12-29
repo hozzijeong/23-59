@@ -1,5 +1,5 @@
 import React from 'react';
-import PrivateRoute from 'utilities/PrivateRoute';
+import PrivateRoute from 'PrivateRoute';
 import { Route, Routes as ReactRouterRoutes, Navigate } from 'react-router-dom';
 import Diary from 'pages/Diary';
 import Home from 'pages/Home';

@@ -25,6 +25,7 @@
     "hooks/*": ["hooks/*"],
     "images/*": ["images/*"],
     "recoil/*": ["recoil/*"],
-    "types/*": ["types/*"]
+    "types/*": ["types/*"],
+    "constant/*": ["constant/*"]
   }
 }
