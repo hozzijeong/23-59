@@ -1,12 +1,11 @@
 # **하루 결산 기록 사이트, 23:59✍️**
 
-### `하루의 끝🕛에 작성하는 하루 결산 기록 사이트`
-<img src="/uploads/9d162881068d8606e0adeadb4ce7b0f0/2359QR.png" width="300" height="300"/>
+<img src="/uploads/ae6e9a306a5a348776fd296b6f608a86/제목을_입력해주세요_-001__1_.png" width="1000" height="550"/>
 
 ## 1. 서비스 소개
 
 ### 🛠️ 기술 스택
-![image](/uploads/4c76399b80c31022f75b1c61720dce22/image.png)
+<img src="/uploads/4c76399b80c31022f75b1c61720dce22/image.png" width="1000" height="500"/>
 
 ### 👀 웹서비스 개요
 
@@ -22,7 +21,7 @@
 ### ✨ 페이지별 기능 소개
 <details open>
   <summary><h4>회원가입,로그인 페이지</h4></summary>
-  ![회원가입_로그인](/uploads/e91c5de429a82a48111ccef3e18d8068/회원가입_로그인.gif)
+<img src="/uploads/e91c5de429a82a48111ccef3e18d8068/회원가입_로그인.gif" width="1000" height="550"/><br/>
   <b>1. 회원가입</b><br/>
   •  이메일 형식 여부 즉시 확인<br/>
   •  비밀번호 확인<br/>
@@ -34,7 +33,7 @@
 </details>
 <details open>
   <summary><h4>홈 페이지</h4></summary>
-  ![홈페이지](/uploads/b04450a95ecf622c8cb25aadefb997b7/홈페이지.gif)
+  <img src="/uploads/b04450a95ecf622c8cb25aadefb997b7/홈페이지.gif" width="1000" height="550"/><br/>
   <b>1. 기본 옵션 설정 모달</b><br/>
   • 최초 로그인 시 모달창을 띄워 기본 옵션 저장<br/><br/>    
   <b>2. 달력에서 다이어리 요약본 확인</b><br/>
@@ -46,7 +45,7 @@
 </details>
 <details open>
   <summary><h4>작성 페이지</h4></summary>
-  ![작성페이지](/uploads/500bf231a432fe5cecb6e93069b101f2/작성페이지.gif)
+  <img src="/uploads/500bf231a432fe5cecb6e93069b101f2/작성페이지.gif" width="1000" height="550"/><br/>
   <b>1. 작성 / 조회</b><br/> 
 • 기본 설정 옵션에 따라 페이지가 다르게 조회<br/>
 • 리모콘 기능으로 해당 위치로 화면 이동 가능<br/>
@@ -62,8 +61,8 @@
 </details>
 <details open>
   <summary><h4>마이페이지</h4></summary>
-  ![마이페이지1](/uploads/83978446b8b93f1b321520e60edc789a/마이페이지1.gif)
-  ![마이페이지2](/uploads/ecbfe5bedede8313a3977f6c01c78626/마이페이지2.gif)
+    <img src="/uploads/83978446b8b93f1b321520e60edc789a/마이페이지1.gif" width="1000" height="550"/><br/>
+    <img src="/uploads/ecbfe5bedede8313a3977f6c01c78626/마이페이지2.gif" width="1000" height="550"/><br/>
   <b>1. 회원 정보 수정/탈퇴</b><br/> 
   • 닉네임 수정<br/> 
   - 현재 비밀번호 확인 및 새 비밀번호 저장<br/> 
@@ -95,9 +94,7 @@
 ## 3. 서비스 구성도
 
 ### 🗺️서비스 구조도
-
-<img src="https://kdt-gitlab.elice.io/honghwanak/initialization/uploads/ac3600d1a08af143551ee635e7fe7e9f/asdads.png" width="200" height="200"/>
-
+<img src="/uploads/1b6f913e02b2f03cd79a814c3fea9dbe/서비스_구조도.png" width="1000" height="550"/>
 
 ### 🎨와이어프레임
 
@@ -108,6 +105,7 @@
 👉[API 명세 보기](https://surgedev.notion.site/DB-API-3c9c7cdb822f4dd080dcdb45fb8e3de2)
 
 ### 🪢인프라 구조
+
 👉[인프라 구조 보기](https://media.discordapp.net/attachments/1050706291208757269/1057661481912639599/1beb610a808d2a8c.png?width=949&height=671)
 
 ## 4. 프로젝트 팀원 역할 분담
