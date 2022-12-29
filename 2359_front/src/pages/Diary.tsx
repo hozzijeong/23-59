@@ -192,6 +192,7 @@ function Diary() {
   const deleteModalHandler = () => {
     setModalProps({
       title: '정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.',
+      submitText: '예',
       submitHandler: () => {
         mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id)).then((res) => {
           if (!initOptions) return;
@@ -210,15 +211,17 @@ function Diary() {
         toggleModal();
         navigation('/');
       },
+      closeText: '아니오',
+      cancelHandler: () => toggleModal(),
     });
     toggleModal();
   };
 
   const cancelModalHandler = () => {
     const isCreate = diaryMode === DiaryMode.CREATE;
-    setModalProps((prev) => ({
-      ...prev,
+    setModalProps({
       title: `정말 취소하시겠습니까?\n작성하신 내용은 저장되지 ${isCreate ? '않고 홈으로 이동합니다' : '않습니다'}.`,
+      submitText: '예',
       submitHandler: () => {
         if (isCreate) {
           navigation('/');
@@ -227,7 +230,9 @@ function Diary() {
         }
         toggleModal();
       },
-    }));
+      closeText: '아니오',
+      cancelHandler: () => toggleModal(),
+    });
     toggleModal();
   };
 

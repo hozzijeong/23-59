@@ -45,7 +45,6 @@ function AccountBook({ todayDiary, setModalProps, toggleModal }: DiaryComponentP
         title: '음수는 임력할 수 없습니다.',
         submitText: '닫기',
         submitHandler: () => {
-          console.log(2233);
           setTodatAccountInfo((prev) => ({ ...prev, amount: '' }));
           toggleModal();
         },
