@@ -5,14 +5,7 @@
 ## 1. 서비스 소개
 
 ### 🛠️ 기술 스택
-
-| 구분        | 사용 스택                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
-| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 프론트 엔드 | <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=black"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/tailwind css-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white"> <img src="https://img.shields.io/badge/styled components-DB7093?style=for-the-badge&logo=styled-components&logoColor=black"> |
-| 백엔드      | <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=black"> <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=node.js&logoColor=white"> <img src="https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=mongoDB&logoColor=black"> <img src="https://img.shields.io/badge/express-000000?style=for-the-badge&logo=Express&logoColor=white">  |
-| 디자인      | <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=black">                                                                                                                                                                                                                                                                                                                                                               |
-| 버전 관리   | <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=black">                                                                                                                                                                                                                                                                                                                                                             |
-| 배포   | <img src="https://img.shields.io/badge/AmazonEC2-FF9900?style=for-the-badge&logo=AmazonEC2&logoColor=black">                                                                                                                                                                                                                                                                                                                                                             |
+![image](/uploads/4c76399b80c31022f75b1c61720dce22/image.png)
 
 ### 👀 웹서비스 개요
 
@@ -25,39 +18,34 @@
 
 ## 2. 서비스 주요 기능 설명
 
-**웹서비스의 유용성, 편의성 및 시각화의 실용성에 대한 설명**
-
 ### ✨ 페이지별 기능 소개
 
-  <details>
+  <details open>
   <summary>로그인,회원가입 페이지</summary>
   ![회원가입_로그인](/uploads/e91c5de429a82a48111ccef3e18d8068/회원가입_로그인.gif)
   1. 이메일, 비밀번호 유효성 체크<br/>   
   2. 이메일 중복 체크   
-</details>
+</details open>
 <details>
   <summary>홈 페이지</summary>
   ![홈페이지](/uploads/b04450a95ecf622c8cb25aadefb997b7/홈페이지.gif)
   1. 첫 로그인 모달 페이지 기본 옵션 설정 저장<br/>      
   2. 달력에서 다이어리 요약본 확인      
-영상 
 </details>
-<details>
+<details open>
   <summary>작성 페이지</summary>
   ![작성페이지](/uploads/500bf231a432fe5cecb6e93069b101f2/작성페이지.gif)
   1. 체크박스로 컴포넌트 추가/빼기<br/>      
   2. Todolist, 일기, 오늘의 질문, 감정, 가계부 기록<br/>      
   3. 기록 수정/삭제   
-영상 
 </details>
-<details>
+<details open>
   <summary>마이페이지</summary>
-  ![마이페이지1](/uploads/ff1cb47e7e2aab3d513df2bce5600b1c/마이페이지1.gif)
+  ![마이페이지1](/uploads/83978446b8b93f1b321520e60edc789a/마이페이지1.gif)
   ![마이페이지2](/uploads/ecbfe5bedede8313a3977f6c01c78626/마이페이지2.gif)
   1. 회원 정보 수정/탈퇴<br/>     
   2. 감정, 가계부 통계 확인<br/>      
   3. 태그별 오늘의 질문 모아보기   
-영상 
 </details>
 
 ### 💡프로젝트만의 차별점, 기대 효과
@@ -72,7 +60,8 @@
 
 ### 🗺️서비스 구조도
 
-<img src="https://kdt-gitlab.elice.io/honghwanak/initialization/uploads/dd9d07cd3fb8f29823d6c8e94c902cd5/%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B5%AC%EC%A1%B0%EB%8F%84.png" width="500"/>
+<img src="https://kdt-gitlab.elice.io/honghwanak/initialization/uploads/dd9d07cd3fb8f29823d6c8e94c902cd5/%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B5%AC%EC%A1%B0%EB%8F%84.png" width="300"/>
+
 
 ### 🎨와이어프레임
 
@@ -81,6 +70,9 @@
 ### 📋API 명세
 
 👉[API 명세 보기](https://surgedev.notion.site/DB-API-3c9c7cdb822f4dd080dcdb45fb8e3de2)
+
+### 🪢인프라 구조
+👉[인프라 구조 보기](https://media.discordapp.net/attachments/1050706291208757269/1057661481912639599/1beb610a808d2a8c.png?width=949&height=671)
 
 ## 4. 프로젝트 팀원 역할 분담
 
@@ -139,8 +131,8 @@
 <summary>설지윤: 프론트엔드 담당</summary>
   <ul>
  <li>기획 단계: 와이어프레임 작성</li>
-<li>개발 단계:  와이어프레임을 기반으로 홈페이지 담당</li>   
- <li>수정 단계: 피드백 반영하여 UX, UI개선</li> 
+<li>개발 단계:  와이어프레임을 기반으로 캘린더, 모달, 홈페이지 담당</li>   
+ <li>수정 단계: 피드백 반영하여 UI개선</li> 
 </ul>   
 </details>
 
