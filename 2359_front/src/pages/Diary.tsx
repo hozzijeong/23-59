@@ -25,6 +25,7 @@ import { useRecoilValue } from 'recoil';
 import { accountTableAtom, emotionAtom, questionAtom, todayDiaryAtom, todayTodo } from 'recoil/diaryAtom';
 import { DiarySkeleton } from 'components/skeleton/DiarySkeleton';
 import { DeferredComponent } from 'components/skeleton/DeferredComponent';
+import { getErrorMessage } from 'utilities/error';
 
 type DiaryContentsPrpos = {
   [key in OPTION]: ReactNode;
@@ -153,11 +154,12 @@ function Diary() {
       diaryMode: DiaryMode.READ,
     };
     try {
+      if (Object.values(body.checkOption).every((checked) => !checked))
+        throw new Error('적어도 하나 이상의 결산을 작성하셔야 합니다.');
       if (isCreateMode) {
         await mutate('/api/contents', createDiary(body)).then((res) => diaryMutate());
         const title = `일일 결산 등록을 완료했습니다.`;
-        setModalProps((prev) => ({
-          ...prev,
+        setModalProps({
           title,
           submitText: '홈으로',
           submitHandler: () => {
@@ -169,25 +171,24 @@ function Diary() {
             setTodayDiary(initialDiary);
             toggleModal();
           },
-        }));
+        });
 
         toggleModal();
       } else {
         await mutate(`/api/contents/${_id}`, updateDiary({ _id, body })).then((res) => diaryMutate());
         setTodayDiary(initialDiary);
       }
-
-      // 수정 완료
-    } catch (e) {
-      throw Error(`errorOccure ${e}`);
+    } catch (error) {
+      const message = getErrorMessage(error);
+      setModalProps({ title: message, closeText: '닫기', cancelHandler: () => toggleModal() });
+      toggleModal();
     }
   };
 
   const toggleModal = useCallback(() => setShowModal((cur) => !cur), []);
 
   const deleteModalHandler = () => {
-    setModalProps((prev) => ({
-      ...prev,
+    setModalProps({
       title: '정말 삭제하시겠습니까?\n삭제한 내용은 저장되지 않습니다.',
       submitHandler: () => {
         mutate(`/api/contents/${diaryInfo._id}`, deleteDiary(diaryInfo._id)).then((res) => {
@@ -207,7 +208,7 @@ function Diary() {
         toggleModal();
         navigation('/');
       },
-    }));
+    });
     toggleModal();
   };
 
