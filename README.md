@@ -1,6 +1,7 @@
 # **하루 결산 기록 사이트, 23:59✍️**
 
 ### `하루의 끝🕛에 작성하는 하루 결산 기록 사이트`
+<img src="/uploads/9d162881068d8606e0adeadb4ce7b0f0/2359QR.png" width="300" height="300"/>
 
 ## 1. 서비스 소개
 
@@ -11,9 +12,9 @@
 
 ```
 '매일 쓰는 일기, 쓰고 싶은 부분만 골라서 기록할 순 없을까?' 라는 질문에서 시작했어요.
-오늘 하루의 Todo list, 일기, 감정, 가계부, 오늘의 질문 중에 쓰고 싶은 것만 골라서 기록하고,
-달력을 눌러 날마다 작성한 내용을 확인할 수 있어요.
-마이페이지에서는 한 달의 감정 및 가계부 통계를 확인하고, 오늘의 질문을 모아볼 수 있어요.
+오늘 하루의 Todo list, 일기, 감정, 가계부, 오늘의 질문 등을 쓰고 싶은 것만 골라서 기록하고,
+달력의 해당 날짜를 눌러 작성한 내용을 확인할 수 있어요.
+내가 기록한 한 달의 감정 및 가계부 통계를 확인하고, 오늘의 질문을 모아볼 수 있어요.
 ```
 
 ## 2. 서비스 주요 기능 설명
@@ -95,7 +96,7 @@
 
 ### 🗺️서비스 구조도
 
-<img src="https://kdt-gitlab.elice.io/honghwanak/initialization/uploads/dd9d07cd3fb8f29823d6c8e94c902cd5/%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B5%AC%EC%A1%B0%EB%8F%84.png" width="300"/>
+<img src="https://kdt-gitlab.elice.io/honghwanak/initialization/uploads/dd9d07cd3fb8f29823d6c8e94c902cd5/%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B5%AC%EC%A1%B0%EB%8F%84.png" width="200" height="200"/>
 
 
 ### 🎨와이어프레임
