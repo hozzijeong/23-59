@@ -25,8 +25,8 @@
   ![회원가입_로그인](/uploads/e91c5de429a82a48111ccef3e18d8068/회원가입_로그인.gif)
   1. 이메일, 비밀번호 유효성 체크<br/>   
   2. 이메일 중복 체크   
-</details open>
-<details>
+</details>
+<details open>
   <summary>홈 페이지</summary>
   ![홈페이지](/uploads/b04450a95ecf622c8cb25aadefb997b7/홈페이지.gif)
   1. 첫 로그인 모달 페이지 기본 옵션 설정 저장<br/>      
