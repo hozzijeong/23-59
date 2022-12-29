@@ -1,14 +1,15 @@
 import axios from 'axios';
 import { DiaryBodyProps } from 'types/interfaces';
 
+const BASE_URL = 'http://ec2-35-79-109-245.ap-northeast-1.compute.amazonaws.com';
 const baseAxios = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: BASE_URL,
   withCredentials: true,
 });
 
 const headerAxios = (token: string) => {
   return axios.create({
-    baseURL: 'http://localhost:8000',
+    baseURL: BASE_URL,
     withCredentials: true,
     headers: { Authorization: `Bearer ${token}` },
   });
