@@ -96,7 +96,7 @@
 
 ### 🗺️서비스 구조도
 
-<img src="https://kdt-gitlab.elice.io/honghwanak/initialization/uploads/dd9d07cd3fb8f29823d6c8e94c902cd5/%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B5%AC%EC%A1%B0%EB%8F%84.png" width="200" height="200"/>
+<img src="https://kdt-gitlab.elice.io/honghwanak/initialization/uploads/11e698580b646d3f1f1fe5ca299fba3c/%EC%84%9C%EB%B9%84%EC%8A%A4_%EA%B5%AC%EC%A1%B0%EB%8F%84.png" width="200" height="200"/>
 
 
 ### 🎨와이어프레임
