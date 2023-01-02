@@ -1,11 +1,10 @@
 # **하루 결산 기록 사이트, 23:59✍️**
-
-<img src="/uploads/ae6e9a306a5a348776fd296b6f608a86/제목을_입력해주세요_-001__1_.png" width="1000" height="550"/>
+<img src="/uploads/c8c054f7778567173ecbb2ac05b103d6/메인.png" width="1000" height="500"/>
 
 ## 1. 서비스 소개
 
 ### 🛠️ 기술 스택
-<img src="/uploads/4c76399b80c31022f75b1c61720dce22/image.png" width="1000" height="500"/>
+<img src="/uploads/9c3d48234c84e12c043c8583f2740e88/image.png" width="1000" height="500"/>
 
 ### 👀 웹서비스 개요
 
@@ -19,9 +18,9 @@
 ## 2. 서비스 주요 기능 설명
 
 ### ✨ 페이지별 기능 소개
-<details open>
+<details>
   <summary><h4>회원가입,로그인 페이지</h4></summary>
-<img src="/uploads/e91c5de429a82a48111ccef3e18d8068/회원가입_로그인.gif" width="1000" height="550"/><br/>
+<img src="/uploads/e2baf7ed12ee114309ef8055fa7a6af5/회원가입_로그인.gif" width="1000" height="550"/><br/>
   <b>1. 회원가입</b><br/>
   •  이메일 형식 여부 즉시 확인<br/>
   •  비밀번호 확인<br/>
@@ -31,9 +30,9 @@
   • 이메일, 비밀번호 유효성 확인<br/>
    -  완료, 에러메시지 모달 처리<br/>
 </details>
-<details open>
+<details>
   <summary><h4>홈 페이지</h4></summary>
-  <img src="/uploads/b04450a95ecf622c8cb25aadefb997b7/홈페이지.gif" width="1000" height="550"/><br/>
+  <img src="/uploads/3cb34e50266a53b2577420a225e58a58/홈페이지.gif" width="1000" height="550"/><br/>
   <b>1. 기본 옵션 설정 모달</b><br/>
   • 최초 로그인 시 모달창을 띄워 기본 옵션 저장<br/><br/>    
   <b>2. 달력에서 다이어리 요약본 확인</b><br/>
@@ -43,9 +42,9 @@
   - 가계부 수입/지출 1일 합계<br/> 
   - 그 외의 기록 유무 오른쪽 점으로 표시 <br/>   
 </details>
-<details open>
+<details>
   <summary><h4>작성 페이지</h4></summary>
-  <img src="/uploads/500bf231a432fe5cecb6e93069b101f2/작성페이지.gif" width="1000" height="550"/><br/>
+  <img src="/uploads/cb57b700ce11eae2d592255b96256b50/작성페이지.gif" width="1000" height="550"/><br/>
   <b>1. 작성 / 조회</b><br/> 
 • 기본 설정 옵션에 따라 페이지가 다르게 조회<br/>
 • 리모콘 기능으로 해당 위치로 화면 이동 가능<br/>
@@ -59,10 +58,10 @@
 • 작성 내용 수정 및 삭제<br/>
 - 수정 시 옵션 추가 또는 삭제 가능<br/>   
 </details>
-<details open>
+<details>
   <summary><h4>마이페이지</h4></summary>
-    <img src="/uploads/83978446b8b93f1b321520e60edc789a/마이페이지1.gif" width="1000" height="550"/><br/>
-    <img src="/uploads/ecbfe5bedede8313a3977f6c01c78626/마이페이지2.gif" width="1000" height="550"/><br/>
+    <img src="/uploads/d22baa622428de032fb9524284ef5e95/마이페이지1.gif" width="1000" height="550"/><br/>
+    <img src="/uploads/b1cc40a290c000430aaf9c69fb08b2c1/마이페이지2.gif" width="1000" height="550"/><br/>
   <b>1. 회원 정보 수정/탈퇴</b><br/> 
   • 닉네임 수정<br/> 
   - 현재 비밀번호 확인 및 새 비밀번호 저장<br/> 
@@ -94,7 +93,7 @@
 ## 3. 서비스 구성도
 
 ### 🗺️서비스 구조도
-<img src="/uploads/1b6f913e02b2f03cd79a814c3fea9dbe/서비스_구조도.png" width="1000" height="550"/>
+<img src="/uploads/3dd2286865aa5a40fd1fa260ef030428/서비스_구조도.png" width="1000" height="550"/>
 
 ### 🎨와이어프레임
 
