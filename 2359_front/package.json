@@ -2,7 +2,7 @@
   "name": "2359_front",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://localhost:8000",
+  "proxy": "http://ec2-35-79-109-245.ap-northeast-1.compute.amazonaws.com",
   "dependencies": {
     "@nivo/bar": "^0.80.0",
     "@nivo/core": "^0.80.0",

@@ -1,18 +1,26 @@
-import mongoose, { Schema, model, connect, ObjectId } from 'mongoose';
+import { Schema } from 'mongoose';
 
 interface IContent {
   _id: Schema.Types.ObjectId;
   selectedDate: string;
-  month: string;
-  //author: ObjectId;
   author: Schema.Types.ObjectId;
   emotion: string;
-  diary: object;
+  diary: IDiary;
   todo: object;
   account: object;
-  qna: object;
-  checkOption: object;
+  qna: IQnA;
+  checkOption: ICheckOption;
 }
+
+// interface IContentData {
+//   selectedDate: string;
+//   author: string;
+//   emotion: string;
+//   diary: object;
+//   todo: object;
+//   account: object;
+//   checkOption: object;
+// }
 
 interface IDiary {
   title: string;
