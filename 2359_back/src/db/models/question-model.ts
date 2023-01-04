@@ -9,7 +9,7 @@ const createQuestion = async (data: any) => {
 };
 
 const findQuestions = async () => {
-  const questions = await Question.find({});
+  const questions = await Question.find({}).select({ _id: 1, item: 1 });
   return questions;
 };
 

@@ -1,17 +1,18 @@
+import { ModalBasicProps } from 'components/ModalBasic';
 import {
-  expenseEnums as EXPENSE,
-  incomeEnums as INCOME,
-  emotionEnums as EMOTION,
-  clsEnums,
-  OptionEnums as OPTIONS,
-  DiaryMode,
+  expense as EXPENSE,
+  income as INCOME,
+  emotion as EMOTION,
+  cls,
+  option as OPTIONS,
+  diaryMode as DiaryMode,
 } from 'types/enums';
 
 interface AccountTableRow {
   id: string;
-  cls: clsEnums;
+  cls: cls;
   category: EXPENSE | INCOME;
-  amount: number;
+  amount: string;
   memo: string;
 }
 
@@ -28,19 +29,21 @@ interface DiaryProps {
 
 interface QuestionAnswerProps {
   question: string;
-  tag: string;
   answer: string;
+  questionId: string;
 }
+
+type EmotionType = EMOTION | null;
 
 interface DiaryStateProps {
   _id: string;
   selectedDate: string;
   todo: TodoListProps[];
   qna: QuestionAnswerProps;
-  emotion: EMOTION;
+  emotion: EmotionType;
   diary: DiaryProps;
   account: AccountTableRow[];
-  contentOptions: OptionCheckedProps;
+  checkOption: OptionCheckedProps;
 }
 
 interface OptionProps {
@@ -60,9 +63,14 @@ interface TodayDiaryProps {
   diaryMode: DiaryMode;
 }
 
-interface DiaryComponentPrpos {
+interface ModalComponentProps {
+  setModalProps?: React.Dispatch<React.SetStateAction<ModalBasicProps>>;
+  toggleModal?: () => void;
+}
+
+interface DiaryComponentPrpos extends ModalComponentProps {
   todayDiary: TodayDiaryProps;
-  setTodayDiary: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
+  setTodayDiary?: React.Dispatch<React.SetStateAction<TodayDiaryProps>>;
 }
 
 interface ContentOptionsProps {
@@ -95,12 +103,39 @@ interface LoginFormValue {
 
 interface DiaryBodyProps {
   selectedDate: string;
-  emotion: EMOTION;
+  emotion: EmotionType;
   diary: DiaryProps;
-  qna: QuestionAnswerProps;
+  qna: {
+    questionId: string;
+    answer: string;
+  };
   todo: TodoListProps[];
   account: AccountTableRow[];
   checkOption: OptionCheckedProps;
+}
+
+interface EmotionStaticProps {
+  [key: string]: number | string;
+}
+
+interface CategoriesStaticProps {
+  id: string;
+  label: string;
+  value: number;
+}
+
+interface RandomQuestionProps {
+  _id: string;
+  item: string;
+}
+
+interface errorData {
+  reason: string;
+  result: string;
+}
+
+interface PrivateRouteProps {
+  authentication: boolean;
 }
 
 export type {
@@ -120,4 +155,10 @@ export type {
   DiaryContentOptionsProps,
   DiaryComponentPrpos,
   DiaryBodyProps,
+  EmotionStaticProps,
+  CategoriesStaticProps,
+  RandomQuestionProps,
+  EmotionType,
+  errorData,
+  PrivateRouteProps,
 };

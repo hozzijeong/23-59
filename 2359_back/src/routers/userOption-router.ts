@@ -5,7 +5,7 @@ import { userOptionService } from '../services';
 const userOptionRouter = Router();
 
 // 유저옵션조회
-userOptionRouter.get('/user/option', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
+userOptionRouter.get('/option', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.currentUserId;
     const userOptionInfo = await userOptionService.findById(userId);
@@ -16,7 +16,7 @@ userOptionRouter.get('/user/option', loginRequired, async (req: Request, res: Re
 });
 
 // 유저옵션 수정
-userOptionRouter.patch('/user/option', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
+userOptionRouter.patch('/option', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.currentUserId;
     const { firstLogin, createOption } = req.body;

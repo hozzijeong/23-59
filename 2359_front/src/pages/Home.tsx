@@ -1,35 +1,83 @@
-import React from 'react';
+import React, { useEffect, useState, Suspense } from 'react';
 import Calendar from 'components/calendar/Calendar';
-import Modal from 'components/Modal';
-import { TutorialOption } from 'components/tutorial/TutorialOption';
+import ModalBasic from 'components/ModalBasic';
 import { useUserOptions } from 'hooks/useUserOptions';
-import TutorialModal from 'components/tutorial/TutorialModal';
-import { useSetRecoilState } from 'recoil';
-import { showModalPage } from 'recoil/modalAtom';
+import { TutorialOption } from 'components/tutorial/TutorialOption';
+import { baseAxios } from 'api';
+import { useInitializeDiaryRecoil } from 'hooks/useInitiallizeDiaryRecoil';
+import { CalendarSkeleton } from 'components/skeleton/CalendarSkeleton';
+import { SkeletonLayout } from 'components/skeleton/SkeletonLayout';
+import { DeferredComponent } from 'components/skeleton/DeferredComponent';
 
 function Home() {
-  const { firstLogin, contentOptions, setContentOptions } = useUserOptions();
-  // console.log(contentOptions, 'Home options');
-  // console.log(firstLogin, contentOptions, 'firstLogin');
-  const setShowModal = useSetRecoilState(showModalPage);
-  if (firstLogin) {
-    setShowModal(true);
+  const { firstLogin, contentOptions, setContentOptions, mutate } = useUserOptions();
+  const [showModal, setShowModal] = useState(firstLogin);
+  const { initilizeSetRecoilState } = useInitializeDiaryRecoil();
+
+  useEffect(() => {
+    if (firstLogin === true) {
+      setShowModal(true);
+    } else if (firstLogin === false) {
+      setShowModal(false);
+    }
+    initilizeSetRecoilState();
+  }, [firstLogin]);
+
+  const title = contentOptions.map((option) => {
+    return option.title;
+  });
+  const isChecked = contentOptions.map((option) => {
+    return option.isChecked;
+  });
+  const newObj = title.reduce((acc, cur, idx) => {
+    return { ...acc, [cur]: isChecked[idx] };
+  }, {});
+  const data = {
+    firstLogin: false,
+    createOption: newObj,
+  };
+  const userToken = localStorage.getItem('token');
+
+  async function updateUser() {
+    try {
+      await baseAxios.patch('/api/user/option', data, {
+        headers: {
+          Authorization: `Bearer ${userToken}`,
+        },
+      });
+    } catch (err) {
+      throw new Error();
+    }
   }
+
+  const optionSaveHandler = () => {
+    setContentOptions(contentOptions);
+    updateUser().then(() => setShowModal(false));
+    mutate();
+  };
   return (
-    <div>
+    <Suspense
+      fallback={
+        <DeferredComponent>
+          <CalendarSkeleton />
+        </DeferredComponent>
+      }
+    >
       <Calendar />
-      {firstLogin && (
-        <Modal>
-          <TutorialModal
-            title="옵션 설정하기"
-            btnclose="나중에 하기"
-            btnsave="설정 저장하기"
-            state={contentOptions}
-            setState={setContentOptions}
-          />
-        </Modal>
+      {showModal && (
+        <ModalBasic
+          title="옵션 설정하기"
+          tooltip
+          tooltipText="매일 쓰는 일기의 옵션을 설정할 수 있어요. 설정한 옵션은 마이페이지에서 수정할 수 있어요."
+          closeText="나중에 설정하기"
+          submitText="설정 저장하기"
+          cancelHandler={() => setShowModal(false)}
+          submitHandler={optionSaveHandler}
+        >
+          <TutorialOption state={contentOptions} setState={setContentOptions} />
+        </ModalBasic>
       )}
-    </div>
+    </Suspense>
   );
 }
 

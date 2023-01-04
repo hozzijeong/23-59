@@ -5,7 +5,7 @@ import { loginRequired } from '../middlewares/login-required';
 const userRouter = Router();
 
 // 회원가입
-userRouter.post('/user/register', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/register', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password, nickname, passwordConfirm } = req.body;
 
@@ -27,7 +27,7 @@ userRouter.post('/user/register', async (req: Request, res: Response, next: Next
 });
 
 // 로그인
-userRouter.post('/user/login', async (req: Request, res: Response, next: NextFunction) => {
+userRouter.post('/login', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { email, password } = req.body;
 
@@ -39,14 +39,14 @@ userRouter.post('/user/login', async (req: Request, res: Response, next: NextFun
 });
 
 // 유저정보조회 (유저정보수정 & mypage??)
-userRouter.get('/user/info', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
+userRouter.get('/info', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
   const userOid = req.currentUserId;
   const user = await userService.getUserInfo(userOid);
   res.status(200).json(user);
 });
 
 // 회원정보수정
-userRouter.patch('/user/info', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
+userRouter.patch('/info', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userId = req.currentUserId;
     const { password, nickname } = req.body;
@@ -71,7 +71,7 @@ userRouter.patch('/user/info', loginRequired, async (req: Request, res: Response
 });
 
 // 회원탈퇴
-userRouter.delete('/user/delete', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
+userRouter.delete('/delete', loginRequired, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const userOid = req.currentUserId;
     const userDelete = await userService.deleteUser(userOid);

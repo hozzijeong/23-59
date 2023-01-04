@@ -1,22 +1,34 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ModalBasic from 'components/ModalBasic';
-import { useRecoilState } from 'recoil';
-import { showModalPage } from 'recoil/modalAtom';
+import useSWR from 'swr';
 import { useNavigate } from 'react-router-dom';
 import useUserDelete from 'hooks/useUserDelete';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { UpdateFormValue } from '../../types/interfaces';
-import * as SC from '../signup/FormStyled';
+import {
+  ErrorMesg,
+  SubmitButton,
+  FormInput,
+  FormLabel,
+  FormTitle,
+  Form,
+  Container,
+  DeleteTag,
+} from '../signup/FormStyled';
 import useUserUpdate from '../../hooks/useUserUpdate';
-import { baseAxios } from '../../api';
-import { emailCheck } from '../../utilities/regex';
+import { headerAxios } from '../../api';
+import { EMAIL_REGEX } from '../../utilities/regex';
 /* eslint-disable react/jsx-props-no-spreading */
 
 function UserInfo() {
-  const [showModal, setShowModal] = useRecoilState(showModalPage);
-  const navigation = useNavigate();
-  const { userUpdateRequest } = useUserUpdate();
-  const { userDelete } = useUserDelete();
+  const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false);
+  const { userUpdateRequest, setIsOk, isOk, error, isModal, setIsModal } = useUserUpdate();
+  const { userDelete, setIsDel, isDel } = useUserDelete();
+  const cancelModalHandler = () => {
+    setIsDel(false);
+    navigate('/login');
+  };
 
   const {
     register,
@@ -26,80 +38,66 @@ function UserInfo() {
     formState: { errors },
   } = useForm<UpdateFormValue>();
 
-  // 유저 정보 가져오기
-  const userDataRequest = useCallback(() => {
-    baseAxios
-      .get(`/api/user/info`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      })
-      .then((res) => {
-        setValue('email', res.data.email);
-        setValue('nickname', res.data.nickname);
-      })
-      .catch((err) => {
-        alert('로그인 해주세요!');
-        navigation('/login');
-      });
-  }, []);
+  const fetcher = async (url: string) => {
+    const token = localStorage.getItem('token') ?? '';
+    const res = await headerAxios(token).get(url);
+    return res.data;
+  };
+
+  const { data, mutate } = useSWR(`/api/user/info`, fetcher);
 
   useEffect(() => {
-    userDataRequest();
-  }, []);
+    if (data) {
+      const { email, nickname } = data;
+      setValue('email', email);
+      setValue('nickname', nickname);
+    }
+  });
 
-  const OnSubmit: SubmitHandler<UpdateFormValue> = (data) => {
-    const formdata = {
-      currentPassword: data.currentPassword,
-      nickname: data.nickname,
-      password: data.password,
-    };
-    userUpdateRequest(formdata);
+  const onSubmit: SubmitHandler<UpdateFormValue> = (data) => {
+    userUpdateRequest(data);
+    mutate(undefined, false);
     setValue('password', '');
     setValue('currentPassword', '');
   };
 
   return (
-    <SC.Container>
-      <SC.Form onSubmit={handleSubmit(OnSubmit)}>
-        <SC.FormTitle>회원 정보 수정</SC.FormTitle>
-        <SC.FormLabel>이메일</SC.FormLabel>
-        <SC.FormInput
+    <Container>
+      <Form onSubmit={handleSubmit(onSubmit)}>
+        <FormTitle>회원 정보 수정</FormTitle>
+        <FormLabel>이메일</FormLabel>
+        <FormInput
           readOnly
           {...register('email', {
             required: '필수 응답 항목입니다.',
-            pattern: { value: emailCheck, message: '이메일 형식이 아닙니다.' },
+            pattern: { value: EMAIL_REGEX, message: '이메일 형식이 아닙니다.' },
           })}
           type="email"
           placeholder="이메일을 입력해주세요"
         />
-        {errors.email && errors.email.type === 'required' && <SC.ErrorMesg>이메일을 입력해주세요.</SC.ErrorMesg>}
-        {errors.email && errors.email.type === 'pattern' && <SC.ErrorMesg>올바른 이메일을 입력해주세요.</SC.ErrorMesg>}
-        <SC.FormLabel>닉네임</SC.FormLabel>
-        <SC.FormInput
+        {errors.email && errors.email.type === 'required' && <ErrorMesg>이메일을 입력해주세요.</ErrorMesg>}
+        {errors.email && errors.email.type === 'pattern' && <ErrorMesg>올바른 이메일을 입력해주세요.</ErrorMesg>}
+        <FormLabel>닉네임</FormLabel>
+        <FormInput
           {...register('nickname', { required: true, maxLength: 10 })}
           type="text"
           placeholder="닉네임을 입력해주세요"
         />
-        {errors.nickname && errors.nickname.type === 'required' && <SC.ErrorMesg>닉네임을 입력해주세요.</SC.ErrorMesg>}
-        {errors.nickname && errors.nickname.type === 'pattern' && (
-          <SC.ErrorMesg>올바른 닉네임을 입력해주세요.</SC.ErrorMesg>
-        )}
-        {errors.nickname && errors.nickname.type === 'maxLength' && (
-          <SC.ErrorMesg>10자 이하로 설정해주세요.</SC.ErrorMesg>
-        )}
-        <SC.FormLabel>현재 비밀번호</SC.FormLabel>
-        <SC.FormInput
+        {errors.nickname && errors.nickname.type === 'required' && <ErrorMesg>닉네임을 입력해주세요.</ErrorMesg>}
+        {errors.nickname && errors.nickname.type === 'pattern' && <ErrorMesg>올바른 닉네임을 입력해주세요.</ErrorMesg>}
+        {errors.nickname && errors.nickname.type === 'maxLength' && <ErrorMesg>10자 이하로 설정해주세요.</ErrorMesg>}
+        <FormLabel>현재 비밀번호</FormLabel>
+        <FormInput
           autoComplete="new-password"
           {...register('currentPassword', { required: true, minLength: 6 })}
           type="password"
           placeholder="비밀번호를 입력해주세요"
         />
         {errors.currentPassword && errors.currentPassword.type === 'required' && (
-          <SC.ErrorMesg>비밀번호를 입력해주세요.</SC.ErrorMesg>
+          <ErrorMesg>비밀번호를 입력해주세요.</ErrorMesg>
         )}
-        <SC.FormLabel>새로운 비밀 번호</SC.FormLabel>
-        <SC.FormInput
+        <FormLabel>새로운 비밀 번호</FormLabel>
+        <FormInput
           {...register('password', {
             required: true,
             minLength: 6,
@@ -109,30 +107,41 @@ function UserInfo() {
           type="password"
           placeholder="새로운 비밀번호를 입력해주세요"
         />
-        {errors.password && errors.password.type === 'validate' && (
-          <SC.ErrorMesg>다른 비밀번호를 입력해주세요.</SC.ErrorMesg>
-        )}
-        {errors.password && errors.password.type === 'minLength' && (
-          <SC.ErrorMesg>6자 이상으로 설정해주세요.</SC.ErrorMesg>
-        )}
-        {errors.password && errors.password.type === 'required' && (
-          <SC.ErrorMesg>비밀번호를 입력해주세요.</SC.ErrorMesg>
-        )}
-        <SC.SubmitButton type="submit">회원수정</SC.SubmitButton>
-        <SC.DeleteTag
+        {errors.password && errors.password.type === 'validate' && <ErrorMesg>다른 비밀번호를 입력해주세요.</ErrorMesg>}
+        {errors.password && errors.password.type === 'minLength' && <ErrorMesg>6자 이상으로 설정해주세요.</ErrorMesg>}
+        {errors.password && errors.password.type === 'required' && <ErrorMesg>비밀번호를 입력해주세요.</ErrorMesg>}
+        <SubmitButton type="submit">회원수정</SubmitButton>
+        <DeleteTag
           onClick={() => {
             setShowModal(true);
           }}
         >
           회원탈퇴
-        </SC.DeleteTag>
-      </SC.Form>
+        </DeleteTag>
+      </Form>
       {showModal && (
-        <ModalBasic title="회원 탈퇴" btnclose="취소" btnsave="탈퇴" saveHandler={userDelete}>
-          정말 탈퇴 하시겠습니까..?
-        </ModalBasic>
+        <ModalBasic
+          title="정말 탈퇴 하시겠습니까?"
+          closeText="취소"
+          submitText="확인"
+          cancelHandler={() => setShowModal(false)}
+          submitHandler={userDelete}
+        />
       )}
-    </SC.Container>
+      {isOk ? (
+        <ModalBasic
+          title="수정 완료 됐습니다"
+          closeText="확인"
+          cancelHandler={() => {
+            setIsOk(false);
+          }}
+        />
+      ) : null}
+      {isModal ? (
+        <ModalBasic title={`${error?.reason}`} closeText="닫기" cancelHandler={() => setIsModal(false)} />
+      ) : null}
+      {isDel ? <ModalBasic title="탈퇴 완료 됐습니다" closeText="확인" cancelHandler={cancelModalHandler} /> : null}
+    </Container>
   );
 }
 
